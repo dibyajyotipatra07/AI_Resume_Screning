@@ -1,0 +1,48 @@
+<!-- first page of the login, first create an account -->
+
+
+<!Doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>login page</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+       <header>
+        <div class="header">
+            <div class="logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/BHEL_logo.svg/1280px-BHEL_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail">
+                <p>Bharat Heavy Electricals Limited</p>   
+            </div>
+            <ul>
+                <li><a href="home_page.html">Home</a></li>
+                <li><a href="login_page.html">Login</a></li>
+            </ul>
+        </div>
+        
+       </header>
+       <div class="hero">
+        <a href="login_page3.html"><button>admin</button></a>
+           <a href="login_page4.html"><button>applicant</button></a><br><br>
+       </div>
+         <div class="container">
+           <form action="/login" method="post">
+            <h2>create an account</h2>
+                <label for="firstname">first name</label>
+                <input type="text" id="firstname" name="firstname" >
+                    <label for="middlename">middle name</label>
+                    <input type="text" id="middlename" name="middlename" required>
+                        <label for="lastname">last name</label>
+                        <input type="text" id="lastname" name="lastname" required>
+                            <label for="username">email</label>
+                             <input type="text" id="username" name="username" required>
+                                 <label for="password">Password:</label>
+                                 <input type="password" id="password" name="password" required>
+                 <a href="login_page2.html"><input type="button" value="create account"></a>
+                <p>Already have an account? <a href="login_page2.html">Login here</a></p>
+                <a href="terms_conditions.html"><p>terms and conditions</p></a>
+          </form>
+          <img src="https://www.bhel.com/sites/default/files/2025-02/power-sector_1.jpg">   
+    </body>
+</html>
