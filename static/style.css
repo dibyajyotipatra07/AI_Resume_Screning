@@ -1,25 +1,39 @@
 .header{
-   display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: center;
 
     background-color: #f5f5f5;
-    padding: 15px 50px;
+    padding: 2px 40px;
 
+    margin-bottom: 5px;
     border-bottom: 2px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    
 }
 .header img{
-    width: 100px;
-    height: px;
+    width: 82px;
+    height: 70px;
+    
 }
 
 .header p{
+    font-family: "Segoe UI", Frutiger, "Myriad Pro", Arial, sans-serif;
     font-size: 24px;
+    font-weight: 700;
+    font-style:normal;
     font-weight: bold;
-    color: #333;
-    margin-left: 20px;
+    color: #1202a1;
+    margin-left: 0px;
+    margin-top: 0;
+    margin-bottom: 0px;
+    letter-spacing: 0.5px
 }
-
+.h1{
+    display: flex;
+}
 .logo{
     display: flex;
 }
@@ -34,50 +48,23 @@
     margin: 10px;
 }
 
-
-/* second div class */
-.hero{
-     display: inline-flex;
-    gap: 10px;
+.main_container{
+    background-color: #003d80;
     padding: 10px;
-    margin-left: 75px;
-    margin-top: 30px;
-    border: 2px solid grey  ;
-    border-radius: 15px;
 }
-.hero button{
-    background-color: #003366;
-    color: white;
-
-    border: none;
-    border-radius: 6px;
-
-    padding: 10px 20px;
-    font-size: 16px;
-    font-weight: bold;
-
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.hero button:hover{
-    background-color: #0056b3;
-    
-}
-
 
 
 /* third div class */
 .container{
-     display: flex;
+    display: flex;
     justify-content: space-between;
     align-items: flex-start;
-
     width: 90%;
-    margin: 0px auto;
+    margin: 30px auto;
 }
 .container img{
-    width:700px;
+    width:1000px;
+    height:550px;
     max-width:100%;
     border-radius:10px;
 
@@ -121,4 +108,81 @@ form input[type="email"]{
     font-size: 15px;
 
     margin-bottom: 15px;
+}
+form input:focus{
+
+    outline: none;
+
+    border-color: #0056b3;
+
+    box-shadow: 0 0 6px rgba(0,86,179,0.4);
+}
+#resume {
+    width: 100%;
+    padding: 10px;
+    border: 2px #4f46e5;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    color: white;
+    cursor: pointer;
+}
+
+#resume::file-selector-button {
+    background: #4f46e5;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 15px;
+    font-weight: 600;
+    transition: 0.3s;
+}
+
+#resume::file-selector-button:hover {
+    background: #4338ca;
+}
+form button.create-btn{
+
+    width: 100%;
+
+    background: #0056b3;
+
+    color: white;
+
+    border: none;
+    border-radius: 6px;
+
+    padding: 12px;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+}
+.role-selection{
+    display:flex;
+    gap:30px;
+    margin-bottom:20px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.role-selection label{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    cursor:pointer;
+}
+
+.role-selection input[type="radio"]{
+    width:18px;
+    height:18px;
+}
+
+#admin-field{
+    margin-bottom:15px;
+}
+form button.create-btn:hover{
+    background: #003d80;
 }
