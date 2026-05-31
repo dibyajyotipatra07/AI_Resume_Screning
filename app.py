@@ -42,4 +42,9 @@ app.config['UPLOAD_FOLDER_RESUME'] = params['upload_location_resume']
 def home():
     return render_template('login_page.html')
 
+
+@app.route('/login')
+def login():
+    return render_template('login_page2.html')
+
 app.run(debug=True)

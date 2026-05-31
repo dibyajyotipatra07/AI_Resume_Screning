@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>login page</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style2.css') }}"
+    />
+  </head>
+  <body>
+    <header>
+      <div class="header">
+        <div class="logo">
+          <img
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/BHEL_logo.svg/1280px-BHEL_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+          />
+          <p>Bharat Heavy Electricals Limited</p>
+        </div>
+        <ul>
+          <li><a href="home_page.html">Home</a></li>
+          <li><a href="login_page.html">Login</a></li>
+        </ul>
+      </div>
+    </header>
+    <div class="container">
+      <form action="/login" method="post">
+        <h2>login</h2>
+        <div class="role-selection">
+          <label>
+            <input
+              type="radio"
+              name="role"
+              value="applicant"
+              checked
+              onclick="toggleFields()"
+            />
+            Applicant
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              name="role"
+              value="admin"
+              onclick="toggleFields()"
+            />
+            Admin
+          </label>
+        </div>
+
+        <!-- Admin Section -->
+        <div id="admin-field" style="display: none">
+          <label for="employeeId">Employee No.</label>
+          <input type="text" id="employeeId" name="employeeId" />
+        </div>
+
+        <!-- Applicant Section -->
+        <div id="applicant-field" style="display: none">
+          <label for="username">Email id</label>
+          <input type="text" id="username" name="email" />
+        </div>
+
+        <script>
+          function toggleFields() {
+            let applicantRadio = document.querySelector(
+              'input[value="applicant"]',
+            );
+
+            let adminField = document.getElementById("admin-field");
+
+            let applicantField = document.getElementById("applicant-field");
+
+            let employeeId = document.getElementById("employeeId");
+
+            let username = document.getElementById("username");
+
+            if (applicantRadio.checked) {
+              applicantField.style.display = "block";
+              adminField.style.display = "none";
+
+              // Make resume mandatory
+              username.required = true;
+
+              // Employee ID not mandatory
+              employeeId.required = false;
+            } else {
+              applicantField.style.display = "none";
+              adminField.style.display = "block";
+
+              // Employee ID mandatory
+              employeeId.required = true;
+
+              // Resume not mandatory
+              username.required = false;
+            }
+          }
+
+          // Run once when page loads
+          window.onload = toggleFields;
+        </script>
+        <label for="password">Password:</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          required
+        /><br /><br />
+        <button class="login-btn" type="submit">login</button>
+        <p>
+          Don't have an account? <a href="login_page.html">Create an account</a>
+        </p>
+      </form>
+      <img
+        src="https://www.bhel.com/sites/default/files/2025-02/power-sector_1.jpg"
+        class="industry_image"
+      />
+    </div>
+  </body>
+</html>
