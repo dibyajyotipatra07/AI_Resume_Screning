@@ -1,0 +1,40 @@
+
+For Candidate
+
+                                                +----------------------+
+                                                |      CANDIDATES      |
+                                                +----------------------+
+                                                | PK applicant_id      |
+                                                | name                 |
+                                                | email                |
+                                                | password             |
+                                                | phone                |
+                                                | linkedin_url         |
+                                                | github_url           |
+                                                | total_experience     |
+                                                | resume_path          |
+                                                | upload_date          |
+                                                +----------------------+
+
+      ┌─────────────────────┬─────────────────┬───────────────────┬─────────────────┬─────────────────────────┐
+      │                     │                 │                   │                 │                         │
+      │ 1:M                 │ 1:M             │ 1:M               │ 1:M             │ 1:M                     │ 1:M
+      ▼                     ▼                 ▼                   ▼                 ▼                         ▼
+
++----------------+ +----------------+ +----------------+ +----------------+ +----------------+   +-------------------------+     
+|   EDUCATION    | |  EXPERIENCE    | |  INTERNSHIPS   | |   PROJECTS     | | CERTIFICATIONS |   |    CANDIDATE_SKILLS     |
++----------------+ +----------------+ +----------------+ +----------------+ +----------------+   +-------------------------+
+| PK education_id| | PK exp_id      | | PK intern_id   | | PK project_id  | | PK cert_id     |   | PK skill_record_id      |
+| FK applicant_id| | FK applicant_id| | FK applicant_id| | FK applicant_id| | FK applicant_id|   | FK applicant_id         |
+| degree         | | company_name   | | company_name   | | project_title  | | cert_name      |   | FK category_id          |
+| specialization | | designation    | | role           | | description    | | issuer         |   | skill_name              |
+| institution    | |                | |                | |                | |                |   +-------------------------+
+| end_year       | | experience     | |                | |                | |                |                │
+| cgpa           | | description    | | description    | | github_link    | +----------------+                │ M:1
++----------------+ +----------------+ +----------------+ |                |                                   ▼
+                                                         |                |                      +-------------------------+
+                                                         +----------------+                      |     SKILL_CATEGORY      |
+                                                                                                 +-------------------------+
+                                                                                                 | PK category_id          |
+                                                                                                 | category_name           |
+                                                                                                 +-------------------------+

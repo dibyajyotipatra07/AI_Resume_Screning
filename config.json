@@ -1,0 +1,13 @@
+{
+    "parameters": {
+        "host": "127.0.0.1",
+        "user": "root",
+        "password": "Dibya14032007@",
+        "database": "blog",
+        "port": 3306,
+        "mail_username": "admin@gmail.com",
+        "mail_password": "admin@123",
+        "upload_location_resume": "C:\\Users\\ppatr\\OneDrive\\Desktop\\internship\\AI_Resume_Screning\\static\\resume",
+        "upload_location_jd": "C:\\Users\\ppatr\\OneDrive\\Desktop\\internship\\AI_Resume_Screning\\static\\job_descriptions"
+    }
+}

@@ -1,0 +1,60 @@
+                                 
+                                    +------------------+
+                                    |      ADMINS      |
+                                    +------------------+
+                                    | PK emp_id        |
+                                    | name             |
+                                    | email_id         |
+                                    | phn_no           |
+                                    | password         |
+                                    +------------------+
+                                             |
+                                             | 1:M
+                                             |
+                                             ▼
+
+                                    +------------------+
+                                    |       JOBS       |
+                                    +------------------+
+                                    | PK job_id        |
+                                    | FK emp_id        |
+                                    | job_title        |
+                                    | company_name     |
+                                    | location         |
+                                    | min_experience   |
+                                    | max_experience   |
+                                    | qualification    |
+                                    | jd_file_path     |
+                                    | posted_date      |
+                                    | status           |
+                                    +------------------+
+                                             |
+                                             | 1:M
+                                             |
+                                             ▼
+                                   +-------------------+
+                                   |    JOB_SKILLS     |
+                                   +-------------------+
+                                   | PK job_skill_id   |
+                                   | FK job_id         |
+                                   | FK category_id    |
+                                   | skill_name        |
+                                   +-------------------+
+
+
+          CANDIDATES (M) -------- (N) JOBS
+                     \             /
+                      \           /
+                       \         /
+                        ▼       ▼
+
+                 +------------------+
+                 |   APPLICATIONS   |
+                 +------------------+
+                 | PK application_id|
+                 | FK applicant_id  |
+                 | FK job_id        |
+                 | application_date |
+                 | match_score      |
+                 | status           |
+                 +------------------+
