@@ -246,6 +246,7 @@ def home():
                 cursor.execute("INSERT INTO admin (emp_id, name, email_id, phn_no, password) VALUES (%s, %s, %s, %s, %s)", 
                                 (emp_id, fullname, email, mobile_number, password))
                 conn.commit()
+                flash("Admin account created successfully!", "success")
             except Exception as e:
                 print("Database Error:", e)
         else:
@@ -261,6 +262,7 @@ def home():
                 # update the resume file name in the database
                 cursor.execute("UPDATE applicant SET resume_file_name = %s WHERE applicant_id = %s", (resume_filename, applicant_id))
                 conn.commit()
+                flash("Applicant account created successfully!", "success")
             except Exception as e:
                 print("Database Error:", e)
         return redirect('/login')  # Redirect to login page after successful account creation
