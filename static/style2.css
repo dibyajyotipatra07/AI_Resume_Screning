@@ -49,14 +49,14 @@
      width:900px;
     max-width:100%;
     border-radius:10px;
-
+    height:515px;
     margin-left:50px;
     margin-right:0px;
 }
 form{
     width:450px;
     background:white;
-
+    height:450px;
     padding:30px;
 
     border-radius:12px;
