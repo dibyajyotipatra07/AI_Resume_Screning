@@ -38,13 +38,13 @@ app.config['UPLOAD_FOLDER_JD'] = params['upload_location_jd']
 app.config['UPLOAD_FOLDER_RESUME'] = params['upload_location_resume']
 
 
-@app.route('/')
+@app.route('/create')
 def home():
-    return render_template('login_page.html')
+    return render_template('create_page.html')
 
 
 @app.route('/login')
 def login():
-    return render_template('login_page2.html')
+    return render_template('login.html')
 
 app.run(debug=True)

@@ -13,7 +13,7 @@
       <div class="header">
         <div class="logo">
           <img
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/BHEL_logo.svg/1280px-BHEL_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail"
+            src="{{ url_for('static', filename='assets/BHEL_logo.png') }}"
           />
           <p>Bharat Heavy Electricals Limited</p>
         </div>
@@ -108,11 +108,11 @@
         /><br /><br />
         <button class="login-btn" type="submit">login</button>
         <p>
-          Don't have an account? <a href="login_page.html">Create an account</a>
+          Don't have an account? <a href="/create">Create an account</a>
         </p>
       </form>
       <img
-        src="https://www.bhel.com/sites/default/files/2025-02/power-sector_1.jpg"
+        src="{{ url_for('static', filename='assets/power-sector.jpg') }}"
         class="industry_image"
       />
     </div>

@@ -11,7 +11,7 @@
         <!-- header of the page -->
         <div class="header">
             <div class="logo">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/BHEL_logo.svg/1280px-BHEL_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail">
+                <img src="{{ url_for('static', filename='assets/BHEL_logo.png') }}">
                 <p>Bharat Heavy Electricals Limited</p>
                 <p><h4>Powering Progress,Brightening Lives Touching Every Indian Home</h4></p>  
             </div>
@@ -122,9 +122,9 @@
                         </script>
                         
                  <button class="create-btn" type="submit">Create Account</button>
-                <p>Already have an account? <a href="login_page2.html">Login here</a></p>
+                <p>Already have an account? <a href="/login">Login here</a></p>
           </form>
-          <img src="https://www.bhel.com/sites/default/files/2025-02/power-sector_1.jpg">   
+          <img src="{{ url_for('static', filename='assets/power-sector.jpg') }}">   
          </div>
     </body>
 </html>
