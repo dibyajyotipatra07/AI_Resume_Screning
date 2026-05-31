@@ -231,7 +231,7 @@ app.config['UPLOAD_FOLDER_RESUME'] = params['upload_location_resume']
 
 
 @app.route('/create', methods=['GET', 'POST'])
-def home():
+def create_account():
     if request.method == 'POST':
         # Handle account creation logic here
         fullname = request.form['Fullname']
