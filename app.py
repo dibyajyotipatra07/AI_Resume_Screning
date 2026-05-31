@@ -249,6 +249,7 @@ def home():
                 flash("Admin account created successfully!", "success")
             except Exception as e:
                 print("Database Error:", e)
+                flash("Failed to create admin account.", "danger")
         else:
             try:
                 resume_file = request.files['resume']
@@ -265,6 +266,7 @@ def home():
                 flash("Applicant account created successfully!", "success")
             except Exception as e:
                 print("Database Error:", e)
+                flash("Failed to create applicant account.", "danger")
         return redirect('/login')  # Redirect to login page after successful account creation
     return render_template('create_page.html', params=params)
 
