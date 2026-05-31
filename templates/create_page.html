@@ -27,12 +27,12 @@
          <div class="main_container">
             <div class="container">
            <!-- create account form -->
-            <form action="/login" method="post">
+            <form action="/create" method="POST" enctype="multipart/form-data">
             <h2>create an account</h2>
                 <label for="firstname">Full Name</label>
                 <input type="text" id="Fulltname" name="Fullname" placeholder="Full name" required>
                          <label for="lastname">Mobile Number</label>
-                        <input type="text" id="mobile number" name="mobile number" placeholder="Mobile number" required>
+                        <input type="text" id="mobile_number" name="mobile_number" placeholder="Mobile number" required>
                             <label for="username">Email</label>
                              <input type="text" id="username" name="username" placeholder="Email ID" required>
                                  <label for="password">Password</label>
@@ -76,7 +76,7 @@
                                     fileName.textContent = "No file selected";
                                 }
                             });
-                            </script>
+                    </script>
                     <script>
                         function toggleFields() {
 

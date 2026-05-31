@@ -230,13 +230,48 @@ app.config['UPLOAD_FOLDER_JD'] = params['upload_location_jd']
 app.config['UPLOAD_FOLDER_RESUME'] = params['upload_location_resume']
 
 
-@app.route('/create')
+@app.route('/create', methods=['GET', 'POST'])
 def home():
-    return render_template('create_page.html')
+    if request.method == 'POST':
+        # Handle account creation logic here
+        fullname = request.form['Fullname']
+        mobile_number = request.form['mobile_number']
+        email = request.form['username']
+        password = request.form['password']
+        role = request.form['role']
+        if role == 'admin':
+            try:
+                emp_id = request.form['employeeId']
+                # Insert the new admin into the database
+                cursor.execute("INSERT INTO admin (emp_id, name, email_id, phn_no, password) VALUES (%s, %s, %s, %s, %s)", 
+                                (emp_id, fullname, email, mobile_number, password))
+                conn.commit()
+            except Exception as e:
+                print("Database Error:", e)
+        else:
+            try:
+                resume_file = request.files['resume']
+                cursor.execute("INSERT INTO applicant (name, phn_no, email_id, password, resume_file_name, upload_date) VALUES (%s, %s, %s, %s, %s, %s)",
+                (fullname, mobile_number, email, password, '', datetime.date.today()))
+                conn.commit()  # Commit to get the applicant_id
+                applicant_id = cursor.lastrowid
+                resume_filename = secure_filename(resume_file.filename)
+                resume_filename = f"{applicant_id}_{resume_filename}"
+                resume_file.save(os.path.join(app.config['UPLOAD_FOLDER_RESUME'], resume_filename))
+                # update the resume file name in the database
+                cursor.execute("UPDATE applicant SET resume_file_name = %s WHERE applicant_id = %s", (resume_filename, applicant_id))
+                conn.commit()
+            except Exception as e:
+                print("Database Error:", e)
+        return redirect('/login')  # Redirect to login page after successful account creation
+    return render_template('create_page.html', params=params)
 
 
-@app.route('/login')
+@app.route('/login', methods=['GET', 'POST'])
 def login():
+    if request.method == 'POST':
+        # Handle login logic here
+        pass
     return render_template('login.html')
 
 app.run(debug=True)
