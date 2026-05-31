@@ -3,7 +3,7 @@
         "host": "127.0.0.1",
         "user": "root",
         "password": "Dibya14032007@",
-        "database": "blog",
+        "database": "resume_screening",
         "port": 3306,
         "mail_username": "admin@gmail.com",
         "mail_password": "admin@123",
