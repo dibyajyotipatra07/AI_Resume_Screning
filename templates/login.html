@@ -19,8 +19,8 @@
           <p>Bharat Heavy Electricals Limited</p>
         </div>
         <ul>
-          <li><a href="home_page.html">Home</a></li>
-          <li><a href="login_page.html">Login</a></li>
+          <li><a href="/home">Home</a></li>
+          <li><a href="/login">Login</a></li>
         </ul>
       </div>
     </header>
@@ -72,8 +72,8 @@
 
         <!-- Applicant Section -->
         <div id="applicant-field" style="display: none">
-          <label for="username">Email id</label>
-          <input type="text" id="username" name="email" />
+          <label for="email">Email id</label>
+          <input type="text" id="email" name="email" />
         </div>
 
         <script>
@@ -88,14 +88,14 @@
 
             let employeeId = document.getElementById("employeeId");
 
-            let username = document.getElementById("username");
+            let email = document.getElementById("email");
 
             if (applicantRadio.checked) {
               applicantField.style.display = "block";
               adminField.style.display = "none";
 
               // Make resume mandatory
-              username.required = true;
+              email.required = true;
 
               // Employee ID not mandatory
               employeeId.required = false;

@@ -229,7 +229,7 @@ app.config['UPLOAD_FOLDER_JD'] = params['upload_location_jd']
 # Configure upload folder for Resumes
 app.config['UPLOAD_FOLDER_RESUME'] = params['upload_location_resume']
 
-
+# create account route
 @app.route('/create', methods=['GET', 'POST'])
 def create_account():
     if request.method == 'POST':
@@ -271,11 +271,56 @@ def create_account():
     return render_template('create_page.html', params=params)
 
 
+# Login page route
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        # Handle login logic here
+        role = request.form.get('role')
+        if role == 'admin':
+            empid = request.form.get('employeeId')
+            passa = request.form.get('password')
+            cursor.execute("SELECT * FROM admin WHERE emp_id = %s AND password = %s", (empid, passa))
+            admin = cursor.fetchone()
+            if admin:
+                session['admin_id'] = admin['emp_id']  # Store admin ID in session
+                session['admin_name'] = admin['name']  # Store admin name in session
+                session['role'] = 'admin'  # Store admin role in session
+                return redirect(f'/dashboard/{session["role"]}/{session["admin_id"]}')  # Redirect to dashboard after successful login
+            else:
+                flash("Invalid admin credentials.", "danger")
+
+        else:
+            email = request.form.get('email')
+            passa = request.form.get('password')
+            cursor.execute("SELECT * FROM applicant WHERE email_id = %s AND password = %s", (email, passa))
+            applicant = cursor.fetchone()
+            if applicant:
+                session['applicant_id'] = applicant['applicant_id']  # Store applicant ID in session
+                session['applicant_name'] = applicant['name']  # Store applicant name in session
+                session['role'] = 'applicant'  # Store applicant role in session
+                return redirect(f'/dashboard/{session["role"]}/{session["applicant_id"]}')  # Redirect to dashboard after successful login
+            else:
+                flash("Invalid applicant credentials.", "danger")
+
+    return render_template('login.html', params=params)
+
+@app.route('/home')
+def home():
+    # return render_template('home_page.html', params=params)
+    pass
+
+
+
+@app.route('/dashboard/<string:role>/<string:id>')
+def home(role, id):
+    if role == 'admin':
+        # return render_template('dashboard_admin.html', params=params)
         pass
-    return render_template('login.html')
+    elif role == 'applicant':
+        # return render_template('dashboard_applicant.html', params=params)
+        pass
+    
+
+
 
 app.run(debug=True)
