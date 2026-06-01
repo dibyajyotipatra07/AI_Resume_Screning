@@ -7,101 +7,143 @@
   <title>login page</title>
   <link
     rel="stylesheet"
-    href="{{ url_for('static', filename='style4.css') }}"
+    href="{{ url_for('static', filename='style3.css') }}"
   />
 </head>
-{% endblock %}
+{% endblock %} {% block content %}
 
-<!-- Main Content  -->
-{% block content %}
+<!-- Main Content -->
+<div class="dashboard_content">
+  <!-- Welcome Section -->
+  <div class="welcome_card">
+    <h2>Welcome, {{ applicant.name }}</h2>
+    <p>Manage your applications, explore jobs, and keep your resume updated.</p>
+  </div>
 
-<div class="main_container">
-  <nav>
-    <a
-      href="/dashboard/applicant/{{applicant.applicant_id}}"
-      style="text-decoration: none"
-      class="active"
-      >Dashboard</a
-    >
-    <a href="myapplication.html" style="text-decoration: none"
-      >My Applications</a
-    >
-    <a href="jobsearch.html" style="text-decoration: none">Job Search</a>
-    <a href="profile.html" style="text-decoration: none">Profile Settings</a>
-  </nav>
-  <!-- Top Section -->
-  <div>
-    <div class="top_grid">
-      <div class="profile-card">
-        <h3>YOUR PROFILE COMPLETENESS</h3>
-
-        <div class="progress-row">
-          <div class="circle">85%</div>
-
-          <div>
-            <p>Your profile completed progress.</p>
-            <button>UPDATE PROFILE</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="status-card">
-        <h3>CURRENT APPLICATION STATUS</h3>
-        <div class="timeline">
-          <div class="timeline-item pending">
-            <h4>Engineer (Electrical) - Haridwar</h4>
-            <p>Under Review</p>
-            <p>Status: Applied 12 Oct</p>
-          </div>
-          <div class="timeline-item active">
-            <h4>Graduate Trainee - Bhopal</h4>
-            <p>Selected for Interview</p>
-            <p>Status: Scheduled 28 Oct</p>
-          </div>
-          <div class="timeline-item">
-            <h4>Management Trainee</h4>
-            <p>Application Submitted</p>
-            <p>Status: Acknowledged</p>
-          </div>
-        </div>
-      </div>
-      <div>
-        <!-- Resume Upload -->
-        <div class="resume-card">
-          <button>UPLOAD NEW RESUME</button>
-        </div>
-        <!-- Jobs & Notifications -->
-        <div class="bottom-grid">
-          <div class="jobs-section">
-            <h3>LATEST JOB OPPORTUNITIES</h3>
-            <div class="jobs">
-              <div class="job-card">
-                <h4>Manager (Finance) - Delhi</h4>
-                <p>Research and management details.</p>
-                <div class="btns">
-                  <button>VIEW DETAILS</button>
-                  <button>APPLY NOW</button>
-                </div>
-              </div>
-              <div class="job-card">
-                <h4>Sr. Engineer (Design) - Bengaluru</h4>
-                <p>Design and engineering details.</p>
-                <div class="btns">
-                  <button>VIEW DETAILS</button>
-                  <button>APPLY NOW</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- Statistics -->
+  <div class="stats_grid">
+    <div class="stat_card">
+      <h3>{{ total_applications }}</h3>
+      <p>Applications Submitted</p>
     </div>
-    <div class="notifications">
-      <h3>MESSAGES & NOTIFICATIONS</h3>
 
-      <p>Interview Call for Haridwar</p>
-      <p>Your Resume Was Viewed</p>
-      <p>Your Resume Was Viewed</p>
+    <div class="stat_card">
+      <h3>{{ under_review }}</h3>
+      <p>Under Review</p>
+    </div>
+
+    <div class="stat_card">
+      <h3>{{ interview_count }}</h3>
+      <p>Interviews Scheduled</p>
+    </div>
+
+    <div class="stat_card">
+      <h3>{{ match_score }}%</h3>
+      <p>Profile Match Score</p>
+    </div>
+  </div>
+
+  <!-- Resume Information -->
+  <div class="resume_section">
+    <div class="section_header">
+      <h3>Resume Information</h3>
+    </div>
+
+    <div class="resume_details">
+      <p>
+        <strong>Uploaded Resume:</strong>
+        {{ applicant.resume_file_name }}
+      </p>
+
+      <p>
+        <strong>Last Updated:</strong>
+        {{ applicant.upload_date }}
+      </p>
+
+      <p>
+        <strong>Skills Extracted:</strong>
+      </p>
+
+      <div class="skills_container">
+        {% for skill in skills %}
+        <span class="skill_badge"> {{ skill }} </span>
+        {% endfor %}
+      </div>
+
+      <a href="/resume/{{ applicant.applicant_id }}">
+        <button>Update Resume</button>
+      </a>
+    </div>
+  </div>
+
+  <!-- Recent Applications -->
+  <div class="applications_section">
+    <div class="section_header">
+      <h3>Recent Applications</h3>
+    </div>
+
+    <table class="application_table">
+      <thead>
+        <tr>
+          <th>Job Title</th>
+          <th>Company</th>
+          <th>Status</th>
+          <th>Applied On</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for application in applications %}
+
+        <tr>
+          <td>{{ application.job_title }}</td>
+          <td>{{ application.company }}</td>
+
+          <td>
+            <span class="status_badge {{ application.status|lower }}">
+              {{ application.status }}
+            </span>
+          </td>
+
+          <td>{{ application.applied_date }}</td>
+        </tr>
+
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Recommended Jobs -->
+  <div class="jobs_section">
+    <div class="section_header">
+      <h3>Recommended Jobs</h3>
+    </div>
+
+    <div class="job_grid">
+      {% for job in recommended_jobs %}
+
+      <div class="job_card">
+        <h4>{{ job.title }}</h4>
+
+        <p>{{ job.company }}</p>
+
+        <p>
+          Match Score:
+          <strong>{{ job.match_score }}%</strong>
+        </p>
+
+        <div class="job_buttons">
+          <a href="/job/{{ job.id }}">
+            <button>View Details</button>
+          </a>
+
+          <a href="/apply/{{ job.id }}">
+            <button>Apply Now</button>
+          </a>
+        </div>
+      </div>
+
+      {% endfor %}
     </div>
   </div>
 </div>

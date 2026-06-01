@@ -16,24 +16,90 @@
             </h4>
           </div>
         </div>
-        <div class="profile">
-          <p>Welcome,<br />{{ applicant.name }}</p>
-          <a href="/logout"><button class="btn">logout</button></a>
-        </div>
       </div>
     </header>
+    <div class="main_container">
+      <!-- Sidebar -->
+      <nav class="sidebar">
+        <ul class="sidebar_lists">
+          <li>
+            <a
+              href="/dashboard/applicant/{{ applicant.applicant_id }}"
+              class="active"
+            >
+              Dashboard
+            </a>
+          </li>
 
-    {% block content %}
-    <!-- Main Content-->
-    {% endblock %}
+          <li>
+            <a href="/applications/{{ applicant.applicant_id }}">
+              My Applications
+            </a>
+          </li>
 
+          <li>
+            <a href="/jobs"> Find Jobs </a>
+          </li>
+
+          <li>
+            <a href="/resume/{{ applicant.applicant_id }}"> My Resume </a>
+          </li>
+
+          <li>
+            <a href="/profile/{{ applicant.applicant_id }}"> Profile </a>
+          </li>
+
+          <li>
+            <a href="/logout"> Logout </a>
+          </li>
+        </ul>
+      </nav>
+      {% block content %}
+      <!-- Main Content-->
+      {% endblock %}
+    </div>
     <!-- Footer -->
-    <footer>
-      <a href="#">About BHEL</a>
-      <a href="#">Contact HR</a>
-      <a href="#">FAQ</a>
-      <a href="#">Privacy Policy</a>
-      <a href="#">BHEL Careers</a>
+    <footer class="footer">
+      <div class="footer_container">
+        <div class="footer_section">
+          <h3>Resume Parser ATS</h3>
+          <p>
+            Smart recruitment platform for candidates and recruiters. Upload
+            resumes, discover jobs, and track applications seamlessly.
+          </p>
+        </div>
+
+        <div class="footer_section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">My Applications</a></li>
+            <li><a href="#">Find Jobs</a></li>
+            <li><a href="#">My Resume</a></li>
+          </ul>
+        </div>
+
+        <div class="footer_section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+          </ul>
+        </div>
+
+        <div class="footer_section">
+          <h4>Contact</h4>
+          <p>Email: support@resumeparser.com</p>
+          <p>Phone: +91 XXXXX XXXXX</p>
+          <p>India</p>
+        </div>
+      </div>
+
+      <div class="footer_bottom">
+        <p>© 2026 Resume Parser ATS. All Rights Reserved.</p>
+      </div>
     </footer>
   </body>
 </html>

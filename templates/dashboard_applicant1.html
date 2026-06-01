@@ -1,0 +1,112 @@
+{% extends "layout2.html" %} {% block title %}Applicant Dashboard{% endblock %}
+
+<!-- for head jinja block-->
+{% block head %}
+<head>
+  <meta charset="utf-8" />
+  <title>login page</title>
+  <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style4.css') }}"
+  />
+</head>
+{% endblock %}
+
+<!-- Main Content  -->
+{% block content %}
+
+<div class="main_container">
+  <nav class="sidebar">
+    <ul class="sidebar_lists">
+      <li>
+        <a href="/dashboard/applicant/{{applicant.applicant_id}}" style="text-decoration: none" class="active">Dashboard</a>
+      </li>
+      <li>
+        <a href="myapplication.html" style="text-decoration: none">My Applications</a>
+      </li>
+      <li>
+        <a href="jobsearch.html" style="text-decoration: none">Job Search</a>
+      </li>
+      <li>
+        <a href="profile.html" style="text-decoration: none">Profile Settings</a>
+      </li>
+    </ul>
+  </nav>
+  <!-- Top Section -->
+  <div>
+    <div class="top_grid">
+      <div class="profile-card">
+        <h3>YOUR PROFILE COMPLETENESS</h3>
+
+        <div class="progress-row">
+          <div class="circle">85%</div>
+
+          <div>
+            <p>Your profile completed progress.</p>
+            <button>UPDATE PROFILE</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="status-card">
+        <h3>CURRENT APPLICATION STATUS</h3>
+        <div class="timeline">
+          <div class="timeline-item pending">
+            <h4>Engineer (Electrical) - Haridwar</h4>
+            <p>Under Review</p>
+            <p>Status: Applied 12 Oct</p>
+          </div>
+          <div class="timeline-item active">
+            <h4>Graduate Trainee - Bhopal</h4>
+            <p>Selected for Interview</p>
+            <p>Status: Scheduled 28 Oct</p>
+          </div>
+          <div class="timeline-item">
+            <h4>Management Trainee</h4>
+            <p>Application Submitted</p>
+            <p>Status: Acknowledged</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <!-- Resume Upload -->
+        <div class="resume-card">
+          <button>UPLOAD NEW RESUME</button>
+        </div>
+        <!-- Jobs & Notifications -->
+        <div class="bottom-grid">
+          <div class="jobs-section">
+            <h3>LATEST JOB OPPORTUNITIES</h3>
+            <div class="jobs">
+              <div class="job-card">
+                <h4>Manager (Finance) - Delhi</h4>
+                <p>Research and management details.</p>
+                <div class="btns">
+                  <button>VIEW DETAILS</button>
+                  <button>APPLY NOW</button>
+                </div>
+              </div>
+              <div class="job-card">
+                <h4>Sr. Engineer (Design) - Bengaluru</h4>
+                <p>Design and engineering details.</p>
+                <div class="btns">
+                  <button>VIEW DETAILS</button>
+                  <button>APPLY NOW</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="notifications">
+      <h3>MESSAGES & NOTIFICATIONS</h3>
+
+      <p>Interview Call for Haridwar</p>
+      <p>Your Resume Was Viewed</p>
+      <p>Your Resume Was Viewed</p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
