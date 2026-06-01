@@ -1,132 +1,135 @@
-<!-- first page of the login, first create an account -->
-<!Doctype html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <title>login page</title>
-        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    </head>
-    <body>
-       <header>
-        <!-- header of the page -->
-        <div class="header">
-            <div class="logo">
-                <img src="{{ url_for('static', filename='assets/BHEL_logo.png') }}">
-                <div>
-                    <p>Bharat Heavy Electricals Limited</p>
-                    <h4 id="tagline">Powering Progress,Brightening Lives Touching Every Indian Home</h4>
-                </div>
-            </div>
-            <ul>
-                <li><a href="/home" style="text-decoration: none;">Home</a></li>
-                <li><a href="/login" style="text-decoration: none;">Login</a></li>
-            </ul>
-        </div>
-        <!-- hero section -->
-       </header>
-         <div class="main_container">
-            <div class="container">
-           <!-- create account form -->
-            <form action="/create" method="POST" enctype="multipart/form-data">
-            <h2>create an account</h2>
-                <label for="firstname">Full Name</label>
-                <input type="text" id="Fulltname" name="Fullname" placeholder="Full name" required>
-                         <label for="lastname">Mobile Number</label>
-                        <input type="text" id="mobile_number" name="mobile_number" placeholder="Mobile number" required>
-                            <label for="username">Email</label>
-                             <input type="text" id="username" name="username" placeholder="Email ID" required>
-                                 <label for="password">Password</label>
-                                 <input type="password" id="password" name="password" placeholder="Password" required>
-                                    <div class="role-selection">
-                        <label>
-                            <input type="radio" name="role" value="applicant"
-                                checked onclick="toggleFields()">
-                            Applicant
-                        </label>
+{% extends "layout.html" %} {% block content %}
 
-                        <label>
-                            <input type="radio" name="role" value="admin"
-                                onclick="toggleFields()">
-                            Admin
-                        </label>
-                    </div>
+<!-- create account page   -->
+<div class="main_container">
+  <div class="container">
+    <!-- create account form -->
+    <form action="/create" method="POST" enctype="multipart/form-data">
+      <h2>create an account</h2>
+      <label for="firstname">Full Name</label>
+      <input
+        type="text"
+        id="Fulltname"
+        name="Fullname"
+        placeholder="Full name"
+        required
+      />
+      <label for="lastname">Mobile Number</label>
+      <input
+        type="text"
+        id="mobile_number"
+        name="mobile_number"
+        placeholder="Mobile number"
+        required
+      />
+      <label for="username">Email</label>
+      <input
+        type="text"
+        id="username"
+        name="username"
+        placeholder="Email ID"
+        required
+      />
+      <label for="password">Password</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Password"
+        required
+      />
+      <div class="role-selection">
+        <label>
+          <input
+            type="radio"
+            name="role"
+            value="applicant"
+            checked
+            onclick="toggleFields()"
+          />
+          Applicant
+        </label>
 
-                    <!-- Admin Section -->
-                    <div id="admin-field" style="display:none;">
-                        <label for="employeeId">Employee No.</label>
-                        <input type="text" id="employeeId" name="employeeId">
-                    </div>
+        <label>
+          <input
+            type="radio"
+            name="role"
+            value="admin"
+            onclick="toggleFields()"
+          />
+          Admin
+        </label>
+      </div>
 
-                    <!-- Applicant Section -->
-                   <div id="applicant-field">
-                        <label for="resume">Upload Resume</label>
-                        <input type="file" id="resume" name="resume"
-                            accept=".pdf,.doc,.docx">
+      <!-- Admin Section -->
+      <div id="admin-field" style="display: none">
+        <label for="employeeId">Employee No.</label>
+        <input type="text" id="employeeId" name="employeeId" />
+      </div>
 
-                        <p id="fileName">No file selected</p>
-                    </div>
-                    <script>
-                            const resumeInput = document.getElementById("resume");
-                            const fileName = document.getElementById("fileName");
+      <!-- Applicant Section -->
+      <div id="applicant-field">
+        <label for="resume">Upload Resume</label>
+        <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" />
 
-                            resumeInput.addEventListener("change", function() {
-                                if (this.files.length > 0) {
-                                    fileName.textContent = "Selected: " + this.files[0].name;
-                                } else {
-                                    fileName.textContent = "No file selected";
-                                }
-                            });
-                    </script>
-                    <script>
-                        function toggleFields() {
+        <p id="fileName">No file selected</p>
+      </div>
+      <script>
+        const resumeInput = document.getElementById("resume");
+        const fileName = document.getElementById("fileName");
 
-                            let applicantRadio =
-                                document.querySelector('input[value="applicant"]');
+        resumeInput.addEventListener("change", function () {
+          if (this.files.length > 0) {
+            fileName.textContent = "Selected: " + this.files[0].name;
+          } else {
+            fileName.textContent = "No file selected";
+          }
+        });
+      </script>
+      <script>
+        function toggleFields() {
+          let applicantRadio = document.querySelector(
+            'input[value="applicant"]',
+          );
 
-                            let adminField =
-                                document.getElementById('admin-field');
+          let adminField = document.getElementById("admin-field");
 
-                            let applicantField =
-                                document.getElementById('applicant-field');
+          let applicantField = document.getElementById("applicant-field");
 
-                            let employeeId =
-                                document.getElementById('employeeId');
+          let employeeId = document.getElementById("employeeId");
 
-                            let resume =
-                                document.getElementById('resume');
+          let resume = document.getElementById("resume");
 
-                            if (applicantRadio.checked) {
+          if (applicantRadio.checked) {
+            applicantField.style.display = "block";
+            adminField.style.display = "none";
 
-                                applicantField.style.display = "block";
-                                adminField.style.display = "none";
+            // Make resume mandatory
+            resume.required = true;
 
-                                // Make resume mandatory
-                                resume.required = true;
+            // Employee ID not mandatory
+            employeeId.required = false;
+          } else {
+            applicantField.style.display = "none";
+            adminField.style.display = "block";
 
-                                // Employee ID not mandatory
-                                employeeId.required = false;
+            // Employee ID mandatory
+            employeeId.required = true;
 
-                            } else {
+            // Resume not mandatory
+            resume.required = false;
+          }
+        }
 
-                                applicantField.style.display = "none";
-                                adminField.style.display = "block";
+        // Run once when page loads
+        window.onload = toggleFields;
+      </script>
 
-                                // Employee ID mandatory
-                                employeeId.required = true;
+      <button class="create-btn" type="submit">Create Account</button>
+      <p>Already have an account? <a href="/login">Login here</a></p>
+    </form>
+    <img src="{{ url_for('static', filename='assets/power-sector.jpg') }}" />
+  </div>
+</div>
 
-                                // Resume not mandatory
-                                resume.required = false;
-                            }
-                        }
-
-                        // Run once when page loads
-                        window.onload = toggleFields;
-                        </script>
-                        
-                 <button class="create-btn" type="submit">Create Account</button>
-                <p>Already have an account? <a href="/login">Login here</a></p>
-          </form>
-          <img src="{{ url_for('static', filename='assets/power-sector.jpg') }}">   
-         </div>
-    </body>
-</html>
+{% endblock %}

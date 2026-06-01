@@ -304,21 +304,20 @@ def login():
 
     return render_template('login.html', params=params)
 
-@app.route('/home')
+@app.route('/')
 def home():
-    # return render_template('home_page.html', params=params)
-    pass
+    return render_template('home_page.html', params=params)
+
 
 
 
 @app.route('/dashboard/<string:role>/<string:id>')
-def home(role, id):
+def dashboard(role, id):
     if role == 'admin':
-        # return render_template('dashboard_admin.html', params=params)
-        pass
+        return render_template('dashboard_admin.html', params=params)
     elif role == 'applicant':
-        # return render_template('dashboard_applicant.html', params=params)
-        pass
+        return render_template('dashboard_applicant.html', params=params)
+
     
 
 
