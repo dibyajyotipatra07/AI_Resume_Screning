@@ -314,12 +314,19 @@ def home():
 @app.route('/dashboard/<string:role>/<string:id>')
 def dashboard(role, id):
     if role == 'admin':
-        return render_template('dashboard_admin.html', params=params)
+        cursor.execute("SELECT * FROM admin WHERE emp_id = %s", (id,))
+        admin = cursor.fetchone()
+        return render_template('dashboard_admin.html', params=params, admin=admin)
     elif role == 'applicant':
-        return render_template('dashboard_applicant.html', params=params)
+        cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (id,))
+        applicant = cursor.fetchone()
+        return render_template('dashboard_applicant.html', params=params, applicant=applicant)
 
-    
 
+@app.route('/logout')
+def logout():
+    session.clear()
+    return redirect('/')
 
 
 app.run(debug=True)

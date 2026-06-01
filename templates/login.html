@@ -3,12 +3,55 @@
   <meta charset="utf-8" />
   <title>login page</title>
 
-  
   <link
     rel="stylesheet"
     href="{{ url_for('static', filename='style2.css') }}"
   />
-  
+
+  <style>
+    /* Flash Messages */
+    .alert {
+      padding: 12px 26px;
+      margin: 10px 0;
+      border-radius: 5px;
+      position: relative;
+      font-size: 17px;
+      color: #2d2727;
+    }
+
+    .alert-success {
+      background-color: #1eee4dc2;
+    }
+
+    .alert-danger {
+      background-color: #ff0018b3;
+    }
+
+    .alert-warning {
+      background-color: #ecc757;
+      color: black;
+    }
+
+    .alert-info {
+      background-color: #50c6d8;
+    }
+
+    .btn-close {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      background: transparent;
+      border: none;
+      color: inherit;
+      font-size: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .btn-close:hover {
+      opacity: 0.7;
+    }
+  </style>
 </head>
 {% endblock %} {% block content %}
 <!-- login page -->
