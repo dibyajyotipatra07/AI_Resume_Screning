@@ -1,0 +1,237 @@
+.header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: #f5f5f5;
+    padding: 2px 40px;
+
+    margin-bottom: 5px;
+    border-bottom: 2px solid #ddd;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    
+}
+.header img{
+    width: 82px;
+    height: 70px;
+    
+}
+
+.tagline p:first-child{
+    font-size: 28px;
+    font-weight: 700;
+    color: #003366;
+    margin-bottom:0px;
+    margin-top:0px;
+}
+.tagline h4{
+    font-size: 18px;
+    font-weight: 400;
+    color: #1c0d0d;
+    margin-top: 0px;
+    letter-spacing: 0.5px;
+}
+.h1{
+    display: flex;
+}
+.logo{
+    display: flex;
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #3cff00;
+    padding: 10px 100px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #ddd;
+}
+.top_grid{
+    display: flex;
+}
+.profile-card{
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    border: 1px solid #dedada;
+    margin-top:30px;
+    margin-right:25px;
+     margin-left:25px;
+}
+.profile-card h3{
+    font-size: 18px;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.progress-row{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.circle{
+    width: 100px;
+    height: 100px;
+    border: 8px solid #0056b3;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #0056b3;
+}
+.progress-row p{
+    color: #555;
+    font-size: 15px;
+    margin-bottom: 12px;
+    line-height: 1.5;
+}
+
+.profile-card button{
+    background: #0056b3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.3s;
+}
+.profile-card button:hover{
+    background: #003f88;
+    transform: translateY(-2px);
+}
+.status-card{
+    background: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    border: 1px solid #dedada;
+    margin-top:30px;
+     margin-right:25px;
+      margin-left:25px;
+}
+
+.status-card h3{
+    font-size: 18px;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.timeline{
+    position: relative;
+    margin-left: 15px;
+}
+
+.timeline::before{
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 0;
+    height: 100%;
+    width: 2px;
+    background: #d1d5db;
+}
+
+.timeline-item{
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 25px;
+}
+
+
+
+
+.timeline-item p{
+    font-size: 14px;
+    color: #6b7280;
+    margin: 2px 0;
+}
+
+.resume-card{
+    margin:30px;
+    margin-left:25px;
+    margin-right:25px;
+    box-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+
+.resume-card button{
+    width:100%;
+    background:#0056b3;
+    color:white;
+    border:none;
+    border-radius:15px;
+    padding:25px;
+    font-size:20px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+    
+}
+
+.resume-card button:hover{
+    background:#6d7680;
+}
+.jobs-section{
+    background:white;
+    padding:40px;
+    border-radius:12px;
+    border:1px solid #e5e7eb;
+    box-shadow:0 2px 8px rgba(0,0,0,0.4);
+    margin-top: 10px;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+.jobs-section h3{
+    color:#1e3a8a;
+    margin-bottom:20px;
+}
+
+.jobs{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:20px;
+}
+
+.job-card{
+    border:1px solid #d1d5db;
+    border-radius:10px;
+    padding:15px;
+}
+
+.job-card h4{
+    color:#111827;
+    margin-bottom:10px;
+}
+
+.job-card p{
+    color:#6b7280;
+    margin-bottom:15px;
+}
+
+.btns{
+    display:flex;
+    gap:10px;
+}
+
+.btns button{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    background:#0056b3;
+    color:white;
+    cursor:pointer;
+}
+
+.btns button:hover{
+    background:#003f88;
+}

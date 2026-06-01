@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>login page</title>
+        <link rel="stylesheet" href="style4.css">
+         <style>
+        /* 1. Prevent scrollbars caused by the blurred image edges */
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            position: relative; 
+            overflow-x: hidden; 
+        }
+
+        /* 2. Create a hidden layer attached to the body for the image */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Pushes the image behind your text content */
+            
+            /* Add your image file path here */
+            background-image: url('https://hwr.bhel.com/bhelweb/assets/img/portfolio/st3.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            /* 3. Apply the blur filter and scale to hide white edges */
+            filter: blur(8px); 
+            transform: scale(1.1); 
+        }
+
+        /* Styling for your actual content so it sits cleanly on top */
+        .content {
+            color: white;
+            text-align: center;
+            padding: 50px;
+            text-shadow: 1px 1px 10px rgba(0,0,0,0.5);
+        }
+    </style>
+    </head>
+    <body>
+        <header>
+        <!-- header of the page -->
+        <div class="header">
+            <div class="logo">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/BHEL_logo.svg/1280px-BHEL_logo.svg.png?utm_source=commons.wikimedia.org&utm_campaign=index&utm_content=thumbnail">
+                <div class="tagline">
+                    <p>Bharat Heavy Electricals Limited</p>
+                    <p><h4>Powering Progress,Brightening Lives Touching Every Indian Home</h4></p> 
+                </div>
+            </div>
+            <div class="profile">
+                <p>Welcome,<br>applicant name</p>
+                <button>logout</button>
+            </div>
+        </div>
+       </header>
+       <nav>
+        <a href="dashboard_applicant2.html" style="text-decoration: none;"class="active">Dashboard</a>
+        <a href="myapplication.html" style="text-decoration: none;">My Applications</a>
+        <a href="jobsearch.html" style="text-decoration: none;">Job Search</a>
+        <a href="profile.html" style="text-decoration: none;">Profile Settings</a>
+    </nav>
+       <!-- Top Section -->
+<div class="top_grid">
+
+            <div class="profile-card">
+                <h3>YOUR PROFILE COMPLETENESS</h3>
+
+                <div class="progress-row">
+                    <div class="circle">
+                        85%
+                    </div>
+
+                    <div>
+                        <p>Your profile completed progress.</p>
+                        <button>UPDATE PROFILE</button>
+                    </div>
+                </div>
+            </div>
+
+       <div class="status-card">
+         <h3>CURRENT APPLICATION STATUS</h3>
+            <div class="timeline">
+                 <div class="timeline-item pending">
+                 <h4>Engineer (Electrical) - Haridwar</h4>
+                 <p>Under Review</p>
+                 <p>Status: Applied 12 Oct</p>
+                </div>
+            <div class="timeline-item active">
+                <h4>Graduate Trainee - Bhopal</h4>
+                <p>Selected for Interview</p>
+                <p>Status: Scheduled 28 Oct</p>
+            </div>
+                <div class="timeline-item">
+                    <h4>Management Trainee</h4>
+                    <p>Application Submitted</p>
+                    <p>Status: Acknowledged</p>
+            </div>
+
+         </div>
+    
+    </div>
+       <div>
+         <!-- Resume Upload -->
+            <div class="resume-card">
+                <button>UPLOAD NEW RESUME</button>
+            </div>
+                <!-- Jobs & Notifications -->
+    <div class="bottom-grid">
+        <div class="jobs-section">
+            <h3>LATEST JOB OPPORTUNITIES</h3>
+            <div class="jobs">
+                <div class="job-card">
+                    <h4>Manager (Finance) - Delhi</h4>
+                    <p>Research and management details.</p>
+                    <div class="btns">
+                        <button>VIEW DETAILS</button>
+                        <button>APPLY NOW</button>
+                    </div>
+                </div>
+                <div class="job-card">
+                    <h4>Sr. Engineer (Design) - Bengaluru</h4>
+                    <p>Design and engineering details.</p>
+                    <div class="btns">
+                        <button>VIEW DETAILS</button>
+                        <button>APPLY NOW</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+       </div>
+    
+</div>
+     <div class="notifications">
+            <h3>MESSAGES & NOTIFICATIONS</h3>
+
+            <p>Interview Call for Haridwar</p>
+            <p>Your Resume Was Viewed</p>
+            <p>Your Resume Was Viewed</p>
+        </div>
+    <!-- Footer -->
+    <footer>
+        <a href="#">About BHEL</a>
+        <a href="#">Contact HR</a>
+        <a href="#">FAQ</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">BHEL Careers</a>
+    </footer>
+    </body>
+</html>
