@@ -1,14 +1,9 @@
 <!-- first page of the login, first create an account -->
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>login page</title>
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='style.css') }}"
-    />
-  </head>
+  {% block head  %}
+  <!-- Head Content-->
+  {% endblock %}
   <body>
     <header>
       <!-- header of the page -->
@@ -33,5 +28,6 @@
     {% block content %}
     <!-- Main Content-->
     {% endblock %}
+  
   </body>
 </html>
