@@ -1,0 +1,105 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f7fc;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.logout-container{
+    width:100%;
+    display:flex;
+    justify-content:center;
+}
+
+.logout-card{
+    width:500px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    text-align:center;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+.logout-card img{
+    width:120px;
+    height:120px;
+    border-radius:50%;
+    margin-bottom:15px;
+}
+
+.logout-card h2{
+    color:#003366;
+}
+
+.role{
+    color:#666;
+    margin-bottom:20px;
+}
+
+.logout-card h1{
+    margin-bottom:15px;
+    color:#003366;
+}
+
+.message{
+    color:#555;
+    line-height:1.6;
+    margin-bottom:25px;
+}
+
+.session-info{
+    display:flex;
+    justify-content:space-between;
+    background:#f7f9fc;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:25px;
+    text-align:left;
+}
+
+.active{
+    color:green;
+    font-weight:600;
+}
+
+.button-group{
+    display:flex;
+    gap:15px;
+}
+
+.cancel-btn,
+.logout-btn{
+    flex:1;
+    padding:14px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+}
+
+.cancel-btn{
+    background:#e5e7eb;
+    color:#333;
+}
+
+.logout-btn{
+    background:#dc3545;
+    color:white;
+}
+
+.logout-btn:hover{
+    background:#c82333;
+}
+
+.cancel-btn:hover{
+    background:#d1d5db;
+}
