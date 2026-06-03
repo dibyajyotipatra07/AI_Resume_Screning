@@ -2,12 +2,14 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:'Segoe UI',sans-serif;
+    font-family:"times new roman",serif;
 }
+
+
 
 body{
     background:#f4f7fc;
-    padding:30px;
+
 }
 
 .container{

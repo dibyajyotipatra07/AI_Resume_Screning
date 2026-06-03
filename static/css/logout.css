@@ -103,3 +103,10 @@ body{
 .cancel-btn:hover{
     background:#d1d5db;
 }
+
+.cancel-btn a,
+.logout-btn a{
+    text-decoration:none;
+    color:inherit;
+    display:block;
+}

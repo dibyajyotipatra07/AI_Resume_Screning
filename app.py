@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session, flash
+from flask import Flask, render_template, request, redirect, session, flash, send_file
 import mysql.connector
 import json
 import datetime
@@ -258,7 +258,7 @@ def create_account():
                 (fullname, mobile_number, email, password, '', datetime.date.today()))
                 applicant_id = cursor.lastrowid
                 conn.commit()  # Commit to get the applicant_id
-                resume_filename = f"{applicant_id}_resume.pdf"
+                resume_filename = f"{applicant_id}_Resume.pdf"
                 resume_file.save(os.path.join(app.config['UPLOAD_FOLDER_RESUME'], resume_filename))
                 # update the resume file name in the database
                 cursor.execute("UPDATE applicant SET resume_file_name = %s WHERE applicant_id = %s", (resume_filename, applicant_id))
@@ -283,10 +283,13 @@ def login():
             cursor.execute("SELECT * FROM admin WHERE emp_id = %s AND password = %s", (empid, passa))
             admin = cursor.fetchone()
             if admin:
-                session['admin_id'] = admin['emp_id']  # Store admin ID in session
+                session['user_id'] = admin['emp_id']  # Store admin ID in session
                 session['admin_name'] = admin['name']  # Store admin name in session
                 session['role'] = 'admin'  # Store admin role in session
-                return redirect(f'/dashboard/{session["role"]}/{session["admin_id"]}')  # Redirect to dashboard after successful login
+                cursor.execute("UPDATE admin SET last_login=%s WHERE emp_id=%s",(datetime.datetime.now(), session['user_id']))
+                conn.commit()
+                flash("Admin logged in successfully!", "success")
+                return redirect(f'/dashboard/{session["role"]}/{session["user_id"]}')  # Redirect to dashboard after successful login
             else:
                 flash("Invalid admin credentials.", "danger")
 
@@ -296,10 +299,13 @@ def login():
             cursor.execute("SELECT * FROM applicant WHERE email_id = %s AND password = %s", (email, passa))
             applicant = cursor.fetchone()
             if applicant:
-                session['applicant_id'] = applicant['applicant_id']  # Store applicant ID in session
+                session['user_id'] = applicant['applicant_id']  # Store applicant ID in session
                 session['applicant_name'] = applicant['name']  # Store applicant name in session
                 session['role'] = 'applicant'  # Store applicant role in session
-                return redirect(f'/dashboard/{session["role"]}/{session["applicant_id"]}')  # Redirect to dashboard after successful login
+                cursor.execute("UPDATE applicant SET last_login=%s WHERE applicant_id=%s",(datetime.datetime.now(), session['user_id']))
+                conn.commit()
+                flash("Applicant logged in successfully!", "success")
+                return redirect(f'/dashboard/{session["role"]}/{session["user_id"]}')  # Redirect to dashboard after successful login
             else:
                 flash("Invalid applicant credentials.", "danger")
 
@@ -314,67 +320,45 @@ def home():
 
 @app.route('/dashboard/<string:role>/<string:id>')
 def dashboard(role, id):
-    if role == 'admin':
-        flash("Admin logged in successfully!", "success")
-        cursor.execute("SELECT * FROM admin WHERE emp_id = %s", (id,))
-        admin = cursor.fetchone()
-        return render_template('dashboard_admin.html', params=params, admin=admin)
-    elif role == 'applicant':
-        flash("Applicant logged in successfully!", "success")
-        cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (id,))
-        applicant = cursor.fetchone()
-        return render_template('dashboard_applicant.html', params=params, applicant=applicant)
+    if 'user_id' in session:
+        if session['role']  == 'admin':
+            cursor.execute("SELECT * FROM admin WHERE emp_id = %s", (session['user_id'],))
+            admin = cursor.fetchone()
+            return render_template('dashboard_admin.html', params=params, admin=admin, active_page='dashboard')
+        
+        elif session['role'] == 'applicant':
+            cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (id,))
+            applicant = cursor.fetchone()
+            return render_template('dashboard_applicant.html', params=params, applicant=applicant, active_page='dashboard')
+    flash("Invalid session", "danger")
+    return redirect('/login')
 
-
-@app.route('/logout')
-def logout():
-    session.clear()
-    return redirect('/')
 
 @app.route('/applicant/<string:applicant_id>/resume/update', methods=['POST'])
 def update_resume(applicant_id):
 
-    if 'applicant_id' not in session:
+    if 'user_id' not in session:
         flash("Please login first.", "danger")
         return redirect('/login')
 
     try:
-        applicant_id = session['applicant_id']
-        resume_file = request.files.get('resume')
+        applicant_id = session['user_id']
+        resume_file = request.files.get('resume_upload')
 
         if not resume_file or resume_file.filename == '':
             flash("Please select a PDF file.", "danger")
-            return redirect('/dashboard')
+            return redirect(f'/dashboard/applicant/{session["user_id"]}')
 
         if not resume_file.filename.lower().endswith('.pdf'):
             flash("Only PDF files are allowed.", "danger")
-            return redirect('/dashboard')
+            return redirect(f'/dashboard/applicant/{session["user_id"]}')
 
-        resume_filename = f"{applicant_id}_resume.pdf"
+        resume_filename = f"{applicant_id}_Resume.pdf"
 
-        resume_file.save(
-            os.path.join(
-                app.config['UPLOAD_FOLDER_RESUME'],
-                resume_filename
-            )
-        )
+        resume_file.save(os.path.join(app.config['UPLOAD_FOLDER_RESUME'],resume_filename))
 
-        cursor.execute(
-            """
-            UPDATE applicant
-            SET resume_file_name = %s,
-                upload_date = %s
-            WHERE applicant_id = %s
-            """,
-            (
-                resume_filename,
-                datetime.date.today(),
-                applicant_id
-            )
-        )
-
+        cursor.execute("UPDATE applicant SET resume_file_name = %s, upload_date = %s WHERE applicant_id = %s", ( resume_filename, datetime.date.today(), applicant_id))
         conn.commit()
-
         flash("Resume updated successfully!", "success")
 
     except Exception as e:
@@ -382,6 +366,64 @@ def update_resume(applicant_id):
         print("Error:", e)
         flash("Failed to update resume.", "danger")
 
-    return redirect('/dashboard')
+    return redirect(f'/dashboard/applicant/{session["user_id"]}')
+
+
+@app.route('/applicant/applications/<string:applicant_id>')
+def application(applicant_id):
+    cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
+    applicant = cursor.fetchone()
+    return render_template('my_applications.html', params=params, applicant= applicant, active_page='applications')
+
+@app.route('/jobs/<string:applicant_id>')
+def find_jobs(applicant_id):
+    cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
+    applicant = cursor.fetchone()
+    return render_template('find_jobs.html', params=params, applicant= applicant, active_page='jobs')
+
+@app.route('/applicant/resume/<string:applicant_id>')
+def view_resume(applicant_id):
+    cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
+    applicant = cursor.fetchone()
+    return render_template('my_resume.html', params=params, applicant= applicant, active_page='resume')
+
+@app.route('/applicant/profile/<string:applicant_id>')
+def profile_applicant(applicant_id):
+    cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
+    applicant = cursor.fetchone()
+    return render_template('profile.html', params=params, applicant= applicant, active_page='profile')
+
+@app.route('/profile/<string:applicant_id>/edit')
+def profile_applicant_edit(applicant_id):
+    cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
+    applicant = cursor.fetchone()
+    return render_template('edit_profile.html', params=params, applicant= applicant)
+
+@app.route('/applicant/logout/<string:applicant_id>')
+def applicant_logout(applicant_id):
+    role = session.get('role').upper()
+    cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
+    applicant = cursor.fetchone()
+    return render_template('logout.html', params=params, applicant= applicant, role=role)
+
+@app.route('/logout')
+def logout():  
+    session.clear()
+    return redirect('/')
+
+@app.route('/preview_resume/<int:applicant_id>')
+def preview_resume(applicant_id):
+    cursor.execute("SELECT resume_file_name FROM applicant WHERE applicant_id=%s",(applicant_id,))
+    applicant = cursor.fetchone()
+    file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],applicant['resume_file_name'])
+    return send_file(file_path)
+
+@app.route('/download_resume/<int:applicant_id>')
+def download_resume(applicant_id):
+    cursor.execute("SELECT resume_file_name FROM applicant WHERE applicant_id=%s",(applicant_id,))
+    applicant = cursor.fetchone()
+    print(applicant)
+    file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],applicant['resume_file_name'])
+    return send_file(file_path,as_attachment=True)
 
 app.run(debug=True)

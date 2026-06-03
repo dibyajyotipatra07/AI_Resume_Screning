@@ -7,7 +7,7 @@
   <title>login page</title>
   <link
     rel="stylesheet"
-    href="{{ url_for('static', filename='style3.css') }}"
+    href="{{ url_for('static', filename='css/style3.css') }}"
   />
 
   <style>
@@ -72,25 +72,8 @@
       opacity: 0.7;
     }
   </style>
-
 </head>
 {% endblock %} {% block content %}
-
-<!-- Flash Messages -->
-{% with messages = get_flashed_messages(with_categories=True) %} {% if messages
-%} {% for category,message in messages %}
-<div class="alert alert-{{category}} alert-dismissible fade show" role="alert">
-  {{ message }}
-  <button
-    type="button"
-    class="btn-close"
-    data-bs-dismiss="alert"
-    aria-label="Close"
-  >
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-{% endfor %} {% endif %} {% endwith %}
 
 <!-- Main Content -->
 <div class="dashboard_content">
@@ -149,10 +132,6 @@
         <span class="skill_badge"> {{ skill }} </span>
         {% endfor %}
       </div>
-
-      <a href="/applicant/{{ applicant.applicant_id }}/resume/update">
-        <button>Update Resume</button>
-      </a>
     </div>
   </div>
 
@@ -185,46 +164,12 @@
             </span>
           </td>
 
-          <td>{{ application.applied_date }}</td>
+          <td>{{ application.application_date }}</td>
         </tr>
 
         {% endfor %}
       </tbody>
     </table>
-  </div>
-
-  <!-- Recommended Jobs -->
-  <div class="jobs_section">
-    <div class="section_header">
-      <h3>Recommended Jobs</h3>
-    </div>
-
-    <div class="job_grid">
-      {% for job in recommended_jobs %}
-
-      <div class="job_card">
-        <h4>{{ job.title }}</h4>
-
-        <p>{{ job.company }}</p>
-
-        <p>
-          Match Score:
-          <strong>{{ job.match_score }}%</strong>
-        </p>
-
-        <div class="job_buttons">
-          <a href="/job/{{ job.id }}">
-            <button>View Details</button>
-          </a>
-
-          <a href="/apply/{{ job.id }}">
-            <button>Apply Now</button>
-          </a>
-        </div>
-      </div>
-
-      {% endfor %}
-    </div>
   </div>
 </div>
 

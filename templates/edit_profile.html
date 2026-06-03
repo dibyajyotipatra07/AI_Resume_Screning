@@ -1,259 +1,188 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Edit Profile</title>
-<link rel="stylesheet" href="edit_profile.css">
-</head>
-<body>
-
-<div class="container">
-
-    <div class="page-header">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Profile</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit_profile.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="page-header">
         <h1>Edit Profile</h1>
         <p>Update your personal and professional information</p>
-    </div>
+      </div>
 
-    <form class="profile-form">
-
+      <form class="profile-form">
         <!-- Profile Picture -->
 
         <div class="card">
-            <h2>Profile Picture</h2>
+          <h2>Profile Picture</h2>
 
-            <div class="profile-upload">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+          <div class="profile-upload">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+              alt="Profile"
+            />
 
-                <input type="file">
-            </div>
+            <input type="file" />
+          </div>
         </div>
 
         <!-- Personal Information -->
 
         <div class="card">
-            <h2>Personal Information</h2>
+          <h2>Personal Information</h2>
 
-            <div class="grid">
-
-                <div>
-                    <label>Full Name</label>
-                    <input type="text" placeholder="Enter Full Name">
-                </div>
-
-                <div>
-                    <label>Date of Birth</label>
-                    <input type="date">
-                </div>
-
-                <div>
-                    <label>Gender</label>
-                    <select>
-                        <option>Select Gender</option>
-                        <option>Male</option>
-                        <option>Female</option>
-                        <option>Other</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label>Nationality</label>
-                    <input type="text" placeholder="Indian">
-                </div>
-
+          <div class="grid">
+            <div>
+              <label>Full Name</label>
+              <input type="text" placeholder="Enter Full Name" />
             </div>
+
+            <div>
+              <label>Date of Birth</label>
+              <input type="date" />
+            </div>
+
+            <div>
+              <label>Gender</label>
+              <select>
+                <option>Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label>Nationality</label>
+              <input type="text" placeholder="Indian" />
+            </div>
+          </div>
         </div>
 
         <!-- Contact Information -->
 
         <div class="card">
-            <h2>Contact Information</h2>
+          <h2>Contact Information</h2>
 
-            <div class="grid">
-
-                <div>
-                    <label>Email</label>
-                    <input type="email" placeholder="Enter Email">
-                </div>
-
-                <div>
-                    <label>Mobile Number</label>
-                    <input type="tel" placeholder="Enter Mobile Number">
-                </div>
-
-                <div>
-                    <label>City</label>
-                    <input type="text">
-                </div>
-
-                <div>
-                    <label>State</label>
-                    <input type="text">
-                </div>
-
-                <div class="full-width">
-                    <label>Address</label>
-                    <textarea rows="4"></textarea>
-                </div>
-
+          <div class="grid">
+            <div>
+              <label>Email</label>
+              <input type="email" placeholder="Enter Email" />
             </div>
+
+            <div>
+              <label>Mobile Number</label>
+              <input type="tel" placeholder="Enter Mobile Number" />
+            </div>
+
+            <div>
+              <label>City</label>
+              <input type="text" />
+            </div>
+
+            <div>
+              <label>State</label>
+              <input type="text" />
+            </div>
+
+            <div class="full-width">
+              <label>Address</label>
+              <textarea rows="4"></textarea>
+            </div>
+          </div>
         </div>
 
         <!-- Professional Links -->
 
         <div class="card">
-            <h2>Professional Links</h2>
+          <h2>Professional Links</h2>
 
-            <div class="grid">
-
-                <div>
-                    <label>LinkedIn Profile</label>
-                    <input type="url">
-                </div>
-
-                <div>
-                    <label>GitHub Profile</label>
-                    <input type="url">
-                </div>
-
-                <div>
-                    <label>Portfolio Website</label>
-                    <input type="url">
-                </div>
-
+          <div class="grid">
+            <div>
+              <label>LinkedIn Profile</label>
+              <input type="url" />
             </div>
+
+            <div>
+              <label>GitHub Profile</label>
+              <input type="url" />
+            </div>
+          </div>
         </div>
 
         <!-- Education -->
 
         <div class="card">
-            <h2>Education Details</h2>
+          <h2>Education Details</h2>
 
-            <div class="grid">
-
-                <div>
-                    <label>Degree</label>
-                    <input type="text">
-                </div>
-
-                <div>
-                    <label>Branch</label>
-                    <input type="text">
-                </div>
-
-                <div>
-                    <label>University</label>
-                    <input type="text">
-                </div>
-
-                <div>
-                    <label>Graduation Year</label>
-                    <input type="number">
-                </div>
-
-                <div>
-                    <label>CGPA</label>
-                    <input type="text">
-                </div>
-
+          <div class="grid">
+            <div>
+              <label>Degree</label>
+              <input type="text" />
             </div>
+
+            <div>
+              <label>Branch</label>
+              <input type="text" />
+            </div>
+
+            <div>
+              <label>University</label>
+              <input type="text" />
+            </div>
+
+            <div>
+              <label>Graduation Year</label>
+              <input type="number" />
+            </div>
+
+            <div>
+              <label>CGPA</label>
+              <input type="text" />
+            </div>
+          </div>
         </div>
 
         <!-- Skills -->
 
         <div class="card">
-            <h2>Technical Skills</h2>
+          <h2>Technical Skills</h2>
 
-            <textarea rows="4"
-            placeholder="Python, SQL, Java, Machine Learning"></textarea>
+          <textarea
+            rows="4"
+            placeholder="Python, SQL, Java, Machine Learning"
+          ></textarea>
         </div>
 
         <div class="card">
-            <h2>Soft Skills</h2>
+          <h2>Soft Skills</h2>
 
-            <textarea rows="4"
-            placeholder="Communication, Leadership, Teamwork"></textarea>
-        </div>
-
-        <!-- Experience -->
-
-        <div class="card">
-            <h2>Work Experience</h2>
-
-            <div class="grid">
-
-                <div>
-                    <label>Company Name</label>
-                    <input type="text">
-                </div>
-
-                <div>
-                    <label>Job Role</label>
-                    <input type="text">
-                </div>
-
-                <div>
-                    <label>Experience</label>
-                    <input type="text" placeholder="1 Year">
-                </div>
-
-                <div class="full-width">
-                    <label>Responsibilities</label>
-                    <textarea rows="4"></textarea>
-                </div>
-
-            </div>
-        </div>
-
-        <!-- Projects -->
-
-        <div class="card">
-            <h2>Projects</h2>
-
-            <textarea rows="5"
-            placeholder="Project Name, Technologies Used, Description"></textarea>
-        </div>
-
-        <!-- Certifications -->
-
-        <div class="card">
-            <h2>Certifications</h2>
-
-            <textarea rows="4"
-            placeholder="AWS, Google Data Analytics, Python Certification"></textarea>
+          <textarea
+            rows="4"
+            placeholder="Communication, Leadership, Teamwork"
+          ></textarea>
         </div>
 
         <!-- Languages -->
 
         <div class="card">
-            <h2>Languages Known</h2>
+          <h2>Languages Known</h2>
 
-            <input type="text"
-            placeholder="English, Hindi">
-        </div>
-
-        <!-- Career Objective -->
-
-        <div class="card">
-            <h2>Career Objective</h2>
-
-            <textarea rows="5"
-            placeholder="Write your career objective"></textarea>
+          <input type="text" placeholder="English, Hindi" />
         </div>
 
         <!-- Save Button -->
 
         <div class="button-section">
-
-            <button type="submit" class="save-btn">
-                Save Changes
-            </button>
-
+          <button type="submit" class="save-btn">Save Changes</button>
         </div>
-
-    </form>
-
-</div>
-
-</body>
+      </form>
+    </div>
+  </body>
 </html>

@@ -1,13 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout2.html" %} {% block title %}Applicant Dashboard{% endblock %}
+
+<!-- for head jinja block-->
+{% block head %}
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Applications</title>
-    <link rel="stylesheet" href="my_applications.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/my_applications.css') }}">
 </head>
-<body>
-
+{% endblock %} {% block content %}
 <div class="container">
 
     <div class="page-header">
@@ -218,5 +220,4 @@
 
 </div>
 
-</body>
-</html>
+{% endblock %}

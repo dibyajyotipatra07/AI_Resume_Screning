@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Logout</title>
-    <link rel="stylesheet" href="logout.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/logout.css') }}">
 </head>
 <body>
 
@@ -12,13 +12,13 @@
 
     <div class="logout-card">
 
-        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+        <img src="{{ url_for('static', filename='assets/profile_img_default.png') }}"
              alt="Profile">
 
-        <h2>Aman Kumar</h2>
+        <h2>{{applicant.name}}</h2>
 
         <p class="role">
-            Software Developer Candidate
+            {{role}}
         </p>
 
         <h1>Logout</h1>
@@ -29,10 +29,15 @@
         </p>
 
         <div class="session-info">
-
             <div>
                 <strong>Last Login</strong>
-                <p>12 June 2026, 10:30 AM</p>
+                <p>{% if applicant.last_login %}
+                    {{ applicant.last_login.strftime('%d %b %Y') }}
+                    {{ applicant.last_login.strftime('%H:%M') }}
+                    {% else %}
+                        Never
+                    {% endif %}
+                </p>
             </div>
 
             <div>
@@ -44,11 +49,11 @@
 
         <div class="button-group">
 
-            <button class="cancel-btn">
+            <button class="cancel-btn"><a href="/dashboard/applicant/{{ applicant.applicant_id }}" >
                 Cancel
             </button>
 
-            <button class="logout-btn">
+            <button class="logout-btn"><a href="/logout" >
                 Logout
             </button>
 

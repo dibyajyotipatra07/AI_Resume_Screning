@@ -25,36 +25,73 @@
           <li>
             <a
               href="/dashboard/applicant/{{ applicant.applicant_id }}"
-              class="active"
+              class="{% if active_page=='dashboard' %}active{% endif %}"
             >
               Dashboard
             </a>
           </li>
 
           <li>
-            <a href="/applications/{{ applicant.applicant_id }}">
+            <a
+              href="/applicant/applications/{{ applicant.applicant_id }}"
+              class="{% if active_page=='applications' %}active{% endif %}"
+            >
               My Applications
             </a>
           </li>
 
           <li>
-            <a href="/jobs"> Find Jobs </a>
+            <a
+              href="/jobs/{{ applicant.applicant_id }}"
+              class="{% if active_page=='jobs' %}active{% endif %}"
+            >
+              Find Jobs
+            </a>
           </li>
 
           <li>
-            <a href="/resume/{{ applicant.applicant_id }}"> My Resume </a>
+            <a
+              href="/applicant/resume/{{ applicant.applicant_id }}"
+              class="{% if active_page=='resume' %}active{% endif %}"
+            >
+              My Resume
+            </a>
           </li>
 
           <li>
-            <a href="/profile/{{ applicant.applicant_id }}"> Profile </a>
+            <a
+              href="/applicant/profile/{{ applicant.applicant_id }}"
+              class="{% if active_page=='profile' %}active{% endif %}"
+            >
+              Profile
+            </a>
           </li>
 
           <li>
-            <a href="/logout"> Logout </a>
+            <a href="/applicant/logout/{{ applicant.applicant_id }}">
+              Logout
+            </a>
           </li>
         </ul>
       </nav>
-      {% block content %}
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=True) %} {% if
+      messages %} {% for category,message in messages %}
+      <div
+        class="alert alert-{{category}} alert-dismissible fade show"
+        role="alert"
+      >
+        {{ message }}
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        >
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %} {% endif %} {% endwith %} {% block content %}
       <!-- Main Content-->
       {% endblock %}
     </div>
@@ -72,10 +109,22 @@
         <div class="footer_section">
           <h4>Quick Links</h4>
           <ul>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">My Applications</a></li>
-            <li><a href="#">Find Jobs</a></li>
-            <li><a href="#">My Resume</a></li>
+            <li>
+              <a href="/dashboard/applicant/{{ applicant.applicant_id }}"
+                >Dashboard</a
+              >
+            </li>
+            <li>
+              <a href="/applicant/applications/{{ applicant.applicant_id }}"
+                >My Applications</a
+              >
+            </li>
+            <li><a href="/jobs/{{ applicant.applicant_id }}">Find Jobs</a></li>
+            <li>
+              <a href="/applicant/resume/{{ applicant.applicant_id }}"
+                >My Resume</a
+              >
+            </li>
           </ul>
         </div>
 
@@ -98,7 +147,7 @@
       </div>
 
       <div class="footer_bottom">
-        <p>© 2026 Resume Parser ATS. All Rights Reserved.</p>
+        <p>© 2026 Resume Parser ATS.</p>
       </div>
     </footer>
   </body>

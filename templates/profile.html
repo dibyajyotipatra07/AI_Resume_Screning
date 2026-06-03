@@ -1,13 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout2.html" %} {% block title %}Applicant Dashboard{% endblock %}
+
+<!-- for head jinja block-->
+{% block head %}
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Candidate Profile</title>
-<link rel="stylesheet" href="profile.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
 
-<body>
+{% endblock %} {% block content %}
 
 <div class="container">
 
@@ -34,7 +36,7 @@
 
         </div>
 
-        <a href="edit_profile.html" style="text-decoration: none;" <button class="edit-btn">Edit Profile</button></a>
+        <a href="/profile/{{ applicant.applicant_id }}/edit" style="text-decoration: none;" <button class="edit-btn">Edit Profile</button></a>
 
     </div>
 
@@ -141,6 +143,11 @@
             </div>
 
             <div>
+                <label>Graduation Year</label>
+                <p>2028</p>
+            </div>
+
+            <div>
                 <label>CGPA</label>
                 <p>8.5</p>
             </div>
@@ -168,129 +175,6 @@
 
     </div>
 
-    <!-- Experience -->
-
-    <div class="card">
-
-        <h2>Experience</h2>
-
-        <div class="experience">
-
-            <h3>Software Development Intern</h3>
-            <p>BHEL Haridwar</p>
-            <p>June 2025 - Present</p>
-
-        </div>
-
-    </div>
-
-    <!-- Projects -->
-
-    <div class="card">
-
-        <h2>Projects</h2>
-
-        <div class="project-card">
-
-            <h3>AI Resume Screening System</h3>
-
-            <p>
-                Developed an AI-based candidate ranking and resume
-                screening platform using Python and Machine Learning.
-            </p>
-
-            <div class="skills">
-                <span>Python</span>
-                <span>Flask</span>
-                <span>Machine Learning</span>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Certifications -->
-
-    <div class="card">
-
-        <h2>Certifications</h2>
-
-        <ul class="list">
-
-            <li>AWS Cloud Practitioner</li>
-            <li>Google Data Analytics</li>
-            <li>Python Programming Certification</li>
-
-        </ul>
-
-    </div>
-
-    <!-- Achievements -->
-
-    <div class="card">
-
-        <h2>Achievements</h2>
-
-        <ul class="list">
-
-            <li>College Hackathon Winner</li>
-            <li>Best Final Year Project Award</li>
-            <li>Technical Event Coordinator</li>
-
-        </ul>
-
-    </div>
-
-    <!-- AI Analysis -->
-
-    <div class="card">
-
-        <h2>AI Profile Analysis</h2>
-
-        <div class="analysis-grid">
-
-            <div class="analysis-card">
-                <h3>Profile Strength</h3>
-                <p>92%</p>
-            </div>
-
-            <div class="analysis-card">
-                <h3>Technical Skills</h3>
-                <p>Strong</p>
-            </div>
-
-            <div class="analysis-card">
-                <h3>Projects</h3>
-                <p>Excellent</p>
-            </div>
-
-            <div class="analysis-card">
-                <h3>Experience</h3>
-                <p>Good</p>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Suggestions -->
-
-    <div class="card">
-
-        <h2>AI Recommendations</h2>
-
-        <ul class="list">
-
-            <li>Add AWS Certification</li>
-            <li>Improve GitHub Portfolio</li>
-            <li>Add More Industry Projects</li>
-            <li>Upload Updated Resume</li>
-
-        </ul>
-
-    </div>
-
 </div>
 
-</body>
-</html>
+{% endblock %}
