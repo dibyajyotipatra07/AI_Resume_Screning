@@ -75,7 +75,7 @@
       <!-- Applicant Section -->
       <div id="applicant-field">
         <label for="resume">Upload Resume</label>
-        <input type="file" id="resume" name="resume" accept=".pdf,.doc,.docx" />
+        <input type="file" id="resume" name="resume" accept=".pdf" />
 
         <p id="fileName">No file selected</p>
       </div>
@@ -85,7 +85,17 @@
 
         resumeInput.addEventListener("change", function () {
           if (this.files.length > 0) {
-            fileName.textContent = "Selected: " + this.files[0].name;
+            const file = this.files[0];
+
+            if (!file.name.toLowerCase().endsWith(".pdf")) {
+              alert("Only PDF files are allowed.");
+
+              this.value = "";
+              fileName.textContent = "No file selected";
+              return;
+            }
+
+            fileName.textContent = "Selected: " + file.name;
           } else {
             fileName.textContent = "No file selected";
           }

@@ -248,6 +248,7 @@ def create_account():
                 conn.commit()
                 flash("Admin account created successfully!", "success")
             except Exception as e:
+                conn.rollback()  # Rollback in case of error
                 print("Database Error:", e)
                 flash("Failed to create admin account.", "danger")
         else:
@@ -255,16 +256,16 @@ def create_account():
                 resume_file = request.files['resume']
                 cursor.execute("INSERT INTO applicant (name, phn_no, email_id, password, resume_file_name, upload_date) VALUES (%s, %s, %s, %s, %s, %s)",
                 (fullname, mobile_number, email, password, '', datetime.date.today()))
-                conn.commit()  # Commit to get the applicant_id
                 applicant_id = cursor.lastrowid
-                resume_filename = secure_filename(resume_file.filename)
-                resume_filename = f"{applicant_id}_{resume_filename}"
+                conn.commit()  # Commit to get the applicant_id
+                resume_filename = f"{applicant_id}_resume.pdf"
                 resume_file.save(os.path.join(app.config['UPLOAD_FOLDER_RESUME'], resume_filename))
                 # update the resume file name in the database
                 cursor.execute("UPDATE applicant SET resume_file_name = %s WHERE applicant_id = %s", (resume_filename, applicant_id))
                 conn.commit()
                 flash("Applicant account created successfully!", "success")
             except Exception as e:
+                conn.rollback()  # Rollback in case of error
                 print("Database Error:", e)
                 flash("Failed to create applicant account.", "danger")
         return redirect('/login')  # Redirect to login page after successful account creation
@@ -314,10 +315,12 @@ def home():
 @app.route('/dashboard/<string:role>/<string:id>')
 def dashboard(role, id):
     if role == 'admin':
+        flash("Admin logged in successfully!", "success")
         cursor.execute("SELECT * FROM admin WHERE emp_id = %s", (id,))
         admin = cursor.fetchone()
         return render_template('dashboard_admin.html', params=params, admin=admin)
     elif role == 'applicant':
+        flash("Applicant logged in successfully!", "success")
         cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (id,))
         applicant = cursor.fetchone()
         return render_template('dashboard_applicant.html', params=params, applicant=applicant)
@@ -328,5 +331,57 @@ def logout():
     session.clear()
     return redirect('/')
 
+@app.route('/applicant/<string:applicant_id>/resume/update', methods=['POST'])
+def update_resume(applicant_id):
+
+    if 'applicant_id' not in session:
+        flash("Please login first.", "danger")
+        return redirect('/login')
+
+    try:
+        applicant_id = session['applicant_id']
+        resume_file = request.files.get('resume')
+
+        if not resume_file or resume_file.filename == '':
+            flash("Please select a PDF file.", "danger")
+            return redirect('/dashboard')
+
+        if not resume_file.filename.lower().endswith('.pdf'):
+            flash("Only PDF files are allowed.", "danger")
+            return redirect('/dashboard')
+
+        resume_filename = f"{applicant_id}_resume.pdf"
+
+        resume_file.save(
+            os.path.join(
+                app.config['UPLOAD_FOLDER_RESUME'],
+                resume_filename
+            )
+        )
+
+        cursor.execute(
+            """
+            UPDATE applicant
+            SET resume_file_name = %s,
+                upload_date = %s
+            WHERE applicant_id = %s
+            """,
+            (
+                resume_filename,
+                datetime.date.today(),
+                applicant_id
+            )
+        )
+
+        conn.commit()
+
+        flash("Resume updated successfully!", "success")
+
+    except Exception as e:
+        conn.rollback()
+        print("Error:", e)
+        flash("Failed to update resume.", "danger")
+
+    return redirect('/dashboard')
 
 app.run(debug=True)
