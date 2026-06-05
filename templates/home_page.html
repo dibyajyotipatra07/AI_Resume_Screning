@@ -1,42 +1,161 @@
-{% extends "layout.html" %} {% block content %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Resume Screening & Candidate Ranking</title>
 
-<div class="container">
-  <h1>Welcome to BHEL Recruitment Portal</h1>
-  <p>
-    Discover exciting career opportunities at Bharat Heavy Electricals Limited
-    (BHEL). Join us in shaping the future of power generation and engineering
-    excellence.
-  </p>
-  <a href="/login"><button>Get Started</button></a>
-</div>
-<img
-  src="https://www.bhel.com/sites/default/files/2025-02/power-sector_1.jpg"
-/>
-<p>
-  # Welcome to BHEL Haridwar ## Powering India's Progress Bharat Heavy
-  Electricals Limited (BHEL), Haridwar, is one of India's premier engineering
-  and manufacturing enterprises. Established in 1964, the Haridwar unit plays a
-  vital role in the design, manufacture, and supply of power generation
-  equipment for thermal, hydro, nuclear, and renewable energy sectors. With
-  decades of engineering excellence, BHEL Haridwar has contributed significantly
-  to India's industrial growth and energy security. The unit is equipped with
-  advanced manufacturing facilities, research capabilities, and a highly skilled
-  workforce dedicated to delivering world-class products and services. ### Our
-  Vision To be a global engineering enterprise providing sustainable solutions
-  for power generation and industrial development. ### Our Mission * Deliver
-  high-quality engineering products and services. * Promote innovation and
-  technological advancement. * Ensure customer satisfaction through excellence
-  and reliability. * Contribute to national development and environmental
-  sustainability. ### Key Products * Steam Turbines * Hydro Turbines * Gas
-  Turbines * Generators * Industrial Motors * Power Plant Equipment * Renewable
-  Energy Solutions ### Why Choose BHEL Haridwar? ✔ Over 60 years of engineering
-  excellence ✔ Advanced manufacturing infrastructure ✔ Highly skilled technical
-  workforce ✔ Commitment to quality and innovation ✔ Significant contribution to
-  India's power sector ### Building a Stronger Nation Through Engineering
-  Excellence BHEL Haridwar continues to lead the way in providing reliable and
-  efficient power equipment, helping meet the growing energy demands of India
-  and supporting sustainable industrial growth.
-</p>
-<button>Submit</button>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/home.css') }}"
+    />
 
-{% endblock %}
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+  </head>
+
+  <body>
+    <header>
+      <div class="logo">
+        <i class="fas fa-brain"></i>
+        AI Resume Screening
+      </div>
+
+      <nav>
+        <a href="/">Home</a>
+        <a href="/login">Login</a>
+        <a href="/create" class="register-btn">Register</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="hero-content">
+        <h1>AI-Powered Resume Screening & Candidate Ranking System</h1>
+
+        <p>
+          Streamline recruitment with intelligent resume analysis, skill
+          matching, semantic similarity scoring, and automated candidate
+          ranking.
+        </p>
+
+        <div class="hero-buttons">
+          <a href="/create" class="primary-btn"> Apply Now </a>
+
+          <a href="/login" class="secondary-btn"> Recruiter Login </a>
+        </div>
+      </div>
+
+      <div class="hero-image">
+        <img
+          src="{{ url_for('static', filename='assets/home.jpeg') }}"
+          alt="AI Recruitment"
+        />
+      </div>
+    </section>
+
+    <section class="stats">
+      <div class="stat-card">
+        <h2>95%</h2>
+        <p>Matching Accuracy</p>
+      </div>
+
+      <div class="stat-card">
+        <h2>500+</h2>
+        <p>Resumes Processed</p>
+      </div>
+
+      <div class="stat-card">
+        <h2>100+</h2>
+        <p>Candidates Ranked</p>
+      </div>
+
+      <div class="stat-card">
+        <h2>24/7</h2>
+        <p>Automated Screening</p>
+      </div>
+    </section>
+
+    <section class="workflow">
+      <h2>How It Works</h2>
+
+      <div class="workflow-container">
+        <div class="step">
+          <i class="fas fa-file-upload"></i>
+          <h3>Upload Resume</h3>
+          <p>Candidate uploads resume in PDF format.</p>
+        </div>
+
+        <div class="step">
+          <i class="fas fa-file-alt"></i>
+          <h3>Resume Parsing</h3>
+          <p>Extract skills, education and experience.</p>
+        </div>
+
+        <div class="step">
+          <i class="fas fa-robot"></i>
+          <h3>AI Matching</h3>
+          <p>Compare candidate profile with job requirements.</p>
+        </div>
+
+        <div class="step">
+          <i class="fas fa-trophy"></i>
+          <h3>Candidate Ranking</h3>
+          <p>Generate ranking based on matching score.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="features">
+      <h2>Key Features</h2>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <i class="fas fa-file-pdf"></i>
+          <h3>Resume Parsing</h3>
+          <p>Extract information automatically from resumes.</p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fas fa-code"></i>
+          <h3>Skill Matching</h3>
+          <p>Compare candidate skills with job requirements.</p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fas fa-chart-line"></i>
+          <h3>Candidate Ranking</h3>
+          <p>Rank applicants based on matching score.</p>
+        </div>
+
+        <div class="feature-card">
+          <i class="fas fa-users"></i>
+          <h3>Recruiter Dashboard</h3>
+          <p>Manage applications and view rankings.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta">
+      <h2>Find The Best Candidates Faster</h2>
+
+      <p>
+        Reduce manual screening effort and improve hiring decisions with
+        AI-powered candidate evaluation.
+      </p>
+
+      <a href="/create"> Start Screening </a>
+    </section>
+
+    <footer>
+      <h3>AI Resume Screening & Candidate Ranking System</h3>
+
+      <p>
+        Developed During Internship at Bharat Heavy Electricals Limited (BHEL)
+      </p>
+
+      <p>Powered by Flask, NLP & Machine Learning</p>
+    </footer>
+  </body>
+</html>

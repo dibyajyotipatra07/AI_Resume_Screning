@@ -1,0 +1,40 @@
+Resume PDF
+      ↓
+pdfplumber
+      ↓
+Resume Text
+      ↓
+Regex
+      ├── Email
+      └── Phone
+
+spaCy NER
+      ├── Name
+      ├── Companies
+      ├── Locations
+      └── Dates
+
+PhraseMatcher
+      ├── Skills
+      ├── Technologies
+      └── Certifications
+
+Matcher
+      ├── Experience
+      └── Education
+
+Structured Candidate Data
+      ↓
+Store in MySQL
+      ↓
+Compare with Job Description
+      ↓
+Skill Matching
+      ↓
+Experience Matching
+      ↓
+Final Score
+      ↓
+Candidate Ranking
+      ↓
+Recruiter Dashboard

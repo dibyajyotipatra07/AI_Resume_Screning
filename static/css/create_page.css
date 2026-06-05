@@ -177,3 +177,28 @@ form input::placeholder {
 form label {
   margin-bottom: 5px;
 }
+
+/* FOOTER */
+
+footer{
+    background:#001f3f;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+footer p{
+    margin-top:10px;
+}
+
+/* animation */
+body{
+    opacity:0;
+    animation:fadeIn .5s forwards;
+}
+
+@keyframes fadeIn{
+    to{
+        opacity:1;
+    }
+}

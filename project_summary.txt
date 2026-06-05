@@ -1,0 +1,527 @@
+
+# Project Overview
+
+### Applicant Side
+
+```text
+Register
+    ↓
+Login
+    ↓
+Upload Resume (PDF)
+    ↓
+Apply for Jobs
+    ↓
+Track Application Status
+```
+
+### Recruiter/Admin Side
+
+```text
+Login
+    ↓
+Create Job Posting
+    ↓
+View Applicants
+    ↓
+Analyze Resumes
+    ↓
+Rank Candidates
+    ↓
+Shortlist / Reject
+```
+
+---
+
+# Technical Flow
+
+```text
+Resume PDF
+      ↓
+pdfplumber
+      ↓
+Resume Text
+      ↓
+Regex
+      ├── Email
+      └── Phone
+
+spaCy NER
+      ├── Name
+      ├── Companies
+      ├── Locations
+      └── Dates
+
+PhraseMatcher
+      ├── Skills
+      ├── Technologies
+      └── Certifications
+
+Matcher
+      ├── Experience
+      └── Education
+
+Structured Candidate Data
+      ↓
+Store in MySQL
+      ↓
+Compare with Job Description
+      ↓
+Skill Matching
+      ↓
+Experience Matching
+      ↓
+Final Score
+      ↓
+Candidate Ranking
+      ↓
+Recruiter Dashboard
+```
+
+---
+
+# Module 1: Authentication
+
+### Applicant
+
+Tables:
+
+```text
+applicant
+---------
+applicant_id
+name
+email
+password
+phone
+created_at
+```
+
+Features:
+
+* Register
+* Login
+* Logout
+* Change Password
+
+---
+
+### Recruiter/Admin
+
+Tables:
+
+```text
+recruiter
+---------
+recruiter_id
+name
+email
+password
+company
+```
+
+Features:
+
+* Login
+* Dashboard
+
+---
+
+# Module 2: Resume Upload
+
+Applicant uploads:
+
+```text
+resume.pdf
+```
+
+Store:
+
+```text
+resume
+------
+resume_id
+applicant_id
+resume_path
+upload_date
+```
+
+Validation:
+
+* PDF only
+* Maximum size limit
+
+---
+
+# Module 3: Resume Parsing
+
+Using:
+
+```text
+pdfplumber
+Regex
+spaCy
+```
+
+Extract:
+
+### Personal Information
+
+```text
+Name
+Email
+Phone
+Location
+```
+
+---
+
+### Skills
+
+Example:
+
+```text
+Python
+Flask
+MySQL
+Pandas
+Git
+```
+
+Use:
+
+```text
+PhraseMatcher
+```
+
+---
+
+### Experience
+
+Example:
+
+```text
+2 years experience
+```
+
+Use:
+
+```text
+Matcher
+```
+
+---
+
+### Education
+
+Example:
+
+```text
+B.Tech
+M.Tech
+MCA
+BCA
+```
+
+Use:
+
+```text
+Matcher / PhraseMatcher
+```
+
+---
+
+### Companies
+
+Example:
+
+```text
+Infosys
+TCS
+Microsoft
+```
+
+Use:
+
+```text
+NER
+```
+
+---
+
+# Module 4: Database Storage
+
+Store parsed data.
+
+### Applicant Profile
+
+```text
+applicant_profile
+-----------------
+applicant_id
+name
+email
+phone
+location
+```
+
+---
+
+### Skills
+
+```text
+applicant_skills
+----------------
+skill_id
+applicant_id
+skill_name
+```
+
+---
+
+### Education
+
+```text
+education
+---------
+education_id
+applicant_id
+degree
+```
+
+---
+
+### Experience
+
+```text
+experience
+----------
+experience_id
+applicant_id
+company
+years
+```
+
+---
+
+# Module 5: Job Posting
+
+Recruiter creates:
+
+```text
+Python Developer
+```
+
+Fields:
+
+```text
+job_id
+title
+description
+required_skills
+minimum_experience
+location
+salary
+deadline
+```
+
+---
+
+# Module 6: Application System
+
+Applicant clicks:
+
+```text
+Apply
+```
+
+Store:
+
+```text
+applications
+------------
+application_id
+job_id
+applicant_id
+applied_on
+status
+```
+
+Status:
+
+```text
+Applied
+Under Review
+Shortlisted
+Rejected
+Selected
+```
+
+---
+
+# Module 7: Candidate Screening
+
+## Skill Matching
+
+JD Skills:
+
+```text
+Python
+Flask
+MySQL
+Docker
+```
+
+Resume Skills:
+
+```text
+Python
+Flask
+MySQL
+```
+
+Score:
+
+```text
+3/4 = 75%
+```
+
+---
+
+## Experience Matching
+
+JD:
+
+```text
+2 years
+```
+
+Resume:
+
+```text
+3 years
+```
+
+Score:
+
+```text
+100%
+```
+
+---
+
+## Education Matching
+
+JD:
+
+```text
+B.Tech
+```
+
+Resume:
+
+```text
+B.Tech
+```
+
+Score:
+
+```text
+100%
+```
+
+---
+
+# Module 8: Candidate Ranking
+
+Formula example:
+
+```text
+Skill Match       = 60%
+Experience Match  = 25%
+Education Match   = 15%
+```
+
+Final Score:
+
+```text
+Final ATS Score = 87%
+```
+
+Store:
+
+```text
+candidate_score
+```
+
+---
+
+# Module 9: Recruiter Dashboard
+
+Show:
+
+| Candidate | Score | Status  |
+| --------- | ----- | ------- |
+| Rahul     | 92%   | Applied |
+| Priya     | 87%   | Applied |
+| Amit      | 75%   | Applied |
+
+Features:
+
+* Sort by score
+* Search candidate
+* Filter by skills
+* Filter by experience
+* View resume
+* Download resume
+
+---
+
+# Module 10: Resume Preview
+
+Buttons:
+
+```html
+Preview Resume
+Download Resume
+```
+
+You were already working on this part.
+
+---
+
+# Libraries Used
+
+| Library             | Purpose                     |
+| ------------------- | --------------------------- |
+| Flask               | Backend                     |
+| MySQL Connector     | Database                    |
+| pdfplumber          | PDF text extraction         |
+| re                  | Email & phone extraction    |
+| spaCy NER           | Names, companies, locations |
+| spaCy Matcher       | Experience, education       |
+| spaCy PhraseMatcher | Skills, certifications      |
+| Pandas              | Reporting (optional)        |
+
+---
+
+# Final Project Level
+
+This becomes a:
+
+**AI-Assisted Applicant Tracking System (ATS)**
+
+Features:
+
+✅ Resume Upload
+✅ Resume Parsing
+✅ Skill Extraction
+✅ Experience Extraction
+✅ Education Extraction
+✅ Job Posting
+✅ Candidate Screening
+✅ Candidate Ranking
+✅ Recruiter Dashboard
+✅ Resume Preview & Download
+
+This is already a strong B.Tech project without needing advanced AI models. Skill/experience-based ranking is enough for a complete and practical ATS implementation.

@@ -24,11 +24,11 @@
 
           <div class="profile-upload">
             <img
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+              src="{{ url_for('static', filename='assets/profile_img/profile_img_default.png') }}"
               alt="Profile"
             />
 
-            <input type="file" />
+            <input type="file" accept="image/*" name="profile_picture"/>
           </div>
         </div>
 
@@ -40,17 +40,17 @@
           <div class="grid">
             <div>
               <label>Full Name</label>
-              <input type="text" placeholder="Enter Full Name" />
+              <input type="text" placeholder="Enter Full Name" value="{{ applicant.name }}" />
             </div>
 
             <div>
               <label>Date of Birth</label>
-              <input type="date" />
+              <input type="date" value="{{ applicant.dob }}" />
             </div>
 
             <div>
               <label>Gender</label>
-              <select>
+              <select value="{{ applicant.gender }}">
                 <option>Select Gender</option>
                 <option>Male</option>
                 <option>Female</option>
@@ -73,12 +73,12 @@
           <div class="grid">
             <div>
               <label>Email</label>
-              <input type="email" placeholder="Enter Email" />
+              <input type="email" placeholder="Enter Email" value="{{ applicant.email }}" />
             </div>
 
             <div>
               <label>Mobile Number</label>
-              <input type="tel" placeholder="Enter Mobile Number" />
+              <input type="tel" placeholder="Enter Mobile Number" value="{{ applicant.phn_no }}" />
             </div>
 
             <div>
@@ -88,12 +88,12 @@
 
             <div>
               <label>State</label>
-              <input type="text" />
+              <input type="text"  />
             </div>
 
             <div class="full-width">
               <label>Address</label>
-              <textarea rows="4"></textarea>
+              <textarea rows="4">{{ applicant.address }}</textarea>
             </div>
           </div>
         </div>
@@ -106,12 +106,12 @@
           <div class="grid">
             <div>
               <label>LinkedIn Profile</label>
-              <input type="url" />
+              <input type="url" value="{{ applicant.linkedin }}" />
             </div>
 
             <div>
               <label>GitHub Profile</label>
-              <input type="url" />
+              <input type="url" value="{{ applicant.github }}" />
             </div>
           </div>
         </div>
@@ -124,27 +124,27 @@
           <div class="grid">
             <div>
               <label>Degree</label>
-              <input type="text" />
+              <input type="text" value="{{ applicant.degree }}" />
             </div>
 
             <div>
               <label>Branch</label>
-              <input type="text" />
+              <input type="text" value="{{ applicant.branch }}" />
             </div>
 
             <div>
               <label>University</label>
-              <input type="text" />
+              <input type="text" value="{{ applicant.university }}" />
             </div>
 
             <div>
               <label>Graduation Year</label>
-              <input type="number" />
+              <input type="number" value="{{ applicant.g_year }}" />
             </div>
 
             <div>
               <label>CGPA</label>
-              <input type="text" />
+              <input type="text" value="{{ applicant.cgpa }}" />
             </div>
           </div>
         </div>

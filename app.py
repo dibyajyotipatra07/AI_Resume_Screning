@@ -212,7 +212,31 @@ CREATE TABLE IF NOT EXISTS skills (
 );
 """)
 
-
+#Profile Table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS profile_applicant (
+  applicant_id INT NOT NULL,
+  name VARCHAR(45) NOT NULL,
+  email VARCHAR(45) NOT NULL,
+  phn_no VARCHAR(10) NOT NULL,
+  dob DATE DEFAULT NULL,
+  gender VARCHAR(45) DEFAULT NULL,
+  address VARCHAR(100) DEFAULT NULL,
+  linkedin VARCHAR(45) DEFAULT NULL,
+  github VARCHAR(45) DEFAULT NULL,
+  degree VARCHAR(45) DEFAULT NULL,
+  branch VARCHAR(45) DEFAULT NULL,
+  university VARCHAR(45) DEFAULT NULL,
+  g_year YEAR DEFAULT NULL,
+  cgpa INT DEFAULT NULL,
+  profile_img VARCHAR(45) DEFAULT 'profile_img_default.png',
+  PRIMARY KEY (email),
+  UNIQUE KEY applicant_id_UNIQUE (applicant_id),
+  UNIQUE KEY email_UNIQUE (email),
+  CONSTRAINT applicant_to_profile FOREIGN KEY (applicant_id) REFERENCES applicant (applicant_id)
+  );
+  
+""")
 
 # Flask-Mail configuration
 app.config.update(
@@ -257,7 +281,8 @@ def create_account():
                 cursor.execute("INSERT INTO applicant (name, phn_no, email_id, password, resume_file_name, upload_date) VALUES (%s, %s, %s, %s, %s, %s)",
                 (fullname, mobile_number, email, password, '', datetime.date.today()))
                 applicant_id = cursor.lastrowid
-                conn.commit()  # Commit to get the applicant_id
+                cursor.execute("INSERT INTO applicant_profile (applicant_id, email, phn_no) VALUES (%s, %s, %s)", (applicant_id, email, mobile_number))
+                conn.commit()
                 resume_filename = f"{applicant_id}_Resume.pdf"
                 resume_file.save(os.path.join(app.config['UPLOAD_FOLDER_RESUME'], resume_filename))
                 # update the resume file name in the database
@@ -311,13 +336,13 @@ def login():
 
     return render_template('login.html', params=params)
 
+
+# Home page route
 @app.route('/')
 def home():
     return render_template('home_page.html', params=params)
 
-
-
-
+# Dashboard route for both admin and applicant
 @app.route('/dashboard/<string:role>/<string:id>')
 def dashboard(role, id):
     if 'user_id' in session:
@@ -333,7 +358,7 @@ def dashboard(role, id):
     flash("Invalid session", "danger")
     return redirect('/login')
 
-
+# Route to handle resume update
 @app.route('/applicant/<string:applicant_id>/resume/update', methods=['POST'])
 def update_resume(applicant_id):
 
@@ -368,37 +393,43 @@ def update_resume(applicant_id):
 
     return redirect(f'/dashboard/applicant/{session["user_id"]}')
 
-
+# Route to display applicant's applications
 @app.route('/applicant/applications/<string:applicant_id>')
 def application(applicant_id):
     cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
     applicant = cursor.fetchone()
     return render_template('my_applications.html', params=params, applicant= applicant, active_page='applications')
 
+# Route to display available jobs to the applicant
 @app.route('/jobs/<string:applicant_id>')
 def find_jobs(applicant_id):
     cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
     applicant = cursor.fetchone()
     return render_template('find_jobs.html', params=params, applicant= applicant, active_page='jobs')
 
+# Route to display applicant's resume
 @app.route('/applicant/resume/<string:applicant_id>')
 def view_resume(applicant_id):
     cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
     applicant = cursor.fetchone()
     return render_template('my_resume.html', params=params, applicant= applicant, active_page='resume')
 
+# Route to display applicant's profile
 @app.route('/applicant/profile/<string:applicant_id>')
 def profile_applicant(applicant_id):
-    cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
+    cursor.execute("SELECT * FROM profile_applicant WHERE applicant_id = %s", (applicant_id,))
     applicant = cursor.fetchone()
-    return render_template('profile.html', params=params, applicant= applicant, active_page='profile')
+    return render_template('profile.html', params=params, applicant= applicant, active_page='profile', role=session['role'].upper())
 
+# Route to edit applicant's profile
 @app.route('/profile/<string:applicant_id>/edit')
 def profile_applicant_edit(applicant_id):
-    cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
+    cursor.execute("SELECT * FROM profile_applicant WHERE applicant_id = %s", (applicant_id,))
     applicant = cursor.fetchone()
-    return render_template('edit_profile.html', params=params, applicant= applicant)
+    profile_picture = request.files('profile_picture')
+    return render_template('edit_profile.html', params=params, applicant= applicant, profile_picture=profile_picture)
 
+# Route to handle applicant logout
 @app.route('/applicant/logout/<string:applicant_id>')
 def applicant_logout(applicant_id):
     role = session.get('role').upper()
@@ -406,11 +437,13 @@ def applicant_logout(applicant_id):
     applicant = cursor.fetchone()
     return render_template('logout.html', params=params, applicant= applicant, role=role)
 
+# Route to handle logout for both admin and applicant
 @app.route('/logout')
 def logout():  
     session.clear()
     return redirect('/')
 
+# Route to preview applicant's resume
 @app.route('/preview_resume/<int:applicant_id>')
 def preview_resume(applicant_id):
     cursor.execute("SELECT resume_file_name FROM applicant WHERE applicant_id=%s",(applicant_id,))
@@ -418,6 +451,7 @@ def preview_resume(applicant_id):
     file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],applicant['resume_file_name'])
     return send_file(file_path)
 
+# Route to download applicant's resume
 @app.route('/download_resume/<int:applicant_id>')
 def download_resume(applicant_id):
     cursor.execute("SELECT resume_file_name FROM applicant WHERE applicant_id=%s",(applicant_id,))
@@ -425,5 +459,10 @@ def download_resume(applicant_id):
     print(applicant)
     file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],applicant['resume_file_name'])
     return send_file(file_path,as_attachment=True)
+
+# Contact Page
+@app.route('/contact')
+def contact():
+    return render_template('home_page.html', params=params)
 
 app.run(debug=True)

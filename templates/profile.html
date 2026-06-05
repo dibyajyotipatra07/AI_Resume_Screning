@@ -29,9 +29,9 @@
             </div>
 
             <div>
-                <h2>Aman Kumar</h2>
-                <p>Software Developer</p>
-                <p>Haridwar, India</p>
+                <h2>{{ applicant.name }}</h2>
+                <p>{{ role }}</p>
+                <p>{{applicant.email}}</p>
             </div>
 
         </div>
@@ -65,32 +65,32 @@
 
             <div>
                 <label>Full Name</label>
-                <p>Aman Kumar</p>
+                <p>{{ applicant.name }}</p>
             </div>
 
             <div>
                 <label>Email</label>
-                <p>aman@gmail.com</p>
+                <p>{{ applicant.email }}</p>
             </div>
 
             <div>
                 <label>Mobile</label>
-                <p>9876543210</p>
+                <p>{{ applicant.phn_no }}</p>
             </div>
 
             <div>
                 <label>Date of Birth</label>
-                <p>12 June 2003</p>
+                <p>{{ applicant.dob }}</p>
             </div>
 
             <div>
                 <label>Gender</label>
-                <p>Male</p>
+                <p>{{ applicant.gender }}</p>
             </div>
 
             <div>
                 <label>Location</label>
-                <p>Haridwar, Uttarakhand</p>
+                <p>{{ applicant.address }}</p>
             </div>
 
         </div>
@@ -107,12 +107,12 @@
 
             <div>
                 <label>LinkedIn</label>
-                <p>linkedin.com/in/aman</p>
+                <p>{{ applicant.linkedin }}</p>
             </div>
 
             <div>
                 <label>GitHub</label>
-                <p>github.com/aman</p>
+                <p>{{ applicant.github }}</p>
             </div>
 
         </div>
@@ -129,27 +129,27 @@
 
             <div>
                 <label>Degree</label>
-                <p>B.Tech</p>
+                <p>{{ applicant.degree }}</p>
             </div>
 
             <div>
                 <label>Branch</label>
-                <p>Computer Science</p>
+                <p>{{ applicant.branch }}</p>
             </div>
 
             <div>
                 <label>University</label>
-                <p>XYZ University</p>
+                <p>{{ applicant.university }}</p>
             </div>
 
             <div>
                 <label>Graduation Year</label>
-                <p>2028</p>
+                <p>{{ applicant.g_year }}</p>
             </div>
 
             <div>
                 <label>CGPA</label>
-                <p>8.5</p>
+                <p>{{ applicant.cgpa }}</p>
             </div>
 
         </div>
