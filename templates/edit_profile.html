@@ -16,19 +16,31 @@
         <p>Update your personal and professional information</p>
       </div>
 
-      <form class="profile-form">
+      <form
+        class="profile-form"
+        action="/profile/{{ applicant.applicant_id }}>/edit"
+        method="POST"
+        enctype="multipart/form-data"
+      >
         <!-- Profile Picture -->
 
         <div class="card">
           <h2>Profile Picture</h2>
 
           <div class="profile-upload">
+            {% if applicant.profile_img %}
+            <img
+              src="{{ url_for('static', filename='assets/profile_img/' + applicant.profile_img) }}"
+              alt="Profile"
+            />
+            {% else %}
             <img
               src="{{ url_for('static', filename='assets/profile_img/profile_img_default.png') }}"
               alt="Profile"
             />
+            {% endif %}
 
-            <input type="file" accept="image/*" name="profile_picture"/>
+            <input type="file" accept="image/*" name="profile_picture" />
           </div>
         </div>
 
@@ -40,27 +52,49 @@
           <div class="grid">
             <div>
               <label>Full Name</label>
-              <input type="text" placeholder="Enter Full Name" value="{{ applicant.name }}" />
+              <input
+                type="text"
+                placeholder="Enter Full Name"
+                value="{{ applicant.name }}"
+                name="name"
+              />
             </div>
 
             <div>
               <label>Date of Birth</label>
-              <input type="date" value="{{ applicant.dob }}" />
+              <input type="date" value="{{ applicant.dob }}" name="dob" />
             </div>
 
             <div>
               <label>Gender</label>
-              <select value="{{ applicant.gender }}">
-                <option>Select Gender</option>
-                <option>Male</option>
-                <option>Female</option>
-                <option>Other</option>
+              <select name="gender">
+                <option value="">Select Gender</option>
+
+                <option value="Male"
+                    {% if applicant.gender == 'Male' %}selected{% endif %}>
+                    Male
+                </option>
+
+                <option value="Female"
+                    {% if applicant.gender == 'Female' %}selected{% endif %}>
+                    Female
+                </option>
+
+                <option value="Other"
+                    {% if applicant.gender == 'Other' %}selected{% endif %}>
+                    Other
+                </option>
               </select>
             </div>
 
             <div>
               <label>Nationality</label>
-              <input type="text" placeholder="Indian" />
+              <input
+                type="text"
+                placeholder="Nationality"
+                name="nationality"
+                value="{{ applicant.nationality }}"
+              />
             </div>
           </div>
         </div>
@@ -73,27 +107,39 @@
           <div class="grid">
             <div>
               <label>Email</label>
-              <input type="email" placeholder="Enter Email" value="{{ applicant.email }}" />
+              <input
+                type="email"
+                placeholder="Enter Email"
+                value="{{ applicant.email }}"
+                name="email"
+              />
             </div>
 
             <div>
               <label>Mobile Number</label>
-              <input type="tel" placeholder="Enter Mobile Number" value="{{ applicant.phn_no }}" />
+              <input
+                type="tel"
+                placeholder="Enter Mobile Number"
+                value="{{ applicant.phn_no }}"
+                name="phn_no"
+              />
             </div>
 
             <div>
               <label>City</label>
-              <input type="text" />
+              <input type="text" name="city" />
             </div>
 
             <div>
               <label>State</label>
-              <input type="text"  />
+              <input type="text" name="state" />
             </div>
 
             <div class="full-width">
               <label>Address</label>
-              <textarea rows="4">{{ applicant.address }}</textarea>
+              <textarea rows="4" name="address">
+              {{ applicant.address or '' }}</textarea
+              >
             </div>
           </div>
         </div>
@@ -106,12 +152,20 @@
           <div class="grid">
             <div>
               <label>LinkedIn Profile</label>
-              <input type="url" value="{{ applicant.linkedin }}" />
+              <input
+                type="text"
+                value="{{ applicant.linkedin or '' }}"
+                name="linkedin"
+              />
             </div>
 
             <div>
               <label>GitHub Profile</label>
-              <input type="url" value="{{ applicant.github }}" />
+              <input
+                type="text"
+                value="{{ applicant.github or '' }}"
+                name="git"
+              />
             </div>
           </div>
         </div>
@@ -124,27 +178,43 @@
           <div class="grid">
             <div>
               <label>Degree</label>
-              <input type="text" value="{{ applicant.degree }}" />
+              <input
+                type="text"
+                value="{{ applicant.degree or ''}}"
+                name="degree"
+              />
             </div>
 
             <div>
               <label>Branch</label>
-              <input type="text" value="{{ applicant.branch }}" />
+              <input
+                type="text"
+                value="{{ applicant.branch or ''}}"
+                name="branch"
+              />
             </div>
 
             <div>
               <label>University</label>
-              <input type="text" value="{{ applicant.university }}" />
+              <input
+                type="text"
+                value="{{ applicant.university or ''}}"
+                name="university"
+              />
             </div>
 
             <div>
               <label>Graduation Year</label>
-              <input type="number" value="{{ applicant.g_year }}" />
+              <input
+                type="number"
+                value="{{ applicant.g_year or ''}}"
+                name="g_year"
+              />
             </div>
 
             <div>
               <label>CGPA</label>
-              <input type="text" value="{{ applicant.cgpa }}" />
+              <input type="text" value="{{ applicant.cgpa or ''}}" name="cgpa" />
             </div>
           </div>
         </div>
@@ -154,10 +224,7 @@
         <div class="card">
           <h2>Technical Skills</h2>
 
-          <textarea
-            rows="4"
-            placeholder="Python, SQL, Java, Machine Learning"
-          ></textarea>
+          <textarea rows="4" placeholder="{{ skills }}" name="skill"></textarea>
         </div>
 
         <div class="card">
@@ -165,7 +232,8 @@
 
           <textarea
             rows="4"
-            placeholder="Communication, Leadership, Teamwork"
+            placeholder="{{soft_skills}}"
+            name="soft_skill"
           ></textarea>
         </div>
 
@@ -174,7 +242,7 @@
         <div class="card">
           <h2>Languages Known</h2>
 
-          <input type="text" placeholder="English, Hindi" />
+          <input type="text" placeholder="English, Hindi" name="lang" />
         </div>
 
         <!-- Save Button -->

@@ -2,12 +2,10 @@
 
 <!-- for head jinja block-->
 {% block head %}
-<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Candidate Profile</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
-</head>
 
 {% endblock %} {% block content %}
 
@@ -25,7 +23,17 @@
         <div class="profile-left">
 
             <div class="profile-image">
-                <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="profile">
+            {% if applicant.profile_img %}
+            <img
+              src="{{ url_for('static', filename='assets/profile_img/' + applicant.profile_img) }}"
+              alt="Profile"
+            />
+            {% else %}
+            <img
+              src="{{ url_for('static', filename='assets/profile_img/profile_img_default.png') }}"
+              alt="Profile"
+            />
+            {% endif %}
             </div>
 
             <div>
@@ -36,7 +44,7 @@
 
         </div>
 
-        <a href="/profile/{{ applicant.applicant_id }}/edit" style="text-decoration: none;" <button class="edit-btn">Edit Profile</button></a>
+        <a href="/profile/{{ applicant.applicant_id }}/edit" style="text-decoration: none;" ><button class="edit-btn">Edit Profile</button></a>
 
     </div>
 
@@ -90,7 +98,7 @@
 
             <div>
                 <label>Location</label>
-                <p>{{ applicant.address }}</p>
+                <p>{{ applicant.address or ""}}</p>
             </div>
 
         </div>
@@ -144,12 +152,12 @@
 
             <div>
                 <label>Graduation Year</label>
-                <p>{{ applicant.g_year }}</p>
+                <p>{{ applicant.g_year or ""}}</p>
             </div>
 
             <div>
                 <label>CGPA</label>
-                <p>{{ applicant.cgpa }}</p>
+                <p>{{ applicant.cgpa or ""}}</p>
             </div>
 
         </div>

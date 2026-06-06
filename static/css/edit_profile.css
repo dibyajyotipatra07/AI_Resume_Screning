@@ -9,7 +9,7 @@
 
 body{
     background:#f4f7fc;
-
+    padding: 10px 0px;
 }
 
 .container{
@@ -82,7 +82,7 @@ textarea:focus{
 }
 
 .profile-upload img{
-    width:100px;
+    width:107px;
     height:100px;
     border-radius:50%;
 }

@@ -119,6 +119,17 @@ body{
 /* =========================
    WELCOME CARD
 ========================= */
+.profile-left {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.profile-image img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+}
 
 .welcome_card{
     background:white;

@@ -221,6 +221,7 @@ CREATE TABLE IF NOT EXISTS profile_applicant (
   phn_no VARCHAR(10) NOT NULL,
   dob DATE DEFAULT NULL,
   gender VARCHAR(45) DEFAULT NULL,
+  nationality VARCHAR(45) DEFAULT 'Indian',
   address VARCHAR(100) DEFAULT NULL,
   linkedin VARCHAR(45) DEFAULT NULL,
   github VARCHAR(45) DEFAULT NULL,
@@ -252,6 +253,8 @@ mail = Mail(app)
 app.config['UPLOAD_FOLDER_JD'] = params['upload_location_jd']
 # Configure upload folder for Resumes
 app.config['UPLOAD_FOLDER_RESUME'] = params['upload_location_resume']
+# Configure upload folder for Profile Pictures
+app.config['UPLOAD_FOLDER_PROFILE_PICTURE'] = params['upload_location_pf']
 
 # create account route
 @app.route('/create', methods=['GET', 'POST'])
@@ -343,8 +346,8 @@ def home():
     return render_template('home_page.html', params=params)
 
 # Dashboard route for both admin and applicant
-@app.route('/dashboard/<string:role>/<string:id>')
-def dashboard(role, id):
+@app.route('/dashboard/<string:role>/<string:applicant_id>')
+def dashboard(role, applicant_id):
     if 'user_id' in session:
         if session['role']  == 'admin':
             cursor.execute("SELECT * FROM admin WHERE emp_id = %s", (session['user_id'],))
@@ -352,9 +355,12 @@ def dashboard(role, id):
             return render_template('dashboard_admin.html', params=params, admin=admin, active_page='dashboard')
         
         elif session['role'] == 'applicant':
-            cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (id,))
+            applicant_id = session['user_id']
+            cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
             applicant = cursor.fetchone()
-            return render_template('dashboard_applicant.html', params=params, applicant=applicant, active_page='dashboard')
+            cursor.execute("SELECT * FROM profile_applicant WHERE applicant_id = %s", (applicant_id,))
+            applicant_profile = cursor.fetchone()
+            return render_template('dashboard_applicant.html', params=params, applicant=applicant, applicant_profile = applicant_profile, active_page='dashboard')
     flash("Invalid session", "danger")
     return redirect('/login')
 
@@ -417,17 +423,71 @@ def view_resume(applicant_id):
 # Route to display applicant's profile
 @app.route('/applicant/profile/<string:applicant_id>')
 def profile_applicant(applicant_id):
+    if 'user_id' not in session:
+        flash("Please login first.", "danger")
+        return redirect('/login')
+    applicant_id = session['user_id']
     cursor.execute("SELECT * FROM profile_applicant WHERE applicant_id = %s", (applicant_id,))
     applicant = cursor.fetchone()
     return render_template('profile.html', params=params, applicant= applicant, active_page='profile', role=session['role'].upper())
 
 # Route to edit applicant's profile
-@app.route('/profile/<string:applicant_id>/edit')
-def profile_applicant_edit(applicant_id):
-    cursor.execute("SELECT * FROM profile_applicant WHERE applicant_id = %s", (applicant_id,))
-    applicant = cursor.fetchone()
-    profile_picture = request.files('profile_picture')
-    return render_template('edit_profile.html', params=params, applicant= applicant, profile_picture=profile_picture)
+@app.route('/profile/<string:applicant_id>/edit', methods=['GET','POST'])
+def profile_applicant_edit(applicant_id): 
+    if 'user_id' not in session:
+        flash("Please login first.", "danger")
+        return redirect('/login')
+    try:
+        applicant_id = session['user_id']
+        cursor.execute("SELECT * FROM profile_applicant WHERE applicant_id = %s", (applicant_id,))
+        applicant = cursor.fetchone()
+        if request.method == 'POST':
+            pic_file = applicant['profile_img']
+            profile_picture = request.files.get('profile_picture')
+            
+            # Process image only if user uploaded one
+            if profile_picture and profile_picture.filename != '':
+                
+                if not profile_picture.mimetype.startswith('image/'):
+                    flash("Only image files are allowed.", "danger")
+                    return redirect(f'/applicant/profile/{session["user_id"]}')
+
+                extension = os.path.splitext(secure_filename(profile_picture.filename))[1].lower()
+                pic_file = f"{applicant_id}_profile{extension}"
+                profile_picture.save(os.path.join(app.config['UPLOAD_FOLDER_PROFILE_PICTURE'], pic_file))
+
+            name = request.form.get("name")
+            dob = request.form.get("dob") or None
+            gender = request.form.get("gender")
+            nationality = request.form.get("nationality")
+            email = request.form.get("email")
+            phn_no = request.form.get("phn_no")
+            city = request.form.get("city")
+            state = request.form.get("state")
+            address = request.form.get("address")
+            linkedin = request.form.get("linkedin")
+            git = request.form.get("git")
+            degree = request.form.get("degree")
+            branch = request.form.get("branch")
+            university = request.form.get("university")
+            g_year = request.form.get("g_year") or None
+            cgpa = request.form.get("cgpa") or None
+            # skill = request.form.get("skill")
+            # soft_skill = request.form.get("soft_skill")
+            # lang = request.form.get("lang")
+
+            cursor.execute("UPDATE profile_applicant SET name = %s, email = %s, phn_no = %s, dob = %s, gender = %s, nationality = %s, address = %s, linkedin = %s, github = %s, degree = %s, branch = %s, university = %s, g_year = %s, cgpa = %s, profile_img = %s WHERE applicant_id = %s", ( name, email,phn_no, dob, gender, nationality, f"{address}\n{city}\n{state}", linkedin, git, degree, branch, university, g_year, cgpa, pic_file, applicant_id))
+            cursor.execute("UPDATE applicant SET name = %s, email_id = %s, phn_no = %s, linkedin_url= %s, github_url = %s WHERE applicant_id = %s", ( name, email, phn_no, linkedin, git, applicant_id))
+            conn.commit()
+            flash("Profile updated successfully!", "success")
+            return redirect(f'/applicant/profile/{session["user_id"]}')
+
+    except Exception as e:
+        conn.rollback()
+        print("Error:", e)
+        flash("Failed to update Profile.", "danger")
+        return redirect(f'/dashboard/applicant/{session["user_id"]}')
+    return render_template('edit_profile.html', params=params, applicant= applicant)
 
 # Route to handle applicant logout
 @app.route('/applicant/logout/<string:applicant_id>')

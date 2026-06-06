@@ -8,6 +8,7 @@
         "mail_username": "admin@gmail.com",
         "mail_password": "admin@123",
         "upload_location_resume": "C:\\Users\\ppatr\\OneDrive\\Desktop\\internship\\AI_Resume_Screning\\static\\resume",
-        "upload_location_jd": "C:\\Users\\ppatr\\OneDrive\\Desktop\\internship\\AI_Resume_Screning\\static\\job_descriptions"
+        "upload_location_jd": "C:\\Users\\ppatr\\OneDrive\\Desktop\\internship\\AI_Resume_Screning\\static\\job_descriptions",
+        "upload_location_pf": "C:\\Users\\ppatr\\OneDrive\\Desktop\\internship\\AI_Resume_Screning\\static\\assets\\profile_img"
     }
 }

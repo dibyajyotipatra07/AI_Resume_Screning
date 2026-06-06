@@ -1,8 +1,72 @@
 <!doctype html>
 <html>
-  {% block head %}
-  <!--head content-->
-  {% endblock %}
+  <head>
+    {% block head %}
+    <!--head content-->
+    {% endblock %}
+    <style>
+      /* Flash Messages */
+      .alert {
+        padding: 12px 26px;
+        margin: 10px 0;
+        border-radius: 5px;
+        position: fixed;
+        top: 77px;
+        right: 20px;
+        font-size: 17px;
+        z-index: 9999;
+        color: #2d2727;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        animation: slideIn 0.3s ease;
+        min-width: 400px;
+        max-width: 800px;
+      }
+
+      .alert-success {
+        background-color: #1eee4dc2;
+      }
+
+      .alert-danger {
+        background-color: #ff0018b3;
+      }
+
+      .alert-warning {
+        background-color: #ecc757;
+        color: black;
+      }
+
+      .alert-info {
+        background-color: #50c6d8;
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      .btn-close {
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        background: transparent;
+        border: none;
+        color: inherit;
+        font-size: 20px;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      .btn-close:hover {
+        opacity: 0.7;
+      }
+    </style>
+  </head>
   <body>
     <!-- header of the page -->
     <header>
@@ -150,5 +214,19 @@
         <p>© 2026 Resume Parser ATS.</p>
       </div>
     </footer>
+    <!-- Flash Messages -->
+    <script>
+      setTimeout(() => {
+        document.querySelectorAll(".alert").forEach((alert) => {
+          alert.style.transition = "0.4s";
+          alert.style.opacity = "0";
+
+          setTimeout(() => {
+            alert.remove();
+          }, 400);
+        });
+      }, 4000);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   </body>
 </html>
