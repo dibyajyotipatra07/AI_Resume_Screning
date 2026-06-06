@@ -87,91 +87,96 @@
   </button>
 </div>
 {% endfor %} {% endif %} {% endwith %}
-<div class="container">
-  <form action="/login" method="post">
-    <div class="login-header">
-      <h2>Login</h2>
-    </div>
-    <div class="role-selection">
-      <label>
-        <input
-          type="radio"
-          name="role"
-          value="applicant"
-          checked
-          onclick="toggleFields()"
-        />
-        Applicant
-      </label>
+<div class="main_container">
+  <div class="container">
+    <form action="/login" method="post">
+      <div class="login-header">
+        <h2>Login</h2>
+      </div>
+      <div class="role-selection">
+        <label>
+          <input
+            type="radio"
+            name="role"
+            value="applicant"
+            checked
+            onclick="toggleFields()"
+          />
+          Applicant
+        </label>
 
-      <label>
-        <input
-          type="radio"
-          name="role"
-          value="admin"
-          onclick="toggleFields()"
-        />
-        Admin
-      </label>
-    </div>
+        <label>
+          <input
+            type="radio"
+            name="role"
+            value="admin"
+            onclick="toggleFields()"
+          />
+          Admin
+        </label>
+      </div>
 
-    <!-- Admin Section -->
-    <div id="admin-field" style="display: none">
-      <label for="employeeId">Employee No.</label>
-      <input type="text" id="employeeId" name="employeeId" />
-    </div>
+      <!-- Admin Section -->
+      <div id="admin-field" style="display: none">
+        <label for="employeeId">Employee No.</label>
+        <input type="text" id="employeeId" name="employeeId" />
+      </div>
 
-    <!-- Applicant Section -->
-    <div id="applicant-field" style="display: none">
-      <label for="email">Email id</label>
-      <input type="text" id="email" name="email" />
-    </div>
+      <!-- Applicant Section -->
+      <div id="applicant-field" style="display: none">
+        <label for="email">Email id</label>
+        <input type="text" id="email" name="email" />
+      </div>
 
-    <script>
-      function toggleFields() {
-        let applicantRadio = document.querySelector('input[value="applicant"]');
+      <script>
+        function toggleFields() {
+          let applicantRadio = document.querySelector(
+            'input[value="applicant"]',
+          );
 
-        let adminField = document.getElementById("admin-field");
+          let adminField = document.getElementById("admin-field");
 
-        let applicantField = document.getElementById("applicant-field");
+          let applicantField = document.getElementById("applicant-field");
 
-        let employeeId = document.getElementById("employeeId");
+          let employeeId = document.getElementById("employeeId");
 
-        let email = document.getElementById("email");
+          let email = document.getElementById("email");
 
-        if (applicantRadio.checked) {
-          applicantField.style.display = "block";
-          adminField.style.display = "none";
+          if (applicantRadio.checked) {
+            applicantField.style.display = "block";
+            adminField.style.display = "none";
 
-          // Make resume mandatory
-          email.required = true;
+            // Make resume mandatory
+            email.required = true;
 
-          // Employee ID not mandatory
-          employeeId.required = false;
-        } else {
-          applicantField.style.display = "none";
-          adminField.style.display = "block";
+            // Employee ID not mandatory
+            employeeId.required = false;
+          } else {
+            applicantField.style.display = "none";
+            adminField.style.display = "block";
 
-          // Employee ID mandatory
-          employeeId.required = true;
+            // Employee ID mandatory
+            employeeId.required = true;
 
-          // Resume not mandatory
-          username.required = false;
+            // Resume not mandatory
+            username.required = false;
+          }
         }
-      }
 
-      // Run once when page loads
-      window.onload = toggleFields;
-    </script>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" required /><br /><br />
-    <button class="login-btn" type="submit">login</button>
-    <p>Don't have an account? <a href="/create">Create an account</a></p>
-  </form>
-  <img
-    src="{{ url_for('static', filename='assets/power-sector.jpg') }}"
-    class="industry_image"
-  />
+        // Run once when page loads
+        window.onload = toggleFields;
+      </script>
+      <label for="password">Password:</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        required
+      /><br /><br />
+      <button class="login-btn" type="submit">login</button>
+      <p>Don't have an account? <a href="/create">Create an account</a></p>
+    </form>
+  </div>
 </div>
 
 <!-- Flash Messages -->

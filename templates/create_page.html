@@ -10,7 +10,29 @@
   <div class="container">
     <!-- create account form -->
     <form action="/create" method="POST" enctype="multipart/form-data">
-      <h2>create an account</h2>
+      <h2>Create an Account</h2>
+            <div class="role-selection">
+        <label>
+          <input
+            type="radio"
+            name="role"
+            value="applicant"
+            checked
+            onclick="toggleFields()"
+          />
+          Applicant
+        </label>
+
+        <label>
+          <input
+            type="radio"
+            name="role"
+            value="admin"
+            onclick="toggleFields()"
+          />
+          Admin
+        </label>
+      </div>
       <label for="firstname">Full Name</label>
       <input
         type="text"
@@ -43,107 +65,35 @@
         placeholder="Password"
         required
       />
-      <div class="role-selection">
-        <label>
-          <input
-            type="radio"
-            name="role"
-            value="applicant"
-            checked
-            onclick="toggleFields()"
-          />
-          Applicant
-        </label>
-
-        <label>
-          <input
-            type="radio"
-            name="role"
-            value="admin"
-            onclick="toggleFields()"
-          />
-          Admin
-        </label>
-      </div>
-
       <!-- Admin Section -->
       <div id="admin-field" style="display: none">
         <label for="employeeId">Employee No.</label>
         <input type="text" id="employeeId" name="employeeId" />
       </div>
 
-      <!-- Applicant Section -->
-      <div id="applicant-field">
-        <label for="resume">Upload Resume</label>
-        <input type="file" id="resume" name="resume" accept=".pdf" />
-
-        <p id="fileName">No file selected</p>
-      </div>
-      <script>
-        const resumeInput = document.getElementById("resume");
-        const fileName = document.getElementById("fileName");
-
-        resumeInput.addEventListener("change", function () {
-          if (this.files.length > 0) {
-            const file = this.files[0];
-
-            if (!file.name.toLowerCase().endsWith(".pdf")) {
-              alert("Only PDF files are allowed.");
-
-              this.value = "";
-              fileName.textContent = "No file selected";
-              return;
-            }
-
-            fileName.textContent = "Selected: " + file.name;
-          } else {
-            fileName.textContent = "No file selected";
-          }
-        });
-      </script>
       <script>
         function toggleFields() {
-          let applicantRadio = document.querySelector(
-            'input[value="applicant"]',
-          );
+        const adminRadio = document.querySelector(
+          'input[value="admin"]'
+        );
 
-          let adminField = document.getElementById("admin-field");
+        const adminField = document.getElementById("admin-field");
+        const employeeId = document.getElementById("employeeId");
 
-          let applicantField = document.getElementById("applicant-field");
-
-          let employeeId = document.getElementById("employeeId");
-
-          let resume = document.getElementById("resume");
-
-          if (applicantRadio.checked) {
-            applicantField.style.display = "block";
-            adminField.style.display = "none";
-
-            // Make resume mandatory
-            resume.required = true;
-
-            // Employee ID not mandatory
-            employeeId.required = false;
-          } else {
-            applicantField.style.display = "none";
-            adminField.style.display = "block";
-
-            // Employee ID mandatory
-            employeeId.required = true;
-
-            // Resume not mandatory
-            resume.required = false;
-          }
+        if (adminRadio.checked) {
+          adminField.style.display = "block";
+          employeeId.required = true;
+        } else {
+          adminField.style.display = "none";
+          employeeId.required = false;
         }
+      }
 
-        // Run once when page loads
-        window.onload = toggleFields;
+      window.onload = toggleFields;
       </script>
-
       <button class="create-btn" type="submit">Create Account</button>
       <p>Already have an account? <a href="/login">Login here</a></p>
     </form>
-    <img src="{{ url_for('static', filename='assets/power-sector.jpg') }}" />
   </div>
 </div>
 

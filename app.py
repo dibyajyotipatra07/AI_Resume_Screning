@@ -1,10 +1,18 @@
 from flask import Flask, render_template, request, redirect, session, flash, send_file
+# Importing Mysql Connector
 import mysql.connector
+# Importing JSON
 import json
 import datetime
 import os
+# Imporitng secur_file for safe files
 from werkzeug.utils import secure_filename
+# importing for mailing
 from flask_mail import Mail
+
+# Importing functions from utils to work on resume screening and ranking
+from utils.pdf_reader import pdf_reader
+from utils.resume_parser import extract_email, extract_phn, extract_name, extract_git, extract_linkedin
 
 # Flask app initialization
 app = Flask(__name__)
@@ -65,6 +73,7 @@ CREATE TABLE IF NOT EXISTS applications (
     application_date DATE NOT NULL,
     match_score DECIMAL(5,0) DEFAULT NULL,
     status VARCHAR(45) DEFAULT NULL,
+    resume_uploaded VARCHAR(45) NOT NULL,
     PRIMARY KEY (application_id),
     UNIQUE KEY application_id_UNIQUE (application_id),
     KEY `appliation to job_idx` (job_id),
