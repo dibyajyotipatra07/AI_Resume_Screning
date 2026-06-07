@@ -1,13 +1,18 @@
-{% extends "layout2.html" %} {% block title %}Applicant Dashboard{% endblock %}
+{% extends "layout2.html" %}
 
-<!-- for head jinja block-->
+{% block title %}My Applications{% endblock %}
+
 {% block head %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Applications</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/my_applications.css') }}">
-{% endblock %} {% block content %}
+<title>My Applications</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/my_applications.css') }}">
+{% endblock %}
+
+{% block content %}
+
 <div class="container">
 
     <div class="page-header">
@@ -15,204 +20,139 @@
         <p>Track all your job applications and recruitment progress</p>
     </div>
 
-    <!-- Summary Cards -->
-
     <div class="cards">
 
         <div class="card">
-            <h2>12</h2>
+            <h2>{{ total_applied or 0 }}</h2>
             <p>Total Applied</p>
         </div>
 
         <div class="card review">
-            <h2>4</h2>
+            <h2>{{ under_review or 0 }}</h2>
             <p>Under Review</p>
         </div>
 
         <div class="card shortlisted">
-            <h2>3</h2>
+            <h2>{{ shortlisted or 0 }}</h2>
             <p>Shortlisted</p>
         </div>
 
         <div class="card rejected">
-            <h2>2</h2>
+            <h2>{{ rejected or 0 }}</h2>
             <p>Rejected</p>
         </div>
 
         <div class="card interview">
-            <h2>2</h2>
-            <p>Interviews</p>
+            <h2>{{ selected or 0 }}</h2>
+            <p>Selected</p>
         </div>
 
     </div>
-
-    <!-- Search -->
-
     <div class="search-section">
 
-        <input type="text" placeholder="Search Applications...">
+    <form method="GET"
+          action="/applicant/applications/{{ applicant.applicant_id }}">
 
-        <div class="filters">
-            <button>All</button>
-            <button>Applied</button>
-            <button>Review</button>
-            <button>Shortlisted</button>
-            <button>Rejected</button>
-        </div>
+        <input
+            type="text"
+            name="q"
+            placeholder="Search Job Title"
+            value="{{ search_query or '' }}"
+        >
 
-    </div>
+        <select name="status">
 
-    <!-- Applications Table -->
+            <option value="">All Status</option>
+
+            <option value="Applied"
+            {% if status_filter=='Applied' %}selected{% endif %}>
+                Applied
+            </option>
+
+            <option value="Under Review"
+            {% if status_filter=='Under Review' %}selected{% endif %}>
+                Under Review
+            </option>
+
+            <option value="Shortlisted"
+            {% if status_filter=='Shortlisted' %}selected{% endif %}>
+                Shortlisted
+            </option>
+
+            <option value="Rejected"
+            {% if status_filter=='Rejected' %}selected{% endif %}>
+                Rejected
+            </option>
+
+            <option value="Selected"
+            {% if status_filter=='Selected' %}selected{% endif %}>
+                Selected
+            </option>
+
+        </select>
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+</div>
 
     <div class="table-box">
 
         <table>
-
             <thead>
-
-            <tr>
-                <th>Application ID</th>
-                <th>Job Title</th>
-                <th>Department</th>
-                <th>Applied Date</th>
-                <th>Match Score</th>
-                <th>Status</th>
-            </tr>
-
+                <tr>
+                    <th>Application ID</th>
+                    <th>Job Title</th>
+                    <th>Company</th>
+                    <th>Location</th>
+                    <th>Applied Date</th>
+                    <th>Match Score</th>
+                    <th>Status</th>
+                    <th>Resume</th>
+                </tr>
             </thead>
 
             <tbody>
+                {% if applications %}
+                    {% for application in applications %}
+                    <tr>
+                        <td>APP{{ application.application_id }}</td>
+                        <td>{{ application.job_title }}</td>
+                        <td>{{ application.company_name }}</td>
+                        <td>{{ application.location }}</td>
+                        <td>{{ application.application_date }}</td>
+                        <td>{{ application.match_score or 0 }}%</td>
 
-            <tr>
-                <td>APP001</td>
-                <td>Software Developer</td>
-                <td>IT</td>
-                <td>01-06-2026</td>
-                <td>92%</td>
-                <td><span class="status green">Shortlisted</span></td>
-            </tr>
+                        <td>
+                            {% if application.status == 'Shortlisted' or application.status == 'Selected' %}
+                                <span class="status green">{{ application.status }}</span>
+                            {% elif application.status == 'Rejected' %}
+                                <span class="status red">{{ application.status }}</span>
+                            {% else %}
+                                <span class="status orange">{{ application.status or 'Applied' }}</span>
+                            {% endif %}
+                        </td>
 
-            <tr>
-                <td>APP002</td>
-                <td>Data Analyst</td>
-                <td>Analytics</td>
-                <td>30-05-2026</td>
-                <td>85%</td>
-                <td><span class="status orange">Review</span></td>
-            </tr>
-
-            <tr>
-                <td>APP003</td>
-                <td>Mechanical Engineer</td>
-                <td>Mechanical</td>
-                <td>28-05-2026</td>
-                <td>68%</td>
-                <td><span class="status red">Rejected</span></td>
-            </tr>
-
+                        <td>
+                            <a href="/applicant/{{ applicant.applicant_id }}/{{ application.application_id }}/resume">
+                                <button type="button">View</button>
+                            </a>
+                            <a href="/applicant/application/{{ application.application_id }}">
+                                <button type="button">Details</button>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="8">You have not applied for any job yet.</td>
+                    </tr>
+                {% endif %}
             </tbody>
-
         </table>
-
-    </div>
-
-    <!-- Details Section -->
-
-    <div class="details-grid">
-
-        <!-- Tracker -->
-
-        <div class="box">
-
-            <h2>Application Progress</h2>
-
-            <ul class="tracker">
-
-                <li class="active">Application Submitted</li>
-                <li class="active">Resume Screening</li>
-                <li class="active">HR Review</li>
-                <li>Interview</li>
-                <li>Final Selection</li>
-
-            </ul>
-
-        </div>
-
-        <!-- AI Match -->
-
-        <div class="box">
-
-            <h2>AI Match Analysis</h2>
-
-            <div class="score-circle">
-                91%
-            </div>
-
-            <div class="score-list">
-
-                <p>Skills Match <span>35/40</span></p>
-                <p>Education Match <span>18/20</span></p>
-                <p>Experience Match <span>22/25</span></p>
-                <p>Projects <span>9/10</span></p>
-                <p>Certifications <span>7/10</span></p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Interview -->
-
-    <div class="box">
-
-        <h2>Interview Details</h2>
-
-        <div class="interview-card">
-
-            <h3>Technical Interview</h3>
-
-            <p><strong>Date:</strong> 12 June 2026</p>
-
-            <p><strong>Time:</strong> 10:00 AM</p>
-
-            <p><strong>Mode:</strong> Online</p>
-
-            <p><strong>Status:</strong> Scheduled</p>
-
-        </div>
-
-    </div>
-
-    <!-- Timeline -->
-
-    <div class="box">
-
-        <h2>Application Timeline</h2>
-
-        <div class="timeline">
-
-            <div class="timeline-item">
-                <span>01 June 2026</span>
-                <p>Application Submitted</p>
-            </div>
-
-            <div class="timeline-item">
-                <span>02 June 2026</span>
-                <p>Resume Screening Completed</p>
-            </div>
-
-            <div class="timeline-item">
-                <span>04 June 2026</span>
-                <p>HR Review Completed</p>
-            </div>
-
-            <div class="timeline-item">
-                <span>05 June 2026</span>
-                <p>Interview Scheduled</p>
-            </div>
-
-        </div>
 
     </div>
 

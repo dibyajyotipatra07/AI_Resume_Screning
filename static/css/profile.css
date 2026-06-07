@@ -171,19 +171,71 @@ body {
   justify-content: space-between;
 }
 
-.progress-bar {
-  width: 100%;
-  height: 15px;
-  background: #ddd;
-  border-radius: 20px;
-  margin-top: 15px;
+/* =========================
+   PROFILE COMPLETION CARD
+========================= */
+
+.profile-completion-card{
+    background:white;
+    padding:20px;
+    border-radius:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+    margin-bottom:25px;
 }
 
-.progress {
-  width: 85%;
-  height: 100%;
-  background: #28a745;
-  border-radius: 20px;
+.profile-completion-card h3{
+    color:#003366;
+    margin-bottom:15px;
+}
+
+.progress-bar{
+    width:100%;
+    height:22px;
+    background:#e5e7eb;
+    border-radius:30px;
+    overflow:hidden;
+    margin-bottom:12px;
+}
+
+.progress-fill{
+    height:100%;
+    background:linear-gradient(
+        90deg,
+        #16a34a,
+        #22c55e
+    );
+    border-radius:30px;
+    transition:width .5s ease;
+}
+
+.profile-completion-card p{
+    text-align:right;
+    font-weight:bold;
+    color:#003366;
+}
+
+.complete-msg{
+    color:#16a34a;
+    font-weight:bold;
+    text-align:right;
+}
+
+.strong-msg{
+    color:#2563eb;
+    font-weight:bold;
+    text-align:right;
+}
+
+.medium-msg{
+    color:#f59e0b;
+    font-weight:bold;
+    text-align:right;
+}
+
+.low-msg{
+    color:#dc2626;
+    font-weight:bold;
+    text-align:right;
 }
 
 .info-grid {

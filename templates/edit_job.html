@@ -1,0 +1,104 @@
+{% extends "layout3.html" %}
+
+{% block head %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Edit Job</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/edit_job.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<main class="main-content">
+
+    <div class="page-header">
+        <h1>Edit Job</h1>
+        <p>Update job details.</p>
+    </div>
+
+    <div class="form-card">
+
+        <form method="POST">
+
+            <div class="form-grid">
+
+                <div>
+                    <label>Job Title</label>
+                    <input
+                        type="text"
+                        name="job_title"
+                        value="{{ job.job_title }}"
+                        required>
+                </div>
+
+                <div>
+                    <label>Location</label>
+                    <input
+                        type="text"
+                        name="location"
+                        value="{{ job.location }}"
+                        required>
+                </div>
+
+                <div>
+                    <label>Minimum Experience</label>
+                    <input
+                        type="number"
+                        name="min_experience"
+                        value="{{ job.min_experience }}"
+                        required>
+                </div>
+
+                <div>
+                    <label>Qualification</label>
+                    <input
+                        type="text"
+                        name="qualification"
+                        value="{{ job.qualification }}"
+                        required>
+                </div>
+
+                <div>
+                    <label>Status</label>
+
+                    <select name="status">
+
+                        <option value="Active"
+                            {% if job.status == 'Active' %}selected{% endif %}>
+                            Active
+                        </option>
+
+                        <option value="Closed"
+                            {% if job.status == 'Closed' %}selected{% endif %}>
+                            Closed
+                        </option>
+
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="button-area">
+
+                <button type="submit"
+                        class="update-btn">
+                    Update Job
+                </button>
+
+                <a href="/manage_jobs"
+                   class="cancel-link">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</main>
+
+{% endblock %}

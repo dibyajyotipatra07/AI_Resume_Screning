@@ -1,455 +1,220 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "layout3.html" %} {% block head %}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Reports & Analytics</title>
 
-<link rel="stylesheet" href="reports.css">
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/reports.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+{% endblock %} {% block content %}
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<main class="main-content">
+  <div class="header">
+    <h1>Recruitment Reports & Analytics</h1>
+    <p>
+      Monitor hiring performance, AI screening efficiency and recruitment
+      insights.
+    </p>
+  </div>
 
-</head>
-<body>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Total Jobs</h3>
+      <span>{{ total_jobs or 0 }}</span>
+    </div>
 
-<div class="container">
+    <div class="stat-card">
+      <h3>Total Applications</h3>
+      <span>{{ total_applications or 0 }}</span>
+    </div>
 
-    <!-- Sidebar -->
+    <div class="stat-card">
+      <h3>Shortlisted</h3>
+      <span>{{ shortlisted_count or 0 }}</span>
+    </div>
 
-    <aside class="sidebar">
+    <div class="stat-card">
+      <h3>Selected</h3>
+      <span>{{ selected_count or 0 }}</span>
+    </div>
 
-        <h2>Admin Panel</h2>
+    <div class="stat-card">
+      <h3>Rejected</h3>
+      <span>{{ rejected_count or 0 }}</span>
+    </div>
 
-        <ul>
+    <div class="stat-card">
+      <h3>Avg AI Score</h3>
+      <span>{{ avg_score or 0 }}%</span>
+    </div>
+  </div>
 
-            <li><a href="admin_dashboard.html">Dashboard</a></li>
-            <li><a href="manage_jobs.html">Manage Jobs</a></li>
-            <li><a href="applicants.html">Applicants</a></li>
-            <li><a href="ai_screening.html">AI Screening</a></li>
-            <li><a href="shortlisted.html">Shortlisted</a></li>
-            <li><a href="interviews.html">Interviews</a></li>
-            <li class="active"><a href="#">Reports</a></li>
-            <li><a href="settings.html">Settings</a></li>
+  <div class="card">
+    <h2>Recruitment Funnel</h2>
 
-        </ul>
+    <div class="funnel-grid">
+      <div class="funnel-box">
+        Applications
+        <h3>{{ total_applications or 0 }}</h3>
+      </div>
 
-    </aside>
+      <div class="funnel-box">
+        Under Review
+        <h3>{{ under_review or 0 }}</h3>
+      </div>
 
-    <!-- Main Content -->
+      <div class="funnel-box">
+        Shortlisted
+        <h3>{{ shortlisted_count or 0 }}</h3>
+      </div>
 
-    <main class="main-content">
+      <div class="funnel-box">
+        Selected
+        <h3>{{ selected_count or 0 }}</h3>
+      </div>
 
-        <!-- Header -->
+      <div class="funnel-box">
+        Rejected
+        <h3>{{ rejected_count or 0 }}</h3>
+      </div>
+    </div>
+  </div>
 
-        <div class="header">
+  <div class="card">
+    <h2>Status Wise Report</h2>
 
-            <h1>Recruitment Reports & Analytics</h1>
+    <table>
+      <thead>
+        <tr>
+          <th>Status</th>
+          <th>Total Candidates</th>
+        </tr>
+      </thead>
 
-            <p>
-                Monitor hiring performance, AI screening
-                efficiency and recruitment insights.
-            </p>
+      <tbody>
+        {% if status_report %} {% for row in status_report %}
+        <tr>
+          <td>{{ row.status or 'Applied' }}</td>
+          <td>{{ row.count }}</td>
+        </tr>
+        {% endfor %} {% else %}
+        <tr>
+          <td colspan="2">No status report available.</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
 
+  <div class="card">
+    <h2>Job Performance Report</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Job Position</th>
+          <th>Total Applications</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% if job_report %} {% for job in job_report %}
+        <tr>
+          <td>{{ job.job_title }}</td>
+          <td>{{ job.applications }}</td>
+        </tr>
+        {% endfor %} {% else %}
+        <tr>
+          <td colspan="2">No job report available.</td>
+        </tr>
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="two-column">
+    <div class="card">
+      <h2>Hiring Efficiency</h2>
+
+      <table>
+        <tr>
+          <th>Metric</th>
+          <th>Value</th>
+        </tr>
+
+        <tr>
+          <td>Selection Rate</td>
+          <td>{{ selection_rate or 0 }}%</td>
+        </tr>
+
+        <tr>
+          <td>Rejection Rate</td>
+          <td>{{ rejection_rate or 0 }}%</td>
+        </tr>
+
+        <tr>
+          <td>Shortlisting Rate</td>
+          <td>{{ shortlist_rate or 0 }}%</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <h2>AI Screening Summary</h2>
+
+      <div class="analytics-grid">
+        <div class="analytics-box">
+          Avg Score
+          <h3>{{ avg_score or 0 }}%</h3>
         </div>
 
-        <!-- Stats Cards -->
-
-        <div class="stats-grid">
-
-            <div class="stat-card">
-                <h3>Total Applications</h3>
-                <span>1250</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>Jobs Posted</h3>
-                <span>35</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>Candidates Hired</h3>
-                <span>42</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>Success Rate</h3>
-                <span>68%</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>AI Match Score</h3>
-                <span>84%</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>Time to Hire</h3>
-                <span>12 Days</span>
-            </div>
-
+        <div class="analytics-box">
+          Highest Score
+          <h3>{{ top_score or 0 }}%</h3>
         </div>
 
-        <!-- Filters -->
-
-        <div class="card">
-
-            <h2>Generate Reports</h2>
-
-            <div class="filters">
-
-                <input type="date">
-
-                <input type="date">
-
-                <select>
-                    <option>Department</option>
-                    <option>IT</option>
-                    <option>Analytics</option>
-                    <option>HR</option>
-                </select>
-
-                <select>
-                    <option>Job Position</option>
-                    <option>Software Engineer</option>
-                    <option>Data Analyst</option>
-                </select>
-
-                <button>Generate Report</button>
-
-            </div>
-
+        <div class="analytics-box">
+          Lowest Score
+          <h3>{{ low_score or 0 }}%</h3>
         </div>
 
-        <!-- Monthly Applications -->
-
-        <div class="card">
-
-            <h2>Applications Per Month</h2>
-
-            <table>
-
-                <tr>
-                    <th>Month</th>
-                    <th>Applications</th>
-                </tr>
-
-                <tr>
-                    <td>January</td>
-                    <td>120</td>
-                </tr>
-
-                <tr>
-                    <td>February</td>
-                    <td>140</td>
-                </tr>
-
-                <tr>
-                    <td>March</td>
-                    <td>180</td>
-                </tr>
-
-                <tr>
-                    <td>April</td>
-                    <td>220</td>
-                </tr>
-
-                <tr>
-                    <td>May</td>
-                    <td>260</td>
-                </tr>
-
-                <tr>
-                    <td>June</td>
-                    <td>330</td>
-                </tr>
-
-            </table>
-
+        <div class="analytics-box">
+          Screened
+          <h3>{{ total_applications or 0 }}</h3>
         </div>
-
-        <!-- Job Performance -->
-
-        <div class="card">
-
-            <h2>Job Performance Report</h2>
-
-            <table>
-
-                <tr>
-                    <th>Position</th>
-                    <th>Applications</th>
-                    <th>Shortlisted</th>
-                    <th>Interviews</th>
-                    <th>Selected</th>
-                </tr>
-
-                <tr>
-                    <td>Software Engineer</td>
-                    <td>250</td>
-                    <td>80</td>
-                    <td>35</td>
-                    <td>12</td>
-                </tr>
-
-                <tr>
-                    <td>Data Analyst</td>
-                    <td>180</td>
-                    <td>60</td>
-                    <td>25</td>
-                    <td>8</td>
-                </tr>
-
-            </table>
-
-        </div>
-
-        <!-- Funnel Analysis -->
-
-        <div class="card">
-
-            <h2>Recruitment Funnel Analysis</h2>
-
-            <div class="funnel-grid">
-
-                <div class="funnel-box">
-                    Applications
-                    <h3>1250</h3>
-                </div>
-
-                <div class="funnel-box">
-                    AI Screened
-                    <h3>1100</h3>
-                </div>
-
-                <div class="funnel-box">
-                    Shortlisted
-                    <h3>350</h3>
-                </div>
-
-                <div class="funnel-box">
-                    Interviewed
-                    <h3>150</h3>
-                </div>
-
-                <div class="funnel-box">
-                    Selected
-                    <h3>42</h3>
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- AI Screening Analytics -->
-
-        <div class="card">
-
-            <h2>AI Screening Analytics</h2>
-
-            <div class="analytics-grid">
-
-                <div class="analytics-box">
-                    Screened
-                    <h3>1100</h3>
-                </div>
-
-                <div class="analytics-box">
-                    Qualified
-                    <h3>420</h3>
-                </div>
-
-                <div class="analytics-box">
-                    Rejected
-                    <h3>680</h3>
-                </div>
-
-                <div class="analytics-box">
-                    Avg Score
-                    <h3>84%</h3>
-                </div>
-
-            </div>
-
-        </div>
-
-        <!-- Skills Analytics -->
-
-        <div class="card">
-
-            <h2>Skills Analytics</h2>
-
-            <table>
-
-                <tr>
-                    <th>Skill</th>
-                    <th>Candidates</th>
-                </tr>
-
-                <tr>
-                    <td>SQL</td>
-                    <td>520</td>
-                </tr>
-
-                <tr>
-                    <td>Python</td>
-                    <td>480</td>
-                </tr>
-
-                <tr>
-                    <td>Java</td>
-                    <td>350</td>
-                </tr>
-
-                <tr>
-                    <td>ReactJS</td>
-                    <td>280</td>
-                </tr>
-
-            </table>
-
-        </div>
-
-        <!-- Hiring Analytics -->
-
-        <div class="two-column">
-
-            <div class="card">
-
-                <h2>Department Hiring</h2>
-
-                <table>
-
-                    <tr>
-                        <th>Department</th>
-                        <th>Hired</th>
-                    </tr>
-
-                    <tr>
-                        <td>IT</td>
-                        <td>22</td>
-                    </tr>
-
-                    <tr>
-                        <td>Analytics</td>
-                        <td>10</td>
-                    </tr>
-
-                    <tr>
-                        <td>HR</td>
-                        <td>5</td>
-                    </tr>
-
-                </table>
-
-            </div>
-
-            <div class="card">
-
-                <h2>Candidate Sources</h2>
-
-                <table>
-
-                    <tr>
-                        <th>Source</th>
-                        <th>Candidates</th>
-                    </tr>
-
-                    <tr>
-                        <td>Website</td>
-                        <td>420</td>
-                    </tr>
-
-                    <tr>
-                        <td>LinkedIn</td>
-                        <td>350</td>
-                    </tr>
-
-                    <tr>
-                        <td>Naukri</td>
-                        <td>250</td>
-                    </tr>
-
-                </table>
-
-            </div>
-
-        </div>
-
-        <!-- Recruiter Performance -->
-
-        <div class="card">
-
-            <h2>Recruiter Performance</h2>
-
-            <table>
-
-                <tr>
-                    <th>Recruiter</th>
-                    <th>Jobs Managed</th>
-                    <th>Interviews</th>
-                    <th>Hires</th>
-                </tr>
-
-                <tr>
-                    <td>HR Manager 1</td>
-                    <td>12</td>
-                    <td>40</td>
-                    <td>15</td>
-                </tr>
-
-                <tr>
-                    <td>HR Manager 2</td>
-                    <td>10</td>
-                    <td>35</td>
-                    <td>12</td>
-                </tr>
-
-            </table>
-
-        </div>
-
-        <!-- AI Insights -->
-
-        <div class="card">
-
-            <h2>AI Insights</h2>
-
-            <ul class="insights">
-
-                <li>68% of shortlisted candidates were selected.</li>
-
-                <li>SQL is the most common skill among applicants.</li>
-
-                <li>Software Engineer positions received highest applications.</li>
-
-                <li>Machine Learning certified candidates had higher hiring rates.</li>
-
-                <li>Hiring duration reduced by 15% compared to last month.</li>
-
-            </ul>
-
-        </div>
-
-        <!-- Export Section -->
-
-        <div class="card">
-
-            <h2>Export Reports</h2>
-
-            <div class="export-buttons">
-
-                <button>Export PDF</button>
-                <button>Export Excel</button>
-                <button>Download Analytics</button>
-                <button>Monthly Report</button>
-
-            </div>
-
-        </div>
-
-    </main>
-
-</div>
-
-</body>
-</html>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>AI Insights</h2>
+
+    <ul class="insights">
+      <li>
+        {{ shortlisted_count or 0 }} candidates are shortlisted for further
+        process.
+      </li>
+      <li>{{ selected_count or 0 }} candidates are selected.</li>
+      <li>{{ rejected_count or 0 }} candidates are rejected.</li>
+      <li>Average AI matching score is {{ avg_score or 0 }}%.</li>
+      <li>Total {{ total_jobs or 0 }} jobs are handled by this admin.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Export Reports</h2>
+
+    <div class="export-buttons">
+      <a href="/report/export/csv">
+        <button type="button">Export CSV</button>
+      </a>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

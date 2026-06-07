@@ -2,187 +2,186 @@
 
 <!-- for head jinja block-->
 {% block head %}
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Candidate Profile</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/profile.css') }}"
+/>
 
 {% endblock %} {% block content %}
 
 <div class="container">
+  <div class="page-header">
+    <h1>My Profile</h1>
+    <p>Manage your professional profile information</p>
+  </div>
 
-    <div class="page-header">
-        <h1>My Profile</h1>
-        <p>Manage your professional profile information</p>
+  <!-- Profile Header -->
+
+  <div class="profile-header">
+    <div class="profile-left">
+      <div class="profile-image">
+        {% if applicant.profile_img %}
+        <img
+          src="{{ url_for('static', filename='assets/profile_img/' + applicant.profile_img) }}"
+          alt="Profile"
+        />
+        {% else %}
+        <img
+          src="{{ url_for('static', filename='assets/profile_img/profile_img_default.png') }}"
+          alt="Profile"
+        />
+        {% endif %}
+      </div>
+
+      <div>
+        <h2>{{ applicant.name }}</h2>
+        <p>{{ role }}</p>
+        <p>{{applicant.email}}</p>
+      </div>
     </div>
 
-    <!-- Profile Header -->
+    <a
+      href="/profile/{{ applicant.applicant_id }}/edit"
+      style="text-decoration: none"
+      ><button class="edit-btn">Edit Profile</button></a
+    >
+  </div>
 
-    <div class="profile-header">
+<!-- Profile Completion -->
 
-        <div class="profile-left">
+<div class="profile-completion-card">
+  <h3>Profile Completion</h3>
 
-            <div class="profile-image">
-            {% if applicant.profile_img %}
-            <img
-              src="{{ url_for('static', filename='assets/profile_img/' + applicant.profile_img) }}"
-              alt="Profile"
-            />
-            {% else %}
-            <img
-              src="{{ url_for('static', filename='assets/profile_img/profile_img_default.png') }}"
-              alt="Profile"
-            />
-            {% endif %}
-            </div>
+  <div class="progress-bar">
+    <div
+      class="progress-fill"
+      style="width: {{ profile_completion or 0 }}%;"
+    ></div>
+  </div>
 
-            <div>
-                <h2>{{ applicant.name }}</h2>
-                <p>{{ role }}</p>
-                <p>{{applicant.email}}</p>
-            </div>
+  {% if profile_completion == 100 %}
+    <p class="complete-msg">✓ Profile Complete</p>
 
-        </div>
+  {% elif profile_completion >= 80 %}
+    <p class="strong-msg">★ Strong Profile ({{ profile_completion }}%)</p>
 
-        <a href="/profile/{{ applicant.applicant_id }}/edit" style="text-decoration: none;" ><button class="edit-btn">Edit Profile</button></a>
+  {% elif profile_completion >= 50 %}
+    <p class="medium-msg">{{ profile_completion }}% Complete</p>
 
+  {% else %}
+    <p class="low-msg">Complete your profile ({{ profile_completion or 0 }}%)</p>
+  {% endif %}
+</div>
+
+  <!-- Personal Information -->
+
+  <div class="card">
+    <h2>Personal Information</h2>
+
+    <div class="info-grid">
+      <div>
+        <label>Full Name</label>
+        <p>{{ applicant.name }}</p>
+      </div>
+
+      <div>
+        <label>Email</label>
+        <p>{{ applicant.email }}</p>
+      </div>
+
+      <div>
+        <label>Mobile</label>
+        <p>{{ applicant.phn_no }}</p>
+      </div>
+
+      <div>
+        <label>Date of Birth</label>
+        <p>{{ applicant.dob }}</p>
+      </div>
+
+      <div>
+        <label>Gender</label>
+        <p>{{ applicant.gender }}</p>
+      </div>
+
+      <div>
+        <label>Location</label>
+        <p>{{ applicant.address or ""}}</p>
+      </div>
     </div>
+  </div>
 
-    <!-- Profile Completion -->
+  <!-- Professional Links -->
 
-    <div class="card">
+  <div class="card">
+    <h2>Professional Links</h2>
 
-        <div class="completion-top">
-            <h2>Profile Completion</h2>
-            <span>85%</span>
-        </div>
+    <div class="info-grid">
+      <div>
+        <label>LinkedIn</label>
+        <p>{{ applicant.linkedin }}</p>
+      </div>
 
-        <div class="progress-bar">
-            <div class="progress"></div>
-        </div>
-
+      <div>
+        <label>GitHub</label>
+        <p>{{ applicant.github }}</p>
+      </div>
     </div>
+  </div>
 
-    <!-- Personal Information -->
+  <!-- Education -->
 
-    <div class="card">
+  <div class="card">
+    <h2>Education</h2>
 
-        <h2>Personal Information</h2>
+    <div class="info-grid">
+      <div>
+        <label>Degree</label>
+        <p>{{ applicant.degree }}</p>
+      </div>
 
-        <div class="info-grid">
+      <div>
+        <label>Branch</label>
+        <p>{{ applicant.branch }}</p>
+      </div>
 
-            <div>
-                <label>Full Name</label>
-                <p>{{ applicant.name }}</p>
-            </div>
+      <div>
+        <label>University</label>
+        <p>{{ applicant.university }}</p>
+      </div>
 
-            <div>
-                <label>Email</label>
-                <p>{{ applicant.email }}</p>
-            </div>
+      <div>
+        <label>Graduation Year</label>
+        <p>{{ applicant.g_year or ""}}</p>
+      </div>
 
-            <div>
-                <label>Mobile</label>
-                <p>{{ applicant.phn_no }}</p>
-            </div>
-
-            <div>
-                <label>Date of Birth</label>
-                <p>{{ applicant.dob }}</p>
-            </div>
-
-            <div>
-                <label>Gender</label>
-                <p>{{ applicant.gender }}</p>
-            </div>
-
-            <div>
-                <label>Location</label>
-                <p>{{ applicant.address or ""}}</p>
-            </div>
-
-        </div>
-
+      <div>
+        <label>CGPA</label>
+        <p>{{ applicant.cgpa or ""}}</p>
+      </div>
     </div>
+  </div>
 
-    <!-- Professional Links -->
+  <!-- Skills -->
 
-    <div class="card">
+  <!-- Skills -->
 
-        <h2>Professional Links</h2>
+<div class="card">
+  <h2>Skills</h2>
 
-        <div class="info-grid">
-
-            <div>
-                <label>LinkedIn</label>
-                <p>{{ applicant.linkedin }}</p>
-            </div>
-
-            <div>
-                <label>GitHub</label>
-                <p>{{ applicant.github }}</p>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Education -->
-
-    <div class="card">
-
-        <h2>Education</h2>
-
-        <div class="info-grid">
-
-            <div>
-                <label>Degree</label>
-                <p>{{ applicant.degree }}</p>
-            </div>
-
-            <div>
-                <label>Branch</label>
-                <p>{{ applicant.branch }}</p>
-            </div>
-
-            <div>
-                <label>University</label>
-                <p>{{ applicant.university }}</p>
-            </div>
-
-            <div>
-                <label>Graduation Year</label>
-                <p>{{ applicant.g_year or ""}}</p>
-            </div>
-
-            <div>
-                <label>CGPA</label>
-                <p>{{ applicant.cgpa or ""}}</p>
-            </div>
-
-        </div>
-
-    </div>
-
-    <!-- Skills -->
-
-    <div class="card">
-
-        <h2>Skills</h2>
-
-        <div class="skills">
-
-            <span>Python</span>
-            <span>SQL</span>
-            <span>Java</span>
-            <span>Machine Learning</span>
-            <span>Flask</span>
-            <span>Git</span>
-
-        </div>
-
-    </div>
-
+  <div class="skills">
+    {% if skills %}
+      {% for skill in skills %}
+        <span>{{ skill.skill_name }}</span>
+      {% endfor %}
+    {% else %}
+      <p>No skills added yet.</p>
+    {% endif %}
+  </div>
+</div>
 </div>
 
 {% endblock %}

@@ -1,0 +1,162 @@
+{% extends "layout3.html" %}
+
+{% block head %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Applicant Details</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/admin_applicant_detail.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<main class="main-content">
+
+    <div class="page-header">
+        <h1>Applicant Profile</h1>
+        <p>Detailed candidate information.</p>
+    </div>
+
+    <div class="profile-grid">
+
+        <div class="card">
+
+            <h2>Personal Information</h2>
+
+            <p><strong>Name:</strong> {{ applicant.name }}</p>
+            <p><strong>Email:</strong> {{ applicant.email_id }}</p>
+            <p><strong>Phone:</strong> {{ applicant.phn_no }}</p>
+            <p><strong>Gender:</strong> {{ applicant.gender }}</p>
+            <p><strong>DOB:</strong> {{ applicant.dob }}</p>
+            <p><strong>Nationality:</strong> {{ applicant.nationality }}</p>
+            <p><strong>Address:</strong> {{ applicant.address }}</p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Application Information</h2>
+
+            <p><strong>Job Title:</strong> {{ applicant.job_title }}</p>
+            <p><strong>Company:</strong> {{ applicant.company_name }}</p>
+            <p><strong>Location:</strong> {{ applicant.location }}</p>
+
+            <p><strong>Applied On:</strong>
+                {{ applicant.application_date }}
+            </p>
+
+            <p><strong>Status:</strong>
+                {{ applicant.status }}
+            </p>
+
+            <p><strong>Match Score:</strong>
+                {{ applicant.match_score }}%
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="profile-grid">
+
+        <div class="card">
+
+            <h2>Education</h2>
+
+            <p><strong>Degree:</strong> {{ applicant.degree }}</p>
+
+            <p><strong>Branch:</strong>
+                {{ applicant.branch }}
+            </p>
+
+            <p><strong>University:</strong>
+                {{ applicant.university }}
+            </p>
+
+            <p><strong>Graduation Year:</strong>
+                {{ applicant.g_year }}
+            </p>
+
+            <p><strong>CGPA:</strong>
+                {{ applicant.cgpa }}
+            </p>
+
+        </div>
+
+        <div class="card">
+
+            <h2>Professional</h2>
+
+            <p><strong>Experience:</strong>
+                {{ applicant.total_experience }}
+            </p>
+
+            <p>
+                <strong>LinkedIn:</strong>
+                {{ applicant.linkedin_url }}
+            </p>
+
+            <p>
+                <strong>GitHub:</strong>
+                {{ applicant.github_url }}
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Resume Actions</h2>
+
+        <div class="button-group">
+
+            <a href="/preview_resume/{{ applicant.application_id }}">
+                <button class="view-btn">
+                    Preview Resume
+                </button>
+            </a>
+
+            <a href="/download_resume/{{ applicant.application_id }}">
+                <button class="download-btn">
+                    Download Resume
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h2>Application Actions</h2>
+
+        <div class="button-group">
+
+            <a href="/application/{{ applicant.application_id }}/status/Shortlisted">
+                <button class="shortlist-btn">
+                    Shortlist
+                </button>
+            </a>
+
+            <a href="/application/{{ applicant.application_id }}/status/Selected">
+                <button class="select-btn">
+                    Select
+                </button>
+            </a>
+
+            <a href="/application/{{ applicant.application_id }}/status/Rejected">
+                <button class="reject-btn">
+                    Reject
+                </button>
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+{% endblock %}

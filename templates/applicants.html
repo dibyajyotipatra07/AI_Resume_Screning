@@ -1,271 +1,176 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Applicants Management</title>
-    <link rel="stylesheet" href="applicants.css">
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-</head>
-<body>
+{% extends "layout3.html" %}
 
-<div class="container">
+{% block head %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Applicants Management</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/applicants.css') }}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+{% endblock %}
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
+{% block content %}
 
-        <h2>Admin Panel</h2>
+<main class="main-content">
 
-        <ul>
-            <li><a href="admin_dashboard.html">Dashboard</a></li>
-            <li><a href="manage_jobs.html">Manage Jobs</a></li>
-            <li class="active"><a href="#">Applicants</a></li>
-            <li><a href="ai_screening.html">AI Screening</a></li>
-            <li><a href="shortlisted.html">Shortlisted</a></li>
-            <li><a href="interviews.html">Interviews</a></li>
-            <li><a href="reports.html">Reports</a></li>
-            <li><a href="settings.html">Settings</a></li>
-        </ul>
+    <div class="page-header">
+        <h1>Applicants Management</h1>
+        <p>Review, evaluate and manage all applicants.</p>
+    </div>
 
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-
-        <!-- Header -->
-        <div class="page-header">
-            <h1>Applicants Management</h1>
-            <p>Review, evaluate and manage all applicants.</p>
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Total Applicants</h3>
+            <span>{{ total_applicants or 0 }}</span>
         </div>
 
-        <!-- Statistics -->
-        <div class="stats-container">
-
-            <div class="stat-card">
-                <h3>Total Applicants</h3>
-                <span>356</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>Under Review</h3>
-                <span>180</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>Shortlisted</h3>
-                <span>72</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>Rejected</h3>
-                <span>64</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>Interviews</h3>
-                <span>28</span>
-            </div>
-
-            <div class="stat-card">
-                <h3>Selected</h3>
-                <span>12</span>
-            </div>
-
+        <div class="stat-card">
+            <h3>Under Review</h3>
+            <span>{{ under_review or 0 }}</span>
         </div>
 
-        <!-- Search & Filters -->
-        <div class="search-section">
-
-            <input type="text"
-                placeholder="Search Candidate Name">
-
-            <select>
-                <option>Job Position</option>
-                <option>Software Engineer</option>
-                <option>Data Analyst</option>
-            </select>
-
-            <select>
-                <option>Experience</option>
-                <option>0-2 Years</option>
-                <option>2-5 Years</option>
-            </select>
-
-            <select>
-                <option>Status</option>
-                <option>Under Review</option>
-                <option>Shortlisted</option>
-                <option>Rejected</option>
-            </select>
-
-            <button>Search</button>
-
+        <div class="stat-card">
+            <h3>Shortlisted</h3>
+            <span>{{ shortlisted_count or 0 }}</span>
         </div>
 
-        <!-- Applicants Table -->
-        <div class="table-container">
+        <div class="stat-card">
+            <h3>Rejected</h3>
+            <span>{{ rejected_count or 0 }}</span>
+        </div>
 
-            <h2>Applicants List</h2>
+        <div class="stat-card">
+            <h3>Selected</h3>
+            <span>{{ selected_count or 0 }}</span>
+        </div>
+    </div>
 
-            <table>
+    <div class="search-section">
+        <form method="GET" action="/applicants" style="display:flex; gap:15px; width:100%;">
+            <input type="text" name="q" placeholder="Search Candidate Name">
 
-                <thead>
+            <select name="status">
+                <option value="">All Status</option>
+                <option value="Applied">Applied</option>
+                <option value="Under Review">Under Review</option>
+                <option value="Shortlisted">Shortlisted</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Selected">Selected</option>
+            </select>
+
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <div class="table-container">
+
+        <h2>Applicants List</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Experience</th>
+                    <th>Qualification</th>
+                    <th>AI Score</th>
+                    <th>Status</th>
+                    <th>Resume</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% if applicants %}
+                    {% for applicant in applicants %}
                     <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Experience</th>
-                        <th>Qualification</th>
-                        <th>AI Score</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-
-                    <tr>
-                        <td>Aman Kumar</td>
-                        <td>Software Engineer</td>
-                        <td>3 Years</td>
-                        <td>B.Tech</td>
-                        <td>94%</td>
-                        <td>Shortlisted</td>
+                        <td>{{ applicant.name }}</td>
+                        <td>{{ applicant.job_title }}</td>
+                        <td>{{ applicant.total_experience or 'Not Added' }}</td>
+                        <td>{{ applicant.qualification }}</td>
+                        <td>{{ applicant.match_score or 0 }}%</td>
+                        <td>{{ applicant.status or 'Applied' }}</td>
                         <td>
-                            <button>Profile</button>
-                            <button>Resume</button>
+                            <a href="/preview_resume/{{ applicant.application_id }}">
+                                <button>View</button>
+                            </a>
+                        </td>
+                        <td>
+                            <a href="/admin/applicant/{{ applicant.application_id }}">
+                                <button>Profile</button>
+                            </a>
+                            <a href="/application/{{ applicant.application_id }}/status/Under Review">
+                                <button>Review</button>
+                            </a>
+
+                            <a href="/application/{{ applicant.application_id }}/status/Shortlisted">
+                                <button>Shortlist</button>
+                            </a>
+
+                            <a href="/application/{{ applicant.application_id }}/status/Rejected">
+                                <button>Reject</button>
+                            </a>
                         </td>
                     </tr>
-
+                    {% endfor %}
+                {% else %}
                     <tr>
-                        <td>Rahul Singh</td>
-                        <td>Data Analyst</td>
-                        <td>2 Years</td>
-                        <td>BCA</td>
-                        <td>89%</td>
-                        <td>Review</td>
-                        <td>
-                            <button>Profile</button>
-                            <button>Resume</button>
-                        </td>
+                        <td colspan="8">No applicants found.</td>
                     </tr>
+                {% endif %}
+            </tbody>
+        </table>
 
-                </tbody>
+    </div>
 
-            </table>
+    {% if applicants %}
+    {% set first_applicant = applicants[0] %}
 
+    <div class="candidate-section">
+
+        <div class="profile-card">
+            <h2>Candidate Profile</h2>
+
+            <p><strong>Name:</strong> {{ first_applicant.name }}</p>
+            <p><strong>Email:</strong> {{ first_applicant.email_id }}</p>
+            <p><strong>Phone:</strong> {{ first_applicant.phn_no }}</p>
+            <p><strong>Experience:</strong> {{ first_applicant.total_experience or 'Not Added' }}</p>
+
+            <h3>Applied For</h3>
+            <p>{{ first_applicant.job_title }}</p>
         </div>
 
-        <!-- Candidate Details -->
-        <div class="candidate-section">
+        <div class="resume-card">
+            <h2>Resume</h2>
 
-            <div class="profile-card">
+            <a href="/preview_resume/{{ first_applicant.application_id }}">
+                <button class="resume-btn">View Resume</button>
+            </a>
 
-                <h2>Candidate Profile</h2>
-
-                <p><strong>Name:</strong> Aman Kumar</p>
-                <p><strong>Email:</strong> aman@gmail.com</p>
-                <p><strong>Phone:</strong> +91 9876543210</p>
-                <p><strong>Location:</strong> Hyderabad</p>
-
-                <h3>Education</h3>
-                <p>B.Tech Computer Science</p>
-
-                <h3>Skills</h3>
-
-                <div class="skills">
-                    <span>Python</span>
-                    <span>SQL</span>
-                    <span>ReactJS</span>
-                    <span>Machine Learning</span>
-                </div>
-
-            </div>
-
-            <div class="resume-card">
-
-                <h2>Resume</h2>
-
-                <button class="resume-btn">
-                    View Resume
-                </button>
-
-                <button class="resume-btn">
-                    Download Resume
-                </button>
-
-            </div>
-
+            <a href="/download_resume/{{ first_applicant.application_id }}">
+                <button class="resume-btn">Download Resume</button>
+            </a>
         </div>
 
-        <!-- AI Analysis -->
-        <div class="ai-section">
+    </div>
 
-            <div class="ai-card">
-                <h3>Skill Match</h3>
-                <span>95%</span>
-            </div>
-
-            <div class="ai-card">
-                <h3>Experience Match</h3>
-                <span>88%</span>
-            </div>
-
-            <div class="ai-card">
-                <h3>Education Match</h3>
-                <span>90%</span>
-            </div>
-
-            <div class="ai-card">
-                <h3>Certification Match</h3>
-                <span>85%</span>
-            </div>
-
-            <div class="ai-card highlight">
-                <h3>Overall Score</h3>
-                <span>94%</span>
-            </div>
-
+    <div class="ai-section">
+        <div class="ai-card">
+            <h3>Overall Score</h3>
+            <span>{{ first_applicant.match_score or 0 }}%</span>
         </div>
 
-        <!-- Missing Skills -->
-        <div class="analysis-card">
-
-            <h2>Missing Skills Analysis</h2>
-
-            <p>
-                Required Skills:
-                Python, SQL, Machine Learning
-            </p>
-
-            <p>
-                Candidate Skills:
-                Python, SQL
-            </p>
-
-            <p class="missing">
-                Missing: Machine Learning
-            </p>
-
+        <div class="ai-card">
+            <h3>Status</h3>
+            <span>{{ first_applicant.status or 'Applied' }}</span>
         </div>
 
-        <!-- Timeline -->
-        <div class="analysis-card">
-
-            <h2>Activity Timeline</h2>
-
-            <ul class="timeline">
-                <li>Applied for Job - 01 June 2026</li>
-                <li>Resume Screened - 01 June 2026</li>
-                <li>Shortlisted - 02 June 2026</li>
-                <li>Interview Scheduled - 03 June 2026</li>
-            </ul>
-
+        <div class="ai-card">
+            <h3>Position</h3>
+            <span>{{ first_applicant.job_title }}</span>
         </div>
+    </div>
+    {% endif %}
 
-    </main>
+</main>
 
-</div>
-
-</body>
-</html>
+{% endblock %}

@@ -11,20 +11,12 @@
 <div class="logout-container">
 
     <div class="logout-card">
-
-        {% if applicant_profile.profile_img %}
-      <img
-        src="{{ url_for('static', filename='assets/profile_img/' + applicant_profile.profile_img) }}"
-        alt="Profile"
-      />
-      {% else %}
       <img
         src="{{ url_for('static', filename='assets/profile_img/profile_img_default.png') }}"
         alt="Profile"
       />
-      {% endif %}
 
-        <h2>{{applicant.name}}</h2>
+        <h2>{{admin.name}}</h2>
 
         <p class="role">
             {{role}}
@@ -40,9 +32,9 @@
         <div class="session-info">
             <div>
                 <strong>Last Login</strong>
-                <p>{% if applicant.last_login %}
-                    {{ applicant.last_login.strftime('%d %b %Y') }}
-                    {{ applicant.last_login.strftime('%H:%M') }}
+                <p>{% if admin.last_login %}
+                    {{ admin.last_login.strftime('%d %b %Y') }}
+                    {{ admin.last_login.strftime('%H:%M') }}
                     {% else %}
                         Never
                     {% endif %}
@@ -58,7 +50,7 @@
 
         <div class="button-group">
 
-            <button class="cancel-btn"><a href="/dashboard/applicant/{{ applicant.applicant_id }}" >
+            <button class="cancel-btn"><a href="/dashboard/admin/{{ admin.emp_id }}" >
                 Cancel
             </button>
 

@@ -59,48 +59,6 @@
     padding:20px;
 }
 
-/* =========================
-   SIDEBAR
-========================= */
-
-.sidebar{
-    width:240px;
-    background:#ffffff;
-    border-radius:15px;
-    box-shadow:0 4px 15px rgba(0,0,0,0.08);
-    padding:20px 0;
-    height:fit-content;
-}
-
-.sidebar_lists{
-    list-style:none;
-}
-
-.sidebar_lists li{
-    margin:8px 15px;
-}
-
-.sidebar_lists a{
-    display:block;
-    text-decoration:none;
-    color:#374151;
-    padding:14px 18px;
-    border-radius:10px;
-    font-weight:600;
-    transition:.3s;
-}
-
-.sidebar_lists a:hover{
-    background:#edf4ff;
-    color:#0056b3;
-}
-
-.sidebar_lists a.active{
-    background:#0056b3;
-    color:white;
-}
-
-/* end  */
 
 body{
     background:#f4f7fc;
@@ -108,6 +66,8 @@ body{
 
 .resume-container{
     width:100%;
+    padding: 17px 40px;
+
 }
 
 .page-title{
@@ -214,7 +174,29 @@ body{
     margin:5px;
 }
 
+.back-section button{
+    background:#003366;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:600;
+}
+.back-section button:hover{
+    background:#0056b3;
+}
 
+
+.back-section{
+    margin-top:20px;
+}
+
+@media(max-width:900px){
+    .details-grid{
+        grid-template-columns:1fr;
+    }
+}
 /* =========================
    FOOTER
 ========================= */

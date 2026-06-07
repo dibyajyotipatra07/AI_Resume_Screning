@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Application Details</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/application_detail.css') }}"
+    />
+  </head>
+  <body>
+    <!-- header of the page -->
+    <header>
+      <div class="header">
+        <div class="logo">
+          <img src="{{ url_for('static', filename='assets/BHEL_logo.png') }}" />
+          <div>
+            <p>Bharat Heavy Electricals Limited</p>
+            <h4 id="tagline">
+              Powering Progress,Brightening Lives Touching Every Indian Home
+            </h4>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="page-header">
+        <h1>Application Details</h1>
+        <p>Track your submitted application and recruitment progress</p>
+      </div>
+
+      <div class="details-grid">
+        <div class="card">
+          <h2>Job Information</h2>
+
+          <p><strong>Job Title:</strong> {{ application.job_title }}</p>
+          <p><strong>Company:</strong> {{ application.company_name }}</p>
+          <p><strong>Location:</strong> {{ application.location }}</p>
+          <p>
+            <strong>Experience Required:</strong> {{ application.min_experience
+            }} Years
+          </p>
+          <p><strong>Qualification:</strong> {{ application.qualification }}</p>
+          <p><strong>Posted Date:</strong> {{ application.posted_date }}</p>
+        </div>
+
+        <div class="card">
+          <h2>Application Status</h2>
+
+          <p>
+            <strong>Application ID:</strong> APP{{ application.application_id }}
+          </p>
+          <p>
+            <strong>Applied Date:</strong> {{ application.application_date }}
+          </p>
+          <p>
+            <strong>Uploaded Resume:</strong> {{ application.resume_uploaded }}
+          </p>
+          <p><strong>Upload Date:</strong> {{ application.upload_date }}</p>
+
+          <div class="score-box">
+            <h3>{{ application.match_score or 0 }}%</h3>
+            <p>AI Match Score</p>
+          </div>
+
+          {% if application.status == 'Shortlisted' or application.status ==
+          'Selected' %}
+          <span class="status green">{{ application.status }}</span>
+          {% elif application.status == 'Rejected' %}
+          <span class="status red">{{ application.status }}</span>
+          {% else %}
+          <span class="status orange"
+            >{{ application.status or 'Applied' }}</span
+          >
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Resume Actions</h2>
+
+        <div class="action-buttons">
+          <a href="/preview_resume/{{ application.application_id }}">
+            <button type="button">Preview Resume</button>
+          </a>
+
+          <a href="/download_resume/{{ application.application_id }}">
+            <button type="button">Download Resume</button>
+          </a>
+
+          <a
+            href="/applicant/{{ applicant.applicant_id }}/{{ application.application_id }}/resume"
+          >
+            <button type="button">Update Resume</button>
+          </a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Application Timeline</h2>
+
+        <ul class="timeline">
+          <li class="active">
+            Application Submitted - {{ application.application_date }}
+          </li>
+          <li class="active">
+            Resume Uploaded - {{ application.upload_date }}
+          </li>
+
+          {% if application.match_score %}
+          <li class="active">
+            AI Screening Completed - Score {{ application.match_score }}%
+          </li>
+          {% else %}
+          <li>AI Screening Pending</li>
+          {% endif %} {% if application.status == 'Shortlisted' %}
+          <li class="active">Shortlisted</li>
+          <li>Final Selection Pending</li>
+          {% elif application.status == 'Selected' %}
+          <li class="active">Shortlisted</li>
+          <li class="active">Selected</li>
+          {% elif application.status == 'Rejected' %}
+          <li class="rejected-step">Rejected</li>
+          {% else %}
+          <li>Under Review</li>
+          {% endif %}
+        </ul>
+      </div>
+
+      <div class="back-section">
+        <a href="/applicant/applications/{{ applicant.applicant_id }}">
+          <button type="button">Back to My Applications</button>
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer_container">
+        <div class="footer_section">
+          <h3>Resume Parser ATS</h3>
+          <p>
+            Smart recruitment platform for candidates and recruiters. Upload
+            resumes, discover jobs, and track applications seamlessly.
+          </p>
+        </div>
+
+        <div class="footer_section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li>
+              <a href="/dashboard/applicant/{{ applicant.applicant_id }}"
+                >Dashboard</a
+              >
+            </li>
+            <li>
+              <a href="/applicant/applications/{{ applicant.applicant_id }}"
+                >My Applications</a
+              >
+            </li>
+            <li><a href="/jobs/{{ applicant.applicant_id }}">Find Jobs</a></li>
+          </ul>
+        </div>
+
+        <div class="footer_section">
+          <h4>Support</h4>
+          <ul>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Contact Us</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms & Conditions</a></li>
+          </ul>
+        </div>
+
+        <div class="footer_section">
+          <h4>Contact</h4>
+          <p>Email: support@resumeparser.com</p>
+          <p>Phone: +91 XXXXX XXXXX</p>
+          <p>India</p>
+        </div>
+      </div>
+
+      <div class="footer_bottom">
+        <p>© 2026 Resume Parser ATS.</p>
+      </div>
+    </footer>
+  </body>
+</html>

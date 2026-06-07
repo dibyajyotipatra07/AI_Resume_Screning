@@ -1,0 +1,131 @@
+{% extends "layout2.html" %}
+
+{% block title %}Job Details{% endblock %}
+
+{% block head %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Job Details</title>
+
+<link rel="stylesheet"
+      href="{{ url_for('static', filename='css/job_details.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>{{ job.job_title }}</h1>
+        <p>Detailed job information and requirements</p>
+    </div>
+
+    <div class="details-grid">
+
+        <div class="box">
+
+            <h2>Job Information</h2>
+
+            <p><strong>Company:</strong> {{ job.company_name }}</p>
+
+            <p><strong>Location:</strong> {{ job.location }}</p>
+
+            <p><strong>Experience Required:</strong>
+                {{ job.min_experience }} Years
+            </p>
+
+            <p><strong>Qualification:</strong>
+                {{ job.qualification }}
+            </p>
+
+            <p><strong>Status:</strong>
+                {{ job.status }}
+            </p>
+
+            <p><strong>Posted Date:</strong>
+                {{ job.posted_date }}
+            </p>
+
+        </div>
+
+        <div class="box">
+
+            <h2>Job Description</h2>
+
+            <p>
+                {{ job.job_description }}
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="box">
+
+        <h2>Required Skills</h2>
+
+        <div class="skills-container">
+
+            {% if skills %}
+
+                {% for skill in skills %}
+                    <span class="skill-badge">
+                        {{ skill.skill_name }}
+                    </span>
+                {% endfor %}
+
+            {% else %}
+
+                <p>No skills listed.</p>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <div class="box">
+
+        <h2>Apply For This Job</h2>
+
+        {% if already_applied %}
+
+            <button class="applied-btn" disabled>
+                Already Applied
+            </button>
+
+        {% else %}
+
+            <form
+                action="/{{ applicant.applicant_id }}/apply/{{ job.job_id }}"
+                method="POST"
+                enctype="multipart/form-data"
+                class="apply-form"
+            >
+
+                <label>Upload Resume (PDF)</label>
+
+                <input
+                    type="file"
+                    name="resume"
+                    accept=".pdf"
+                    required
+                >
+
+                <button
+                    type="submit"
+                    class="apply-btn"
+                >
+                    Apply Now
+                </button>
+
+            </form>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

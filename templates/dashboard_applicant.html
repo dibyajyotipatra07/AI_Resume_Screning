@@ -1,160 +1,201 @@
-{% extends "layout2.html" %} {% block title %}Applicant Dashboard{% endblock %}
+{% extends "layout2.html" %}
 
-<!-- for head jinja block-->
+{% block title %}Applicant Dashboard{% endblock %}
+
 {% block head %}
-<meta charset="utf-8" />
-<title>login page</title>
-<link
-  rel="stylesheet"
-  href="{{ url_for('static', filename='css/applicant_dashboard.css') }}"
-/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-  /* Flash Messages */
-  .alert {
-    padding: 12px 26px;
-    margin: 10px 0;
-    border-radius: 5px;
-    position: fixed;
-    top: 77px;
-    right: 20px;
-    font-size: 17px;
-    z-index: 9999;
-    color: #2d2727;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    animation: slideIn 0.3s ease;
-    min-width: 400px;
-    max-width: 800px;
-  }
+<title>Applicant Dashboard</title>
 
-  .alert-success {
-    background-color: #1eee4dc2;
-  }
+<link rel="stylesheet" href="{{ url_for('static', filename='css/applicant_dashboard.css') }}">
+{% endblock %}
 
-  .alert-danger {
-    background-color: #ff0018b3;
-  }
+{% block content %}
 
-  .alert-warning {
-    background-color: #ecc757;
-    color: black;
-  }
-
-  .alert-info {
-    background-color: #50c6d8;
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(50px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  .btn-close {
-    position: absolute;
-    right: 10px;
-    top: 8px;
-    background: transparent;
-    border: none;
-    color: inherit;
-    font-size: 20px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-
-  .btn-close:hover {
-    opacity: 0.7;
-  }
-</style>
-{% endblock %} {% block content %}
-
-<!-- Main Content -->
 <div class="dashboard_content">
-  <!-- Welcome Section -->
-  <div class="welcome_card profile-left">
-    <div class="profile-image">
-      {% if applicant_profile.profile_img %}
-      <img
-        src="{{ url_for('static', filename='assets/profile_img/' + applicant_profile.profile_img) }}"
-        alt="Profile"
-      />
-      {% else %}
-      <img
-        src="{{ url_for('static', filename='assets/profile_img/profile_img_default.png') }}"
-        alt="Profile"
-      />
-      {% endif %}
-    </div>
-    <div class="">
-      <h2>Welcome, {{ applicant.name }}</h2>
-      <p>
-        Manage your applications, explore jobs, and keep your resume updated.
-      </p>
-    </div>
-  </div>
-  <!-- Statistics -->
-  <div class="stats_grid">
-    <div class="stat_card">
-      <h3>{{ total_applications }}</h3>
-      <p>Applications Submitted</p>
+
+    <div class="welcome_card profile-left">
+
+        <div class="profile-image">
+            {% if applicant_profile and applicant_profile.profile_img %}
+                <img
+                    src="{{ url_for('static', filename='assets/profile_img/' + applicant_profile.profile_img) }}"
+                    alt="Profile"
+                />
+            {% else %}
+                <img
+                    src="{{ url_for('static', filename='assets/profile_img/profile_img_default.png') }}"
+                    alt="Profile"
+                />
+            {% endif %}
+        </div>
+
+        <div>
+            <h2>Welcome, {{ applicant.name }}</h2>
+            <p>
+                Manage your applications, explore jobs, and keep your resume updated.
+            </p>
+        </div>
+
     </div>
 
-    <div class="stat_card">
-      <h3>{{ under_review }}</h3>
-      <p>Under Review</p>
+    <div class="cards">
+
+        <div class="card">
+            <h2>{{ total_applications or 0 }}</h2>
+            <p>Total Applications</p>
+        </div>
+
+        <div class="card review">
+            <h2>{{ under_review or 0 }}</h2>
+            <p>Under Review</p>
+        </div>
+
+        <div class="card shortlisted">
+            <h2>{{ shortlisted or 0 }}</h2>
+            <p>Shortlisted</p>
+        </div>
+
+        <div class="card rejected">
+            <h2>{{ rejected or 0 }}</h2>
+            <p>Rejected</p>
+        </div>
+
+        <div class="card selected">
+            <h2>{{ selected or 0 }}</h2>
+            <p>Selected</p>
+        </div>
+
     </div>
 
-    <div class="stat_card">
-      <h3>{{ interview_count }}</h3>
-      <p>Interviews Scheduled</p>
+    <div class="dashboard-grid">
+
+        <div class="box">
+
+            <h2>Profile Completion</h2>
+
+            <div class="progress-wrapper">
+
+                <div class="progress-bar">
+                    <div
+                        class="progress-fill"
+                        style="width: {{ profile_completion or 0 }}%;">
+                    </div>
+                </div>
+
+                <h3>{{ profile_completion or 0 }}%</h3>
+
+            </div>
+
+            <a href="/applicant/profile/{{ applicant.applicant_id }}">
+                <button class="action-btn" type="button">
+                    Complete Profile
+                </button>
+            </a>
+
+        </div>
+
+        <div class="box">
+
+            <h2>Quick Actions</h2>
+
+            <div class="quick-actions">
+
+                <a href="/jobs/{{ applicant.applicant_id }}">
+                    <button class="action-btn" type="button">
+                        Find Jobs
+                    </button>
+                </a>
+
+                <a href="/applicant/applications/{{ applicant.applicant_id }}">
+                    <button class="action-btn" type="button">
+                        My Applications
+                    </button>
+                </a>
+
+                <a href="/applicant/profile/{{ applicant.applicant_id }}">
+                    <button class="action-btn" type="button">
+                        Update Profile
+                    </button>
+                </a>
+
+            </div>
+
+        </div>
+
     </div>
 
-    <div class="stat_card">
-      <h3>{{ match_score }}%</h3>
-      <p>Profile Match Score</p>
+    <div class="box">
+
+        <h2>Recent Applications</h2>
+
+        <div class="table-box">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Company</th>
+                        <th>Location</th>
+                        <th>Applied Date</th>
+                        <th>Status</th>
+                        <th>Match Score</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% if applications %}
+
+                        {% for application in applications %}
+
+                        <tr>
+                            <td>{{ application.job_title }}</td>
+                            <td>{{ application.company_name }}</td>
+                            <td>{{ application.location }}</td>
+                            <td>{{ application.application_date }}</td>
+
+                            <td>
+                                {% if application.status == 'Shortlisted' or application.status == 'Selected' %}
+                                    <span class="status green">
+                                        {{ application.status }}
+                                    </span>
+                                {% elif application.status == 'Rejected' %}
+                                    <span class="status red">
+                                        {{ application.status }}
+                                    </span>
+                                {% else %}
+                                    <span class="status orange">
+                                        {{ application.status or 'Applied' }}
+                                    </span>
+                                {% endif %}
+                            </td>
+
+                            <td>{{ application.match_score or 0 }}%</td>
+                        </tr>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <tr>
+                            <td colspan="6">
+                                No applications found.
+                            </td>
+                        </tr>
+
+                    {% endif %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
     </div>
-  </div>
 
-  <!-- Recent Applications -->
-  <div class="applications_section">
-    <div class="section_header">
-      <h3>Recent Applications</h3>
-    </div>
-
-    <table class="application_table">
-      <thead>
-        <tr>
-          <th>Job Title</th>
-          <th>Company</th>
-          <th>Status</th>
-          <th>Applied On</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        {% for application in applications %}
-
-        <tr>
-          <td>{{ application.job_title }}</td>
-          <td>{{ application.company }}</td>
-
-          <td>
-            <span class="status_badge {{ application.status|lower }}">
-              {{ application.status }}
-            </span>
-          </td>
-
-          <td>{{ application.application_date }}</td>
-        </tr>
-
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
 </div>
+
 {% endblock %}
