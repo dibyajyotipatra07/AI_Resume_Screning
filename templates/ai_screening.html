@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Screening</title>
+
+<link rel="stylesheet" href="ai_screening.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <h2>Admin Panel</h2>
+
+        <ul>
+            <li><a href="admin_dashboard.html">Dashboard</a></li>
+            <li><a href="manage_jobs.html">Manage Jobs</a></li>
+            <li><a href="applicants.html">Applicants</a></li>
+            <li class="active"><a href="#">AI Screening</a></li>
+            <li><a href="shortlisted.html">Shortlisted</a></li>
+            <li><a href="interviews.html">Interviews</a></li>
+            <li><a href="reports.html">Reports</a></li>
+            <li><a href="settings.html">Settings</a></li>
+        </ul>
+
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <div class="header">
+            <h1>AI Resume Screening</h1>
+            <p>
+                Analyze resumes, evaluate candidate-job matching
+                and generate intelligent recommendations.
+            </p>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <h3>Screened</h3>
+                <span>356</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Qualified</h3>
+                <span>142</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Rejected</h3>
+                <span>114</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Pending</h3>
+                <span>100</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Avg Score</h3>
+                <span>82%</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Top Score</h3>
+                <span>97%</span>
+            </div>
+
+        </div>
+
+        <!-- Filters -->
+
+        <div class="card">
+
+            <h2>Job Filters</h2>
+
+            <div class="filters">
+
+                <select>
+                    <option>Software Engineer</option>
+                    <option>Data Analyst</option>
+                    <option>UI Designer</option>
+                </select>
+
+                <select>
+                    <option>Department</option>
+                    <option>IT</option>
+                    <option>Analytics</option>
+                </select>
+
+                <select>
+                    <option>80% & Above</option>
+                    <option>70% & Above</option>
+                    <option>60% & Above</option>
+                </select>
+
+                <button>Apply</button>
+
+            </div>
+
+        </div>
+
+        <!-- Ranking Table -->
+
+        <div class="card">
+
+            <h2>AI Candidate Rankings</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Candidate</th>
+                        <th>Position</th>
+                        <th>Score</th>
+                        <th>Recommendation</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>#1</td>
+                        <td>Aman Kumar</td>
+                        <td>Software Engineer</td>
+                        <td>97%</td>
+                        <td>Highly Recommended</td>
+                        <td>
+                            <button>Profile</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>#2</td>
+                        <td>Priya Sharma</td>
+                        <td>Software Engineer</td>
+                        <td>94%</td>
+                        <td>Highly Recommended</td>
+                        <td>
+                            <button>Profile</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>#3</td>
+                        <td>Rahul Singh</td>
+                        <td>Software Engineer</td>
+                        <td>90%</td>
+                        <td>Recommended</td>
+                        <td>
+                            <button>Profile</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- Candidate Analysis -->
+
+        <div class="analysis-grid">
+
+            <div class="card">
+
+                <h2>Candidate Analysis</h2>
+
+                <p><strong>Name:</strong> Aman Kumar</p>
+                <p><strong>Position:</strong> Software Engineer</p>
+                <p><strong>Experience:</strong> 4 Years</p>
+                <p><strong>Education:</strong> B.Tech CSE</p>
+
+                <h3>Required Skills</h3>
+
+                <div class="tags">
+                    <span>Python</span>
+                    <span>SQL</span>
+                    <span>Machine Learning</span>
+                    <span>React</span>
+                </div>
+
+                <h3>Candidate Skills</h3>
+
+                <div class="tags">
+                    <span>Python</span>
+                    <span>SQL</span>
+                    <span>React</span>
+                </div>
+
+                <p class="missing">
+                    Missing Skill: Machine Learning
+                </p>
+
+            </div>
+
+            <div class="card">
+
+                <h2>AI Recommendation</h2>
+
+                <div class="recommend-box">
+                    Highly Recommended
+                </div>
+
+                <p>
+                    Strong skill match, excellent experience,
+                    and relevant educational background.
+                </p>
+
+                <h3>Candidate Rank</h3>
+
+                <p>#1 out of 120 Applicants</p>
+
+            </div>
+
+        </div>
+
+        <!-- Score Breakdown -->
+
+        <div class="card">
+
+            <h2>AI Scoring Breakdown</h2>
+
+            <div class="score-grid">
+
+                <div class="score-card">
+                    Skills
+                    <h3>36/40</h3>
+                </div>
+
+                <div class="score-card">
+                    Experience
+                    <h3>30/30</h3>
+                </div>
+
+                <div class="score-card">
+                    Education
+                    <h3>20/20</h3>
+                </div>
+
+                <div class="score-card">
+                    Certification
+                    <h3>10/10</h3>
+                </div>
+
+            </div>
+
+            <h2 class="final-score">
+                Final Score : 96 / 100
+            </h2>
+
+        </div>
+
+        <!-- Resume Keywords -->
+
+        <div class="analysis-grid">
+
+            <div class="card">
+
+                <h2>Extracted Keywords</h2>
+
+                <div class="tags">
+                    <span>Python</span>
+                    <span>SQL</span>
+                    <span>ReactJS</span>
+                    <span>TensorFlow</span>
+                    <span>Machine Learning</span>
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h2>Missing Keywords</h2>
+
+                <div class="tags">
+                    <span>AWS</span>
+                    <span>Docker</span>
+                    <span>Kubernetes</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Insights -->
+
+        <div class="card">
+
+            <h2>AI Screening Insights</h2>
+
+            <ul class="insights">
+                <li>78% candidates meet education criteria.</li>
+                <li>65% candidates satisfy experience requirements.</li>
+                <li>22% candidates have ML certification.</li>
+                <li>Most common skill found is SQL.</li>
+            </ul>
+
+        </div>
+
+        <!-- History -->
+
+        <div class="card">
+
+            <h2>Screening History</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Position</th>
+                        <th>Candidates</th>
+                        <th>Qualified</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>01-06-2026</td>
+                        <td>Software Engineer</td>
+                        <td>120</td>
+                        <td>45</td>
+                    </tr>
+
+                    <tr>
+                        <td>02-06-2026</td>
+                        <td>Data Analyst</td>
+                        <td>85</td>
+                        <td>30</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

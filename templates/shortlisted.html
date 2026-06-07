@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shortlisted Candidates</title>
+
+<link rel="stylesheet" href="shortlisted.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <h2>Admin Panel</h2>
+
+        <ul>
+            <li><a href="admin_dashboard.html">Dashboard</a></li>
+            <li><a href="manage_jobs.html">Manage Jobs</a></li>
+            <li><a href="applicants.html">Applicants</a></li>
+            <li><a href="ai_screening.html">AI Screening</a></li>
+            <li class="active"><a href="#">Shortlisted</a></li>
+            <li><a href="interviews.html">Interviews</a></li>
+            <li><a href="reports.html">Reports</a></li>
+            <li><a href="settings.html">Settings</a></li>
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <div class="header">
+            <h1>Shortlisted Candidates</h1>
+            <p>Manage candidates selected for interviews and final hiring stages.</p>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-grid">
+
+            <div class="stat-card">
+                <h3>Total Shortlisted</h3>
+                <span>72</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Interviews</h3>
+                <span>28</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Awaiting</h3>
+                <span>24</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Completed</h3>
+                <span>20</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Final Round</h3>
+                <span>15</span>
+            </div>
+
+            <div class="stat-card">
+                <h3>Selected</h3>
+                <span>12</span>
+            </div>
+
+        </div>
+
+        <!-- Filters -->
+        <div class="card">
+
+            <h2>Search & Filters</h2>
+
+            <div class="filters">
+
+                <input type="text"
+                placeholder="Search Candidate">
+
+                <select>
+                    <option>Job Position</option>
+                    <option>Software Engineer</option>
+                    <option>Data Analyst</option>
+                </select>
+
+                <select>
+                    <option>Interview Status</option>
+                    <option>Scheduled</option>
+                    <option>Completed</option>
+                    <option>Pending</option>
+                </select>
+
+                <button>Search</button>
+
+            </div>
+
+        </div>
+
+        <!-- Candidate Table -->
+        <div class="card">
+
+            <h2>Shortlisted Candidates</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>AI Score</th>
+                        <th>Experience</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Aman Kumar</td>
+                        <td>Software Engineer</td>
+                        <td>94%</td>
+                        <td>3 Years</td>
+                        <td>Scheduled</td>
+                        <td>
+                            <button>Profile</button>
+                            <button>Interview</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Priya Sharma</td>
+                        <td>Software Engineer</td>
+                        <td>91%</td>
+                        <td>4 Years</td>
+                        <td>Completed</td>
+                        <td>
+                            <button>Profile</button>
+                            <button>Interview</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- Profile + AI Summary -->
+        <div class="grid-two">
+
+            <div class="card">
+
+                <h2>Candidate Profile</h2>
+
+                <p><strong>Name:</strong> Aman Kumar</p>
+                <p><strong>Email:</strong> aman@gmail.com</p>
+                <p><strong>Phone:</strong> +91 9876543210</p>
+                <p><strong>Location:</strong> Hyderabad</p>
+
+                <h3>Skills</h3>
+
+                <div class="tags">
+                    <span>Python</span>
+                    <span>SQL</span>
+                    <span>ReactJS</span>
+                    <span>Machine Learning</span>
+                </div>
+
+            </div>
+
+            <div class="card">
+
+                <h2>AI Screening Summary</h2>
+
+                <p>Skill Match : <strong>95%</strong></p>
+                <p>Experience Match : <strong>88%</strong></p>
+                <p>Education Match : <strong>90%</strong></p>
+
+                <h3 class="score">
+                    Overall Score : 94%
+                </h3>
+
+            </div>
+
+        </div>
+
+        <!-- Interview Details -->
+        <div class="card">
+
+            <h2>Interview Details</h2>
+
+            <div class="interview-grid">
+
+                <div>
+                    <strong>Date</strong>
+                    <p>15 June 2026</p>
+                </div>
+
+                <div>
+                    <strong>Time</strong>
+                    <p>10:00 AM</p>
+                </div>
+
+                <div>
+                    <strong>Interviewer</strong>
+                    <p>HR Manager</p>
+                </div>
+
+                <div>
+                    <strong>Mode</strong>
+                    <p>Online</p>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Feedback -->
+        <div class="card">
+
+            <h2>Interview Feedback</h2>
+
+            <textarea rows="5"
+            placeholder="Enter interviewer comments..."></textarea>
+
+            <button class="save-btn">
+                Save Feedback
+            </button>
+
+        </div>
+
+        <!-- Final Evaluation -->
+        <div class="card">
+
+            <h2>Final Evaluation</h2>
+
+            <table>
+
+                <tr>
+                    <th>Criteria</th>
+                    <th>Score</th>
+                </tr>
+
+                <tr>
+                    <td>AI Screening</td>
+                    <td>94%</td>
+                </tr>
+
+                <tr>
+                    <td>Technical Interview</td>
+                    <td>90%</td>
+                </tr>
+
+                <tr>
+                    <td>HR Interview</td>
+                    <td>88%</td>
+                </tr>
+
+                <tr>
+                    <td>Final Score</td>
+                    <td>91%</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+        <!-- Decision Panel -->
+        <div class="card">
+
+            <h2>Selection Decision</h2>
+
+            <div class="decision-buttons">
+
+                <button class="approve">
+                    Select Candidate
+                </button>
+
+                <button class="final">
+                    Final Round
+                </button>
+
+                <button class="hold">
+                    Hold
+                </button>
+
+                <button class="reject">
+                    Reject
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Timeline -->
+        <div class="card">
+
+            <h2>Candidate Timeline</h2>
+
+            <ul class="timeline">
+
+                <li>Application Submitted - 01 Jun 2026</li>
+                <li>AI Screening Passed - 02 Jun 2026</li>
+                <li>Shortlisted - 03 Jun 2026</li>
+                <li>Interview Scheduled - 05 Jun 2026</li>
+                <li>Interview Completed - 10 Jun 2026</li>
+
+            </ul>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

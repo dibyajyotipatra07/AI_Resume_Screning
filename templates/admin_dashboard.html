@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="admin_dashboard.css">
+</head>
+
+<body>
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+
+            <h2 class="sidebar-title">Admin Panel</h2>
+
+            <ul class="menu">
+                <li class="active">Dashboard</li>
+                <li>Manage Jobs</li>
+                <li>Applicants</li>
+                <li>AI Screening</li>
+                <li>Shortlisted</li>
+                <li>Interviews</li>
+                <li>Reports</li>
+                <li>Company Profile</li>
+                <li>Settings</li>
+                <li>Logout</li>
+            </ul>
+
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <!-- Welcome -->
+            <section class="welcome-card">
+                <h1>Welcome, Admin</h1>
+                <p>
+                    Manage job postings, monitor applications,
+                    review AI screening results, and track recruitment progress.
+                </p>
+            </section>
+
+            <!-- Stats Cards -->
+            <section class="stats-container">
+                
+                <div class="stat-card">
+                    <h3>Jobs Posted</h3>
+                    <span>15</span>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Active Jobs</h3>
+                    <span>8</span>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Applications</h3>
+                    <span>356</span>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Shortlisted</h3>
+                    <span>72</span>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Interviews</h3>
+                    <span>28</span>
+                </div>
+
+                <div class="stat-card">
+                    <h3>Selected</h3>
+                    <span>12</span>
+                </div>
+
+            </section>
+
+            <!-- Recruitment Overview -->
+            <section class="card">
+                <h2>Recruitment Overview</h2>
+
+                <div class="overview-grid">
+                    <div>Applications Received : <strong>356</strong></div>
+                    <div>Under Review : <strong>180</strong></div>
+                    <div>Shortlisted : <strong>72</strong></div>
+                    <div>Interviews : <strong>28</strong></div>
+                    <div>Selected : <strong>12</strong></div>
+                    <div>Rejected : <strong>64</strong></div>
+                </div>
+            </section>
+            
+            <!-- Recent Applications -->
+            <section class="card">
+                <h2>Recent Applications</h2>
+
+                <table>
+                    <tr>
+                        <th>Candidate</th>
+                        <th>Position</th>
+                        <th>Status</th>
+                    </tr>
+
+                    <tr>
+                        <td>Aman Kumar</td>
+                        <td>Software Engineer</td>
+                        <td>Under Review</td>
+                    </tr>
+
+                    <tr>
+                        <td>Rahul Singh</td>
+                        <td>Data Analyst</td>
+                        <td>Shortlisted</td>
+                    </tr>
+
+                    <tr>
+                        <td>Priya Sharma</td>
+                        <td>Web Developer</td>
+                        <td>Interview Scheduled</td>
+                    </tr>
+
+                </table>
+            </section>
+
+            <!-- Two Column Section -->
+            <div class="bottom-grid">
+
+                <!-- AI Ranking -->
+                <section class="card">
+                    <h2>Top Ranked Candidates</h2>
+
+                    <table>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Name</th>
+                            <th>Score</th>
+                        </tr>
+
+                        <tr>
+                            <td>1</td>
+                            <td>Aman Kumar</td>
+                            <td>94%</td>
+                        </tr>
+
+                        <tr>
+                            <td>2</td>
+                            <td>Rahul Singh</td>
+                            <td>91%</td>
+                        </tr>
+
+                        <tr>
+                            <td>3</td>
+                            <td>Priya Sharma</td>
+                            <td>89%</td>
+                        </tr>
+                    </table>
+
+                </section>
+
+                <!-- Notifications -->
+                <section class="card">
+                    <h2>Notifications</h2>
+
+                    <ul class="notification-list">
+                        <li>New application received.</li>
+                        <li>5 candidates shortlisted by AI.</li>
+                        <li>Interview scheduled for tomorrow.</li>
+                        <li>Data Analyst job expires in 3 days.</li>
+                    </ul>
+
+                </section>
+
+            </div>
+
+            <!-- Upcoming Interviews -->
+            <section class="card">
+                <h2>Upcoming Interviews</h2>
+
+                <table>
+                    <tr>
+                        <th>Candidate</th>
+                        <th>Position</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+
+                    <tr>
+                        <td>Aman Kumar</td>
+                        <td>Software Engineer</td>
+                        <td>03-06-2026</td>
+                        <td>10:00 AM</td>
+                    </tr>
+
+                    <tr>
+                        <td>Priya Sharma</td>
+                        <td>Web Developer</td>
+                        <td>03-06-2026</td>
+                        <td>02:00 PM</td>
+                    </tr>
+
+                </table>
+
+            </section>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

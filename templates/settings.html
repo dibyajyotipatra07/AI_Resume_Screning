@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings</title>
+
+<link rel="stylesheet" href="settings.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+
+    <aside class="sidebar">
+
+        <h2>Admin Panel</h2>
+
+        <ul>
+            <li><a href="admin_dashboard.html">Dashboard</a></li>
+            <li><a href="manage_jobs.html">Manage Jobs</a></li>
+            <li><a href="applicants.html">Applicants</a></li>
+            <li><a href="ai_screening.html">AI Screening</a></li>
+            <li><a href="shortlisted.html">Shortlisted</a></li>
+            <li><a href="interviews.html">Interviews</a></li>
+            <li><a href="reports.html">Reports</a></li>
+            <li class="active"><a href="#">Settings</a></li>
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+
+    <main class="main-content">
+
+        <div class="header">
+            <h1>System Settings</h1>
+            <p>Manage profile, security, AI configuration and platform preferences.</p>
+        </div>
+
+        <!-- Admin Profile -->
+
+        <div class="card">
+
+            <h2>Admin Profile</h2>
+
+            <div class="form-grid">
+
+                <input type="text" placeholder="Full Name">
+                <input type="email" placeholder="Email Address">
+
+                <input type="text" placeholder="Phone Number">
+                <input type="text" placeholder="Designation">
+
+                <input type="text" placeholder="Department">
+
+            </div>
+
+            <button class="save-btn">Update Profile</button>
+
+        </div>
+
+        <!-- Company Information -->
+
+        <div class="card">
+
+            <h2>Company Information</h2>
+
+            <div class="form-grid">
+
+                <input type="text" placeholder="Company Name">
+                <input type="text" placeholder="Industry">
+
+                <input type="url" placeholder="Website">
+                <input type="email" placeholder="Company Email">
+
+                <input type="text" placeholder="Contact Number">
+                <input type="text" placeholder="Address">
+
+            </div>
+
+            <textarea rows="5"
+            placeholder="Company Description"></textarea>
+
+            <button class="save-btn">
+                Save Company Information
+            </button>
+
+        </div>
+
+        <!-- Security -->
+
+        <div class="card">
+
+            <h2>Security Settings</h2>
+
+            <div class="form-grid">
+
+                <input type="password"
+                placeholder="Current Password">
+
+                <input type="password"
+                placeholder="New Password">
+
+                <input type="password"
+                placeholder="Confirm Password">
+
+            </div>
+
+            <button class="save-btn">
+                Update Password
+            </button>
+
+        </div>
+
+        <!-- AI Configuration -->
+
+        <div class="card">
+
+            <h2>AI Screening Configuration</h2>
+
+            <div class="form-grid">
+
+                <input type="number"
+                placeholder="Minimum AI Score (%)">
+
+                <input type="number"
+                placeholder="Skill Weight (%)">
+
+                <input type="number"
+                placeholder="Experience Weight (%)">
+
+                <input type="number"
+                placeholder="Education Weight (%)">
+
+                <input type="number"
+                placeholder="Certification Weight (%)">
+
+            </div>
+
+            <button class="save-btn">
+                Save AI Settings
+            </button>
+
+        </div>
+
+        <!-- Notifications -->
+
+        <div class="card">
+
+            <h2>Notification Settings</h2>
+
+            <div class="checkbox-group">
+
+                <label>
+                    <input type="checkbox">
+                    New Applications
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Candidate Shortlisted
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Interview Scheduled
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Candidate Selected
+                </label>
+
+                <label>
+                    <input type="checkbox">
+                    Monthly Reports
+                </label>
+
+            </div>
+
+            <button class="save-btn">
+                Save Notifications
+            </button>
+
+        </div>
+
+        <!-- Recruitment Workflow -->
+
+        <div class="card">
+
+            <h2>Recruitment Workflow</h2>
+
+            <ul class="workflow-list">
+
+                <li>Application Received</li>
+                <li>AI Screening</li>
+                <li>Shortlisting</li>
+                <li>Interview</li>
+                <li>Final Evaluation</li>
+                <li>Selection</li>
+
+            </ul>
+
+            <button class="save-btn">
+                Edit Workflow
+            </button>
+
+        </div>
+
+        <!-- User Management -->
+
+        <div class="card">
+
+            <h2>User Management</h2>
+
+            <table>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                </tr>
+
+                <tr>
+                    <td>Admin</td>
+                    <td>admin@company.com</td>
+                    <td>Administrator</td>
+                </tr>
+
+                <tr>
+                    <td>HR Manager</td>
+                    <td>hr@company.com</td>
+                    <td>Recruiter</td>
+                </tr>
+
+            </table>
+
+            <button class="save-btn">
+                Add User
+            </button>
+
+        </div>
+
+        <!-- Email Templates -->
+
+        <div class="card">
+
+            <h2>Email Templates</h2>
+
+            <input type="text"
+            placeholder="Application Received Subject">
+
+            <textarea rows="4"
+            placeholder="Application Email Template"></textarea>
+
+            <input type="text"
+            placeholder="Interview Invitation Subject">
+
+            <textarea rows="4"
+            placeholder="Interview Invitation Template"></textarea>
+
+            <button class="save-btn">
+                Save Templates
+            </button>
+
+        </div>
+
+        <!-- Appearance -->
+
+        <div class="card">
+
+            <h2>Appearance Settings</h2>
+
+            <div class="form-grid">
+
+                <select>
+                    <option>Light Mode</option>
+                    <option>Dark Mode</option>
+                </select>
+
+                <select>
+                    <option>Blue Theme</option>
+                    <option>Green Theme</option>
+                    <option>Purple Theme</option>
+                </select>
+
+            </div>
+
+            <button class="save-btn">
+                Apply Theme
+            </button>
+
+        </div>
+
+        <!-- Backup -->
+
+        <div class="card">
+
+            <h2>Backup & Recovery</h2>
+
+            <div class="action-buttons">
+
+                <button>Create Backup</button>
+                <button>Download Backup</button>
+                <button>Restore Backup</button>
+
+            </div>
+
+            <p class="backup-date">
+                Last Backup: 14 June 2026
+            </p>
+
+        </div>
+
+        <!-- System Information -->
+
+        <div class="card">
+
+            <h2>System Information</h2>
+
+            <table>
+
+                <tr>
+                    <th>Component</th>
+                    <th>Status</th>
+                </tr>
+
+                <tr>
+                    <td>Application Version</td>
+                    <td>v1.0</td>
+                </tr>
+
+                <tr>
+                    <td>Database</td>
+                    <td>Connected</td>
+                </tr>
+
+                <tr>
+                    <td>Server</td>
+                    <td>Online</td>
+                </tr>
+
+                <tr>
+                    <td>AI Engine</td>
+                    <td>Active</td>
+                </tr>
+
+            </table>
+
+        </div>
+
+        <!-- Logout -->
+
+        <div class="card">
+
+            <h2>Account Actions</h2>
+
+            <div class="action-buttons">
+
+                <button class="logout-btn">Logout</button>
+                <button class="danger-btn">Deactivate Account</button>
+                <button class="danger-btn">Delete Account</button>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

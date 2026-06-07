@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Jobs</title>
+    <link rel="stylesheet" href="manage_jobs.css">
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <h2>Admin Panel</h2>
+
+        <ul>
+            <li><a href="admin_dashboard.html">Dashboard</a></li>
+            <li class="active"><a href="#">Manage Jobs</a></li>
+            <li><a href="applicants.html">Applicants</a></li>
+            <li><a href="ai_screening.html">AI Screening</a></li>
+            <li><a href="shortlisted.html">Shortlisted</a></li>
+            <li><a href="interviews.html">Interviews</a></li>
+            <li><a href="reports.html">Reports</a></li>
+            <li><a href="settings.html">Settings</a></li>
+        </ul>
+
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Header -->
+        <div class="page-header">
+            <div>
+                <h1>Manage Jobs</h1>
+                <p>Create, edit and monitor job postings.</p>
+            </div>
+
+            <button class="post-job-btn">
+                + Post New Job
+            </button>
+        </div>
+
+        <!-- Statistics -->
+        <div class="stats-container">
+
+            <div class="card">
+                <h3>Total Jobs</h3>
+                <span>15</span>
+            </div>
+
+            <div class="card">
+                <h3>Active Jobs</h3>
+                <span>8</span>
+            </div>
+
+            <div class="card">
+                <h3>Closed Jobs</h3>
+                <span>5</span>
+            </div>
+
+            <div class="card">
+                <h3>Draft Jobs</h3>
+                <span>2</span>
+            </div>
+
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="search-section">
+
+            <input type="text"
+                   placeholder="Search Job Title">
+
+            <select>
+                <option>Department</option>
+                <option>IT</option>
+                <option>HR</option>
+                <option>Analytics</option>
+            </select>
+
+            <select>
+                <option>Status</option>
+                <option>Active</option>
+                <option>Closed</option>
+            </select>
+
+            <button>Search</button>
+
+        </div>
+
+        <!-- Jobs Table -->
+        <div class="table-container">
+
+            <h2>Job Listings</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Department</th>
+                        <th>Openings</th>
+                        <th>Applications</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>Software Engineer</td>
+                        <td>IT</td>
+                        <td>5</td>
+                        <td>120</td>
+                        <td>15 Jun 2026</td>
+                        <td>
+                            <span class="active-status">
+                                Active
+                            </span>
+                        </td>
+                        <td>
+                            <button class="view-btn">
+                                View
+                            </button>
+
+                            <button class="edit-btn">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Data Analyst</td>
+                        <td>Analytics</td>
+                        <td>3</td>
+                        <td>75</td>
+                        <td>20 Jun 2026</td>
+                        <td>
+                            <span class="active-status">
+                                Active
+                            </span>
+                        </td>
+                        <td>
+                            <button class="view-btn">
+                                View
+                            </button>
+
+                            <button class="edit-btn">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>UI Designer</td>
+                        <td>Design</td>
+                        <td>2</td>
+                        <td>40</td>
+                        <td>10 Jun 2026</td>
+                        <td>
+                            <span class="closed-status">
+                                Closed
+                            </span>
+                        </td>
+                        <td>
+                            <button class="view-btn">
+                                View
+                            </button>
+
+                            <button class="edit-btn">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- Job Analytics -->
+        <div class="analytics">
+
+            <div class="analytics-card">
+                <h3>Applications</h3>
+                <span>120</span>
+            </div>
+
+            <div class="analytics-card">
+                <h3>Under Review</h3>
+                <span>50</span>
+            </div>
+
+            <div class="analytics-card">
+                <h3>Shortlisted</h3>
+                <span>25</span>
+            </div>
+
+            <div class="analytics-card">
+                <h3>Rejected</h3>
+                <span>35</span>
+            </div>
+
+            <div class="analytics-card">
+                <h3>Interviews</h3>
+                <span>10</span>
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>
