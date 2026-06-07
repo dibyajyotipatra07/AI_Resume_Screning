@@ -120,35 +120,6 @@
     </div>
   </div>
 
-  <!-- Resume Information -->
-  <div class="resume_section">
-    <div class="section_header">
-      <h3>Resume Information</h3>
-    </div>
-
-    <div class="resume_details">
-      <p>
-        <strong>Uploaded Resume:</strong>
-        {{ applicant.resume_file_name }}
-      </p>
-
-      <p>
-        <strong>Last Updated:</strong>
-        {{ applicant.upload_date }}
-      </p>
-
-      <p>
-        <strong>Skills Extracted:</strong>
-      </p>
-
-      <div class="skills_container">
-        {% for skill in skills %}
-        <span class="skill_badge"> {{ skill }} </span>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-
   <!-- Recent Applications -->
   <div class="applications_section">
     <div class="section_header">

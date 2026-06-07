@@ -115,15 +115,6 @@
 
           <li>
             <a
-              href="/applicant/resume/{{ applicant.applicant_id }}"
-              class="{% if active_page=='resume' %}active{% endif %}"
-            >
-              My Resume
-            </a>
-          </li>
-
-          <li>
-            <a
               href="/applicant/profile/{{ applicant.applicant_id }}"
               class="{% if active_page=='profile' %}active{% endif %}"
             >
@@ -184,11 +175,6 @@
               >
             </li>
             <li><a href="/jobs/{{ applicant.applicant_id }}">Find Jobs</a></li>
-            <li>
-              <a href="/applicant/resume/{{ applicant.applicant_id }}"
-                >My Resume</a
-              >
-            </li>
           </ul>
         </div>
 

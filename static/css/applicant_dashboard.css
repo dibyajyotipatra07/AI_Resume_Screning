@@ -182,7 +182,6 @@ body{
    COMMON SECTION
 ========================= */
 
-.resume_section,
 .applications_section{
     background:white;
     padding:25px;
@@ -197,46 +196,6 @@ body{
 
 .section_header h3{
     color:#1e3a8a;
-}
-
-/* =========================
-   RESUME SECTION
-========================= */
-
-.resume_details p{
-    margin-bottom:12px;
-    color:#4b5563;
-}
-
-.skills_container{
-    display:flex;
-    flex-wrap:wrap;
-    gap:10px;
-    margin:15px 0 20px;
-}
-
-.skill_badge{
-    background:#e8f1ff;
-    color:#0056b3;
-    padding:8px 14px;
-    border-radius:25px;
-    font-size:14px;
-    font-weight:600;
-}
-
-.resume_details button{
-    background:#0056b3;
-    color:white;
-    border:none;
-    padding:12px 22px;
-    border-radius:8px;
-    cursor:pointer;
-    font-weight:600;
-    transition:.3s;
-}
-
-.resume_details button:hover{
-    background:#003f88;
 }
 
 /* =========================

@@ -55,9 +55,7 @@ CREATE TABLE IF NOT EXISTS applicant (
     password VARCHAR(45) NOT NULL,
     linkedin_url VARCHAR(45) DEFAULT NULL,
     github_url VARCHAR(45) DEFAULT NULL,
-    total_experience VARCHAR(45) DEFAULT NULL,
-    resume_file_name VARCHAR(60) NOT NULL,
-    upload_date DATE NOT NULL,
+    total_experience VARCHAR(45) DEFAULT NULL,    
     PRIMARY KEY (applicant_id),
     UNIQUE KEY email_id_UNIQUE (email_id),
     UNIQUE KEY sno_UNIQUE (applicant_id)
@@ -74,6 +72,7 @@ CREATE TABLE IF NOT EXISTS applications (
     match_score DECIMAL(5,0) DEFAULT NULL,
     status VARCHAR(45) DEFAULT NULL,
     resume_uploaded VARCHAR(45) NOT NULL,
+    upload_date DATE NOT NULL,
     PRIMARY KEY (application_id),
     UNIQUE KEY application_id_UNIQUE (application_id),
     KEY `appliation to job_idx` (job_id),
@@ -289,16 +288,10 @@ def create_account():
                 flash("Failed to create admin account.", "danger")
         else:
             try:
-                resume_file = request.files['resume']
-                cursor.execute("INSERT INTO applicant (name, phn_no, email_id, password, resume_file_name, upload_date) VALUES (%s, %s, %s, %s, %s, %s)",
-                (fullname, mobile_number, email, password, '', datetime.date.today()))
+                cursor.execute("INSERT INTO applicant (name, phn_no, email_id, password) VALUES (%s, %s, %s, %s)",
+                (fullname, mobile_number, email, password))
                 applicant_id = cursor.lastrowid
                 cursor.execute("INSERT INTO applicant_profile (applicant_id, email, phn_no) VALUES (%s, %s, %s)", (applicant_id, email, mobile_number))
-                conn.commit()
-                resume_filename = f"{applicant_id}_Resume.pdf"
-                resume_file.save(os.path.join(app.config['UPLOAD_FOLDER_RESUME'], resume_filename))
-                # update the resume file name in the database
-                cursor.execute("UPDATE applicant SET resume_file_name = %s WHERE applicant_id = %s", (resume_filename, applicant_id))
                 conn.commit()
                 flash("Applicant account created successfully!", "success")
             except Exception as e:
@@ -374,15 +367,17 @@ def dashboard(role, applicant_id):
     return redirect('/login')
 
 # Route to handle resume update
-@app.route('/applicant/<string:applicant_id>/resume/update', methods=['POST'])
-def update_resume(applicant_id):
+@app.route('/applicant/<string:applicant_id>/<string:application_id>/resume/update', methods=['POST'])
+def update_resume(applicant_id, application_id):
 
     if 'user_id' not in session:
         flash("Please login first.", "danger")
         return redirect('/login')
 
     try:
-        applicant_id = session['user_id']
+        if str(session['user_id']) != applicant_id:
+            flash("Unauthorized access.", "danger")
+            return redirect('/login')
         resume_file = request.files.get('resume_upload')
 
         if not resume_file or resume_file.filename == '':
@@ -393,11 +388,24 @@ def update_resume(applicant_id):
             flash("Only PDF files are allowed.", "danger")
             return redirect(f'/dashboard/applicant/{session["user_id"]}')
 
-        resume_filename = f"{applicant_id}_Resume.pdf"
+        cursor.execute("SELECT * FROM applications WHERE application_id=%s",(application_id,))
+        application = cursor.fetchone()
+        if not application:
+            flash("Application not found.", "danger")
+            return redirect(f'/dashboard/applicant/{session["user_id"]}')
+        
+        #Removing old Resume
+        if application.get('resume_uploaded'):
+            old_file = os.path.join(
+                app.config['UPLOAD_FOLDER_RESUME'],
+                application['resume_uploaded'])
 
+            if os.path.exists(old_file):
+                os.remove(old_file)
+        
+        resume_filename = f"{applicant_id}_{application['job_id']}_Resume.pdf"
         resume_file.save(os.path.join(app.config['UPLOAD_FOLDER_RESUME'],resume_filename))
-
-        cursor.execute("UPDATE applicant SET resume_file_name = %s, upload_date = %s WHERE applicant_id = %s", ( resume_filename, datetime.date.today(), applicant_id))
+        cursor.execute("UPDATE applications SET resume_uploaded = %s, upload_date = %s WHERE application_id = %s", ( resume_filename, datetime.date.today(), application_id))
         conn.commit()
         flash("Resume updated successfully!", "success")
 
@@ -423,11 +431,11 @@ def find_jobs(applicant_id):
     return render_template('find_jobs.html', params=params, applicant= applicant, active_page='jobs')
 
 # Route to display applicant's resume
-@app.route('/applicant/resume/<string:applicant_id>')
-def view_resume(applicant_id):
-    cursor.execute("SELECT * FROM applicant WHERE applicant_id = %s", (applicant_id,))
-    applicant = cursor.fetchone()
-    return render_template('my_resume.html', params=params, applicant= applicant, active_page='resume')
+@app.route('/applicant/<string:applicant_id>/<string:application_id>/resume')
+def view_resume(applicant_id, application_id):
+    cursor.execute("SELECT * FROM applications WHERE application_id = %s", (application_id,))
+    application = cursor.fetchone()
+    return render_template('my_resume.html', params=params, application= application, active_page='resume')
 
 # Route to display applicant's profile
 @app.route('/applicant/profile/<string:applicant_id>')
@@ -513,25 +521,39 @@ def logout():
     return redirect('/')
 
 # Route to preview applicant's resume
-@app.route('/preview_resume/<int:applicant_id>')
-def preview_resume(applicant_id):
-    cursor.execute("SELECT resume_file_name FROM applicant WHERE applicant_id=%s",(applicant_id,))
-    applicant = cursor.fetchone()
-    file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],applicant['resume_file_name'])
+@app.route('/preview_resume/<int:application_id>')
+def preview_resume(application_id):
+    cursor.execute("SELECT resume_file_name FROM applications WHERE application_id=%s",(application_id,))
+    application = cursor.fetchone()
+    file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],application['resume_uploaded'])
     return send_file(file_path)
 
 # Route to download applicant's resume
-@app.route('/download_resume/<int:applicant_id>')
-def download_resume(applicant_id):
-    cursor.execute("SELECT resume_file_name FROM applicant WHERE applicant_id=%s",(applicant_id,))
-    applicant = cursor.fetchone()
-    print(applicant)
-    file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],applicant['resume_file_name'])
+@app.route('/download_resume/<int:application_id>')
+def download_resume(application_id):
+    cursor.execute("SELECT resume_file_name FROM applications WHERE application_id=%s",(application_id,))
+    application = cursor.fetchone()
+    file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],application['resume_uploaded'])
     return send_file(file_path,as_attachment=True)
 
 # Contact Page
 @app.route('/contact')
 def contact():
     return render_template('home_page.html', params=params)
+
+
+@app.route('/<string:applicant_id>/apply/<string:job_id>')
+def apply_job(applicant_id, job_id):
+    if 'user_id' not in session:
+        flash("Please login first.", "danger")
+        return redirect('/login')
+    applicant_id = session['user_id']
+    resume_file = request.files['resume']
+    resume_filename = f"{applicant_id}_{job_id}_Resume.pdf"
+    resume_file.save(os.path.join(app.config['UPLOAD_FOLDER_RESUME'], resume_filename))
+    cursor.execute("SELECT * from applications WHERE applicant_id = %s",(applicant_id,))
+    application = cursor.fetchone()
+    
+    return render_template('home_page.html', params=params, application = application)
 
 app.run(debug=True)
