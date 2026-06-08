@@ -14,8 +14,12 @@ from flask_mail import Mail
 
 # Importing functions from utils to work on resume screening and ranking
 from utils.pdf_reader import pdf_reader
-from utils.resume_parser import extract_email, extract_phn, extract_name, extract_git, extract_linkedin
+from utils.skill_matcher import load_json, match_skills
+from utils.resume_parser import parse_resume
 from utils.jd_parser import JobDescriptionParser
+from utils.ranking_engine import rank_single_candidate
+# to use regex
+import re
 
 # Flask app initialization
 app = Flask(__name__)
@@ -320,7 +324,7 @@ def create_account():
                 cursor.execute("INSERT INTO applicant (name, phn_no, email_id, password) VALUES (%s, %s, %s, %s)",
                 (fullname, mobile_number, email, password))
                 applicant_id = cursor.lastrowid
-                cursor.execute("INSERT INTO applicant_profile (applicant_id, email, phn_no) VALUES (%s, %s, %s)", (applicant_id, email, mobile_number))
+                cursor.execute("INSERT INTO profile_applicant (applicant_id, name, email, phn_no) VALUES (%s, %s, %s, %s)", (applicant_id,fullname, email, mobile_number))
                 conn.commit()
                 flash("Applicant account created successfully!", "success")
             except Exception as e:
@@ -862,23 +866,56 @@ def logout():
 # Route to preview applicant's resume
 @app.route('/preview_resume/<int:application_id>')
 def preview_resume(application_id):
-    cursor.execute("SELECT resume_file_name FROM applications WHERE application_id=%s",(application_id,))
+
+    if 'user_id' not in session:
+        flash("Please login first.", "danger")
+        return redirect('/login')
+
+    cursor.execute("""
+        SELECT resume_uploaded
+        FROM applications
+        WHERE application_id=%s
+    """, (application_id,))
+
     application = cursor.fetchone()
-    file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],application['resume_uploaded'])
-    return send_file(file_path)
+
+    if not application or not application['resume_uploaded']:
+        flash("Resume not found.", "danger")
+        return redirect(request.referrer or '/')
+
+    resume_path = os.path.join(
+        app.config['UPLOAD_FOLDER_RESUME'],
+        application['resume_uploaded']
+    )
+
+    if not os.path.exists(resume_path):
+        flash("Resume file does not exist.", "danger")
+        return redirect(request.referrer or '/')
+
+    return send_file(resume_path)
 
 # Route to download applicant's resume
 @app.route('/download_resume/<int:application_id>')
 def download_resume(application_id):
-    cursor.execute("SELECT resume_file_name FROM applications WHERE application_id=%s",(application_id,))
-    application = cursor.fetchone()
-    file_path = os.path.join(app.config['UPLOAD_FOLDER_RESUME'],application['resume_uploaded'])
-    return send_file(file_path,as_attachment=True)
 
-# Contact Page
-@app.route('/contact')
-def contact():
-    return render_template('home_page.html', params=params)
+    cursor.execute("""
+        SELECT resume_uploaded
+        FROM applications
+        WHERE application_id=%s
+    """, (application_id,))
+
+    application = cursor.fetchone()
+
+    if not application or not application['resume_uploaded']:
+        flash("Resume not found.", "danger")
+        return redirect(request.referrer or '/')
+
+    resume_path = os.path.join(
+        app.config['UPLOAD_FOLDER_RESUME'],
+        application['resume_uploaded']
+    )
+
+    return send_file(resume_path, as_attachment=True)
 
 
 @app.route('/<string:applicant_id>/apply/<string:job_id>', methods=['POST'])
@@ -1130,33 +1167,116 @@ def applicants():
 
 @app.route('/ai_screen')
 def ai_screen():
+
     admin = get_logged_admin()
+
     if not admin:
         flash("Please login first.", "danger")
         return redirect('/login')
 
+    job_id = request.args.get('job_id', '').strip()
+    score_filter = request.args.get('score', '').strip()
+
     cursor.execute("""
+        SELECT job_id, job_title
+        FROM jobs
+        WHERE emp_id=%s
+        ORDER BY posted_date DESC
+    """, (admin['emp_id'],))
+    jobs = cursor.fetchall()
+
+    query = """
         SELECT 
             a.application_id,
+            a.applicant_id,
+            a.application_date,
             a.match_score,
             a.status,
+            a.resume_uploaded,
+
             ap.name,
+            ap.email_id,
+            ap.phn_no,
             ap.total_experience,
+
+            j.job_id,
             j.job_title,
+            j.company_name,
+            j.location,
             j.qualification
+
         FROM applications a
         JOIN applicant ap ON a.applicant_id = ap.applicant_id
         JOIN jobs j ON a.job_id = j.job_id
+
         WHERE j.emp_id=%s
-        ORDER BY a.match_score DESC
-    """, (admin['emp_id'],))
+    """
+
+    values = [admin['emp_id']]
+
+    if job_id:
+        query += " AND j.job_id=%s"
+        values.append(job_id)
+
+    if score_filter:
+        query += " AND a.match_score >= %s"
+        values.append(score_filter)
+
+    query += """
+        ORDER BY 
+            a.match_score DESC,
+            a.application_date ASC
+    """
+
+    cursor.execute(query, tuple(values))
     rankings = cursor.fetchall()
+
+    total_screened = len(rankings)
+
+    qualified = sum(
+        1 for candidate in rankings
+        if candidate['match_score'] and candidate['match_score'] >= 70
+    )
+
+    rejected = sum(
+        1 for candidate in rankings
+        if candidate['status'] == 'Rejected'
+    )
+
+    pending = sum(
+        1 for candidate in rankings
+        if candidate['status'] in ['Applied', 'Under Review', None]
+    )
+
+    if rankings:
+        scores = [
+            float(candidate['match_score'] or 0)
+            for candidate in rankings
+        ]
+
+        avg_score = round(sum(scores) / len(scores), 2)
+        top_score = max(scores)
+    else:
+        avg_score = 0
+        top_score = 0
 
     return render_template(
         'ai_screening.html',
         params=params,
         admin=admin,
+        jobs=jobs,
         rankings=rankings,
+
+        total_screened=total_screened,
+        qualified=qualified,
+        rejected=rejected,
+        pending=pending,
+        avg_score=avg_score,
+        top_score=top_score,
+
+        selected_job_id=job_id,
+        selected_score=score_filter,
+
         active_page='ai_screen'
     )
 
@@ -2016,4 +2136,227 @@ def applicant_application_detail(application_id):
         application=application,
         active_page='applications'
     )
+    
+    
+# AI engine integration
+
+# Helper
+def extract_position_code_from_job_title(job_title):
+    match = re.search(r"FTA-\d+", job_title, re.I)
+    return match.group(0).upper() if match else ""
+
+# Run ai screening
+@app.route('/run_ai_screening/<int:job_id>')
+def run_ai_screening(job_id):
+
+    admin = get_logged_admin()
+
+    if not admin:
+        flash("Please login first.", "danger")
+        return redirect('/login')
+
+    try:
+        cursor.execute("""
+            SELECT *
+            FROM jobs
+            WHERE job_id=%s AND emp_id=%s
+        """, (job_id, admin['emp_id']))
+
+        job = cursor.fetchone()
+
+        if not job:
+            flash("Job not found.", "danger")
+            return redirect('/ai_screen')
+
+        position_code = extract_position_code_from_job_title(job['job_title'])
+
+        if not position_code:
+            flash("FTA position code not found in job title.", "danger")
+            return redirect('/ai_screen')
+
+        jd_path = os.path.join(
+            app.config['UPLOAD_FOLDER_JD'],
+            job['jd_file_path']
+        )
+
+        if not os.path.exists(jd_path):
+            flash("JD file not found.", "danger")
+            return redirect('/ai_screen')
+
+        jd_parser = JobDescriptionParser(jd_path)
+        jd_data = jd_parser.parse()
+
+        cursor.execute("""
+            SELECT
+                a.application_id,
+                a.resume_uploaded,
+                ap.name
+            FROM applications a
+            JOIN applicant ap ON a.applicant_id = ap.applicant_id
+            WHERE a.job_id=%s
+        """, (job_id,))
+
+        applications = cursor.fetchall()
+
+        if not applications:
+            flash("No applications found for this job.", "warning")
+            return redirect('/ai_screen')
+
+        screened_count = 0
+
+        for application in applications:
+
+            if not application['resume_uploaded']:
+                continue
+
+            resume_path = os.path.join(
+                app.config['UPLOAD_FOLDER_RESUME'],
+                application['resume_uploaded']
+            )
+
+            if not os.path.exists(resume_path):
+                continue
+
+            resume_data = parse_resume(resume_path)
+
+            result = rank_single_candidate(
+                resume_data,
+                jd_data,
+                position_code
+            )
+
+            print("RESULT:", result)
+
+            if not result:
+                print("No result for application:", application['application_id'])
+                continue
+
+            final_score = result.get("final_score", 0)
+
+            if final_score >= 80:
+                status = "Shortlisted"
+            elif final_score >= 60:
+                status = "Under Review"
+            else:
+                status = "Rejected"
+
+            cursor.execute("""
+                UPDATE applications
+                SET match_score=%s,
+                    status=%s
+                WHERE application_id=%s
+            """, (
+                final_score,
+                status,
+                application['application_id']
+            ))
+
+            conn.commit()
+
+            print("COMMIT DONE")
+
+            screened_count += 1
+
+        flash(f"AI screening completed for {screened_count} candidates.", "success")
+        return redirect('/ai_screen')
+
+    except Exception as e:
+        conn.rollback()
+        print("AI Screening Error:", e)
+        flash("AI screening failed.", "danger")
+        return redirect('/ai_screen')
+
+# candidate data visible route
+@app.route('/candidate_ai_analysis/<int:application_id>')
+def candidate_ai_analysis(application_id):
+
+    admin = get_logged_admin()
+
+    if not admin:
+        flash("Please login first.", "danger")
+        return redirect('/login')
+
+    cursor.execute("""
+        SELECT
+            a.*,
+            ap.name,
+            ap.email_id,
+            ap.phn_no,
+            j.job_title,
+            j.jd_file_path
+
+        FROM applications a
+        JOIN applicant ap
+            ON a.applicant_id = ap.applicant_id
+        JOIN jobs j
+            ON a.job_id = j.job_id
+
+        WHERE a.application_id=%s
+    """, (application_id,))
+
+    application = cursor.fetchone()
+
+    if not application:
+        flash("Application not found.", "danger")
+        return redirect('/ai_screen')
+
+    resume_path = os.path.join(
+        app.config['UPLOAD_FOLDER_RESUME'],
+        application['resume_uploaded']
+    )
+
+    jd_path = os.path.join(
+        app.config['UPLOAD_FOLDER_JD'],
+        application['jd_file_path']
+    )
+
+    resume_data = parse_resume(resume_path)
+
+    jd_data = JobDescriptionParser(jd_path).parse()
+
+    position_code = extract_position_code_from_job_title(
+        application['job_title']
+    )
+
+    result = rank_single_candidate(
+        resume_data,
+        jd_data,
+        position_code
+    )
+    skill_details = result.get("skill_details", {})
+
+    matched_skills = (
+        skill_details.get("matched_skills", [])
+        + skill_details.get("core_matched_skills", [])
+        + skill_details.get("bonus_matched_skills", [])
+        + skill_details.get("common_matched_skills", [])
+        + skill_details.get("best_group_matched_skills", [])
+    )
+
+    missing_skills = (
+        skill_details.get("missing_skills", [])
+        + skill_details.get("core_missing_skills", [])
+        + skill_details.get("bonus_missing_skills", [])
+        + skill_details.get("common_missing_skills", [])
+        + skill_details.get("best_group_missing_skills", [])
+    )
+
+    resume_skills = skill_details.get("resume_skills", [])
+    return render_template(
+    'candidate_ai_analysis.html',
+    params=params,
+    admin=admin,
+    application=application,
+    result=result,
+    matched_skills=matched_skills,
+    missing_skills=missing_skills,
+    resume_skills=resume_skills,
+    active_page='ai_screen'
+)
+
+
+# Contact Page
+@app.route('/contact')
+def contact():
+    return render_template('home_page.html', params=params)
 app.run(debug=True)

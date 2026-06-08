@@ -1,6 +1,6 @@
 import re
 import spacy
-from pdf_reader import pdf_reader
+from utils.pdf_reader import pdf_reader
 
 nlp = spacy.load("en_core_web_sm")
 

@@ -1,6 +1,6 @@
 import os
 import json
-from jd_parser import JobDescriptionParser
+from utils.jd_parser import JobDescriptionParser
 
 
 def save_jd_json(pdf_path, output_folder="parsed_data/jobs"):

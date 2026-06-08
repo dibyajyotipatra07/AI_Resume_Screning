@@ -1,7 +1,7 @@
 import os
 import json
 import re
-from skill_matcher import load_json, match_skills
+from utils.skill_matcher import load_json, match_skills
 
 
 def get_position(jd_data, position_code):

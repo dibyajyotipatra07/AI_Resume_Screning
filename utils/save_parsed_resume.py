@@ -1,6 +1,6 @@
 import os
 import json
-from resume_parser import parse_resume
+from utils.resume_parser import parse_resume
 
 
 def clean_filename(name):

@@ -1,228 +1,229 @@
-{% extends "layout3.html" %}
-
-{% block head %}
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% extends "layout3.html" %} {% block head %}
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>AI Screening</title>
 
-<link rel="stylesheet" href="{{ url_for('static', filename='css/ai_screening.css') }}">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-{% endblock %}
-
-{% block content %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/ai_screening.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+/>
+{% endblock %} {% block content %}
 
 <main class="main-content">
+  <div class="header">
+    <h1>AI Resume Screening</h1>
+    <p>Rank candidates using resume parsing, skill matching and AI scoring.</p>
+  </div>
 
-    <div class="header">
-        <h1>AI Resume Screening</h1>
-        <p>
-            Analyze resumes, evaluate candidate-job matching and generate intelligent recommendations.
-        </p>
+  <div class="stats-grid">
+    <div class="stat-card">
+      <h3>Screened</h3>
+      <span>{{ total_screened or 0 }}</span>
     </div>
 
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>Screened</h3>
-            <span>{{ rankings|length if rankings else 0 }}</span>
-        </div>
+    <div class="stat-card">
+      <h3>Qualified</h3>
+      <span>{{ qualified or 0 }}</span>
+    </div>
 
-        <div class="stat-card">
-            <h3>Qualified</h3>
-            <span>
-                {{ rankings|selectattr("match_score", "ge", 70)|list|length if rankings else 0 }}
-            </span>
-        </div>
+    <div class="stat-card">
+      <h3>Rejected</h3>
+      <span>{{ rejected or 0 }}</span>
+    </div>
 
-        <div class="stat-card">
-            <h3>Rejected</h3>
-            <span>
-                {{ rankings|selectattr("status", "equalto", "Rejected")|list|length if rankings else 0 }}
-            </span>
-        </div>
+    <div class="stat-card">
+      <h3>Pending</h3>
+      <span>{{ pending or 0 }}</span>
+    </div>
 
-        <div class="stat-card">
-            <h3>Pending</h3>
-            <span>
-                {{ rankings|selectattr("status", "equalto", "Applied")|list|length if rankings else 0 }}
-            </span>
-        </div>
+    <div class="stat-card">
+      <h3>Avg Score</h3>
+      <span>{{ avg_score or 0 }}%</span>
+    </div>
 
-        <div class="stat-card">
-            <h3>Avg Score</h3>
-            <span>{{ avg_score or 0 }}%</span>
-        </div>
+    <div class="stat-card">
+      <h3>Top Score</h3>
+      <span>{{ top_score or 0 }}%</span>
+    </div>
+  </div>
 
-        <div class="stat-card">
-            <h3>Top Score</h3>
-            <span>{{ top_score or 0 }}%</span>
-        </div>
+  <div class="card">
+  <h2>Filter Screening Results</h2>
+
+  <form method="GET" action="/ai_screen" class="filters">
+    <select name="job_id">
+      <option value="">All Jobs</option>
+
+      {% if jobs %}
+        {% for job in jobs %}
+          <option
+            value="{{ job.job_id }}"
+            {% if selected_job_id|string == job.job_id|string %}selected{% endif %}
+          >
+            {{ job.job_title }}
+          </option>
+        {% endfor %}
+      {% endif %}
+    </select>
+
+    <select name="score">
+      <option value="">All Scores</option>
+
+      <option value="80" {% if selected_score == "80" %}selected{% endif %}>
+        80% & Above
+      </option>
+
+      <option value="70" {% if selected_score == "70" %}selected{% endif %}>
+        70% & Above
+      </option>
+
+      <option value="60" {% if selected_score == "60" %}selected{% endif %}>
+        60% & Above
+      </option>
+    </select>
+
+    <button type="submit">Apply Filter</button>
+  </form>
+</div>
+
+  <div class="card">
+    <h2>Ranked Candidates</h2>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Candidate</th>
+          <th>Job Title</th>
+          <th>Company</th>
+          <th>AI Score</th>
+          <th>Recommendation</th>
+          <th>Status</th>
+          <th>Resume</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% if rankings %} {% for candidate in rankings %}
+
+        <tr>
+          <td>#{{ loop.index }}</td>
+
+          <td>
+            <strong>{{ candidate.name }}</strong><br />
+            <small>{{ candidate.email_id }}</small>
+          </td>
+
+          <td>{{ candidate.job_title }}</td>
+          <td>{{ candidate.company_name }}</td>
+
+          <td>
+            <strong>{{ candidate.match_score or 0 }}%</strong>
+          </td>
+
+          <td>
+            {% if candidate.match_score and candidate.match_score >= 80 %}
+            Highly Recommended {% elif candidate.match_score and
+            candidate.match_score >= 60 %} Recommended {% elif
+            candidate.match_score and candidate.match_score >= 40 %} Average
+            Match {% else %} Not Recommended {% endif %}
+          </td>
+
+          <td>
+            {% if candidate.status == 'Shortlisted' or candidate.status ==
+            'Selected' %}
+            <span class="status-badge success">{{ candidate.status }}</span>
+            {% elif candidate.status == 'Rejected' %}
+            <span class="status-badge danger">{{ candidate.status }}</span>
+            {% elif candidate.status == 'Under Review' %}
+            <span class="status-badge warning">{{ candidate.status }}</span>
+            {% else %}
+            <span class="status-badge info"
+              >{{ candidate.status or 'Applied' }}</span
+            >
+            {% endif %}
+          </td>
+
+          <td>
+            <a href="/preview_resume/{{ candidate.application_id }}">
+              <button type="button">View</button>
+            </a>
+          </td>
+
+          <td>
+            <a href="/candidate_ai_analysis/{{ candidate.application_id }}">
+              <button type="button">Analysis</button>
+            </a>
+
+            <a
+              href="/application/{{ candidate.application_id }}/status/Shortlisted"
+            >
+              <button type="button">Shortlist</button>
+            </a>
+
+            <a
+              href="/application/{{ candidate.application_id }}/status/Rejected"
+            >
+              <button type="button">Reject</button>
+            </a>
+          </td>
+        </tr>
+
+        {% endfor %} {% else %}
+
+        <tr>
+          <td colspan="9">
+            No AI screening data found. Run AI Screening from Manage Jobs.
+          </td>
+        </tr>
+
+        {% endif %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if rankings %} {% set top_candidate = rankings[0] %}
+
+  <div class="analysis-grid">
+    <div class="card">
+      <h2>Top Candidate</h2>
+
+      <p><strong>Name:</strong> {{ top_candidate.name }}</p>
+      <p><strong>Email:</strong> {{ top_candidate.email_id }}</p>
+      <p><strong>Phone:</strong> {{ top_candidate.phn_no }}</p>
+      <p><strong>Job:</strong> {{ top_candidate.job_title }}</p>
+      <p><strong>Location:</strong> {{ top_candidate.location }}</p>
+
+      <div class="tags">
+        <span>{{ top_candidate.match_score or 0 }}% Match</span>
+        <span>Rank #1</span>
+      </div>
     </div>
 
     <div class="card">
+      <h2>AI Recommendation</h2>
 
-        <h2>Job Filters</h2>
+      <div class="recommend-box">
+        {% if top_candidate.match_score and top_candidate.match_score >= 80 %}
+        Highly Recommended {% elif top_candidate.match_score and
+        top_candidate.match_score >= 60 %} Recommended {% elif
+        top_candidate.match_score and top_candidate.match_score >= 40 %} Average
+        Match {% else %} Not Recommended {% endif %}
+      </div>
 
-        <form method="GET" action="/ai_screen" class="filters">
-            <select name="job_id">
-                <option value="">All Jobs</option>
-                {% if jobs %}
-                    {% for job in jobs %}
-                    <option value="{{ job.job_id }}">
-                        {{ job.job_title }}
-                    </option>
-                    {% endfor %}
-                {% endif %}
-            </select>
-
-            <select name="score">
-                <option value="">All Scores</option>
-                <option value="80">80% & Above</option>
-                <option value="70">70% & Above</option>
-                <option value="60">60% & Above</option>
-            </select>
-
-            <button type="submit">Apply</button>
-        </form>
-
+      <p>
+        This candidate is currently ranked highest based on resume parsing,
+        skill matching, experience and education scoring.
+      </p>
     </div>
+  </div>
 
-    <div class="card">
-
-        <h2>AI Candidate Rankings</h2>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Candidate</th>
-                    <th>Position</th>
-                    <th>Score</th>
-                    <th>Recommendation</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% if rankings %}
-                    {% for candidate in rankings %}
-                    <tr>
-                        <td>#{{ loop.index }}</td>
-                        <td>{{ candidate.name }}</td>
-                        <td>{{ candidate.job_title }}</td>
-                        <td>{{ candidate.match_score or 0 }}%</td>
-
-                        <td>
-                            {% if candidate.match_score and candidate.match_score >= 85 %}
-                                Highly Recommended
-                            {% elif candidate.match_score and candidate.match_score >= 70 %}
-                                Recommended
-                            {% elif candidate.match_score and candidate.match_score >= 50 %}
-                                Average Match
-                            {% else %}
-                                Not Recommended
-                            {% endif %}
-                        </td>
-
-                        <td>{{ candidate.status or 'Applied' }}</td>
-
-                        <td>
-                            <a href="/application/{{ candidate.application_id }}/status/Shortlisted">
-                                <button>Shortlist</button>
-                            </a>
-
-                            <a href="/application/{{ candidate.application_id }}/status/Rejected">
-                                <button>Reject</button>
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="7">No screening data available.</td>
-                    </tr>
-                {% endif %}
-            </tbody>
-        </table>
-
-    </div>
-
-    {% if rankings %}
-    {% set top_candidate = rankings[0] %}
-
-    <div class="analysis-grid">
-
-        <div class="card">
-            <h2>Top Candidate Analysis</h2>
-
-            <p><strong>Name:</strong> {{ top_candidate.name }}</p>
-            <p><strong>Position:</strong> {{ top_candidate.job_title }}</p>
-            <p><strong>Experience:</strong> {{ top_candidate.total_experience or 'Not Added' }}</p>
-            <p><strong>Education:</strong> {{ top_candidate.qualification }}</p>
-
-            <h3>AI Score</h3>
-            <div class="tags">
-                <span>{{ top_candidate.match_score or 0 }}% Match</span>
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>AI Recommendation</h2>
-
-            <div class="recommend-box">
-                {% if top_candidate.match_score and top_candidate.match_score >= 85 %}
-                    Highly Recommended
-                {% elif top_candidate.match_score and top_candidate.match_score >= 70 %}
-                    Recommended
-                {% elif top_candidate.match_score and top_candidate.match_score >= 50 %}
-                    Average Match
-                {% else %}
-                    Not Recommended
-                {% endif %}
-            </div>
-
-            <p>
-                Candidate is ranked #1 based on the current match score
-                stored in the application table.
-            </p>
-
-            <h3>Candidate Rank</h3>
-            <p>#1 out of {{ rankings|length }} Applicants</p>
-        </div>
-
-    </div>
-
-    <div class="card">
-        <h2>AI Scoring Breakdown</h2>
-
-        <div class="score-grid">
-            <div class="score-card">
-                Skills
-                <h3>{{ top_candidate.match_score or 0 }}/100</h3>
-            </div>
-
-            <div class="score-card">
-                Experience
-                <h3>Pending</h3>
-            </div>
-
-            <div class="score-card">
-                Education
-                <h3>Pending</h3>
-            </div>
-
-            <div class="score-card">
-                Certification
-                <h3>Pending</h3>
-            </div>
-        </div>
-
-        <h2 class="final-score">
-            Final Score : {{ top_candidate.match_score or 0 }} / 100
-        </h2>
-    </div>
-    {% endif %}
-
+  {% endif %}
 </main>
 
 {% endblock %}

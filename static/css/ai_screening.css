@@ -266,3 +266,27 @@ td button:hover{
         min-width:900px;
     }
 }
+
+.status-badge{
+    padding:6px 12px;
+    border-radius:20px;
+    color:white;
+    font-weight:600;
+    font-size:13px;
+}
+
+.status-badge.success{
+    background:#16a34a;
+}
+
+.status-badge.danger{
+    background:#dc2626;
+}
+
+.status-badge.warning{
+    background:#f59e0b;
+}
+
+.status-badge.info{
+    background:#2563eb;
+}
