@@ -5,6 +5,31 @@ from pdf_reader import pdf_reader
 nlp = spacy.load("en_core_web_sm")
 
 
+MASTER_SKILLS = [
+    "PLC", "DCS", "SCADA",
+    "Control Panel Testing", "Electrical Testing",
+    "Commissioning", "Testing",
+    "Instrumentation", "Field Instrumentation",
+
+    "Generator Controls", "Excitation Systems", "DAVR",
+    "Substation", "Substation Automation",
+    "Switchyard Controls", "SAS",
+    "Electrical Metering System", "Electrical Interface System",
+    "Thyristor Power Converters", "Relay Testing",
+
+    "Wave Soldering", "PCB Assembly", "PCB Handling",
+    "THT Assembly", "Soldering Techniques",
+    "Soldering Defects", "Thermal Profiling",
+    "Troubleshooting", "Quality Acceptance Standards",
+
+    "CNC", "CNC Programming", "Turret Punch", "Press Brake",
+
+    "FAT", "SAT", "AutoCAD", "MS Excel",
+    "Quality Assurance", "Electrical Safety",
+    "Industrial Automation"
+]
+
+
 def extract_email(text):
     pattern = r"[\w\.-]+@[\w\.-]+\.\w+"
     matches = re.findall(pattern, text)
@@ -63,30 +88,31 @@ def extract_role_and_match(text):
         return role.strip(), match_label.strip()
 
     return second_line.strip(), ""
+
+
 def extract_experience_years(text):
-    pattern = r"(\d+)\+?\s+years?\s+of\s+experience"
-    matches = re.findall(pattern, text.lower())
-    return int(matches[0]) if matches else 0
+    patterns = [
+        r"(\d+)\+?\s+years?\s+of\s+experience",
+        r"(\d+)\+?\s+years?\s+of\s+post qualification experience",
+        r"(\d+)\+?\s+years?\s+of\s+hands[- ]on experience",
+        r"(\d+)\+?\s+years?\s+of\s+site experience",
+        r"(\d+)\+?\s+years?\s+experience"
+    ]
+
+    text = text.lower()
+
+    for pattern in patterns:
+        match = re.search(pattern, text)
+        if match:
+            return int(match.group(1))
+
+    return 0
 
 
 def extract_section(text, start_heading, end_headings):
     pattern = start_heading + r"(.*?)(?=" + "|".join(end_headings) + r"|$)"
     match = re.search(pattern, text, re.IGNORECASE | re.DOTALL)
     return match.group(1).strip() if match else ""
-
-
-def extract_skills(text):
-    skills_text = extract_section(
-        text,
-        "Technical Skills",
-        ["Certifications", "Education", "Employment History", "Technical Project"]
-    )
-
-    if not skills_text:
-        return []
-
-    skills = [skill.strip() for skill in skills_text.replace("\n", " ").split(",")]
-    return [skill for skill in skills if skill]
 
 
 def extract_certifications(text):
@@ -112,12 +138,26 @@ def extract_education(text):
 
     return edu_text.strip()
 
+
+def extract_skills(text):
+    text_lower = text.lower()
+    found_skills = []
+
+    for skill in MASTER_SKILLS:
+        pattern = r"\b" + re.escape(skill.lower()) + r"\b"
+
+        if re.search(pattern, text_lower):
+            found_skills.append(skill)
+
+    return sorted(list(set(found_skills)))
+
+
 def parse_resume(pdf_path):
     text = pdf_reader(pdf_path)
 
     role, match_label = extract_role_and_match(text)
 
-    data = {
+    return {
         "name": extract_name(text),
         "target_role": role,
         "match_label": match_label,
@@ -129,8 +169,5 @@ def parse_resume(pdf_path):
         "skills": extract_skills(text),
         "certifications": extract_certifications(text),
         "education": extract_education(text),
-        "raw_text": text
+        "resume_text": text
     }
-
-    return data
-

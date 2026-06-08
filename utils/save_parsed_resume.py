@@ -29,8 +29,5 @@ def save_resume_json(pdf_path, output_folder="parsed_data/resumes"):
 
 if __name__ == "__main__":
     pdf_path = "sample_resumes/Weak_2_Ritika_Jain.pdf"
-
     saved_path = save_resume_json(pdf_path)
-
-    print("Parsed resume JSON saved successfully:")
-    print(saved_path)
+    print(f"Saved: {saved_path}")

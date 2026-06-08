@@ -1,6 +1,48 @@
 import re
-import json
 import pdfplumber
+
+
+SKILL_NAME_MAP = {
+    "testing": "Testing",
+    "commissioning": "Commissioning",
+    "erection": "Erection",
+
+    "control panel testing": "Control Panel Testing",
+    "electrical testing": "Electrical Testing",
+
+    "dcs": "DCS",
+    "plc": "PLC",
+    "plcs": "PLC",
+    "distributed controls system": "Distributed Control System",
+    "distributed control system": "Distributed Control System",
+    "field instrumentation": "Field Instrumentation",
+
+    "generator controls": "Generator Controls",
+    "excitation systems": "Excitation Systems",
+    "davr": "DAVR",
+    "sync generator": "Sync Generator",
+    "motors": "Motors",
+    "thyristor power converters": "Thyristor Power Converters",
+    "substation": "Substation",
+    "switchyard controls": "Switchyard Controls",
+    "sas": "SAS",
+    "electrical metering system": "Electrical Metering System",
+    "electrical interface system": "Electrical Interface System",
+
+    "wave-soldering": "Wave Soldering",
+    "wave soldering": "Wave Soldering",
+    "tht assembly": "THT Assembly",
+    "soldering techniques": "Soldering Techniques",
+    "pcb handling": "PCB Handling",
+    "soldering defects": "Soldering Defects",
+    "thermal profiling": "Thermal Profiling",
+    "troubleshooting": "Troubleshooting",
+    "quality acceptance standards": "Quality Acceptance Standards",
+
+    "cnc": "CNC",
+    "turret punch": "Turret Punch",
+    "press brake": "Press Brake",
+}
 
 
 class JobDescriptionParser:
@@ -14,9 +56,22 @@ class JobDescriptionParser:
             return ""
 
         value = str(value)
-        value = value.replace("\n", " ")
-        value = value.replace("￾", " ")
-        value = value.replace("FTA -", "FTA-")
+
+        replacements = {
+            "\n": " ",
+            "￾": " ",
+            "FTA -": "FTA-",
+            "Superviso r": "Supervisor",
+            "Instrumentati on": "Instrumentation",
+            "Exciation": "Excitation",
+            "Exci tation": "Excitation",
+            "controls system": "control system",
+            "Distributed controls system": "Distributed control system",
+        }
+
+        for old, new in replacements.items():
+            value = value.replace(old, new)
+
         value = re.sub(r"\s+", " ", value)
 
         return value.strip()
@@ -26,10 +81,11 @@ class JobDescriptionParser:
             for page in pdf.pages:
                 self.text += "\n" + (page.extract_text() or "")
 
-                tables = page.extract_tables()
-                for table in tables:
+                for table in page.extract_tables():
                     if table:
                         self.tables.append(table)
+
+        self.text = self.clean(self.text)
 
     def extract_basic_info(self):
         info = {}
@@ -50,7 +106,7 @@ class JobDescriptionParser:
         total = re.search(r"NO OF VACANCIES ARE\s*(\d+)", self.text, re.I)
         info["total_vacancies"] = int(total.group(1)) if total else None
 
-        age = re.search(r"UPPER AGE LIMIT:\s*(.*?)(?:\n|$)", self.text, re.I)
+        age = re.search(r"UPPER AGE LIMIT:\s*(.*?)(?:EDUCATIONAL|$)", self.text, re.I)
         info["upper_age_limit"] = self.clean(age.group(1)) if age else ""
 
         return info
@@ -59,10 +115,10 @@ class JobDescriptionParser:
         dates = {}
 
         patterns = {
-            "online_application_start": r"Start of Online Application Submission:\s*(.*)",
-            "online_application_close": r"Close of Online Application Submission:\s*(.*)",
-            "hard_copy_last_date": r"Last date of receipt of hard copy.*?:\s*(.*)",
-            "far_flung_last_date": r"Last Date of receipt of Hard copies.*?areas\*?\s*:\s*(.*)"
+            "online_application_start": r"Start of Online Application Submission:\s*(.*?)(?:Close of Online|$)",
+            "online_application_close": r"Close of Online Application Submission:\s*(.*?)(?:Last date|$)",
+            "hard_copy_last_date": r"Last date of receipt of hard copy.*?:\s*(.*?)(?:Last Date|$)",
+            "far_flung_last_date": r"Last Date of receipt of Hard copies.*?areas\*?\s*:\s*(.*?)(?:$)"
         }
 
         for key, pattern in patterns.items():
@@ -112,7 +168,7 @@ class JobDescriptionParser:
         return remuneration
 
     def extract_education_details(self, discipline_text):
-        text = discipline_text.lower()
+        text = self.clean(discipline_text).lower()
 
         education = {
             "qualification_level": "",
@@ -123,35 +179,32 @@ class JobDescriptionParser:
 
         if "degree" in text:
             education["qualification_level"] = "Degree / B.Tech / B.E"
+
         elif "diploma" in text:
             education["qualification_level"] = "Diploma"
 
-        branches = [
-            "Electrical",
-            "Electronics",
-            "Instrumentation",
-            "Mechanical"
-        ]
-
-        for branch in branches:
+        for branch in ["Electrical", "Electronics", "Instrumentation", "Mechanical"]:
             if branch.lower() in text:
                 education["allowed_branches"].append(branch)
 
         return education
 
-    def extract_skills(self, text):
-        text_lower = text.lower()
+    def extract_flat_skills(self, text):
+        text = self.clean(text).lower()
 
         skill_patterns = {
             "testing": [
-                "control panel testing",
-                "electrical testing",
                 "testing",
-                "commissioning"
+                "commissioning",
+                "erection",
+                "control panel testing",
+                "electrical testing"
             ],
             "automation_controls": [
                 "dcs",
                 "plc",
+                "plcs",
+                "distributed control system",
                 "distributed controls system",
                 "field instrumentation"
             ],
@@ -187,25 +240,117 @@ class JobDescriptionParser:
         }
 
         skills = []
+        seen = set()
 
         for category, keywords in skill_patterns.items():
             for keyword in keywords:
-                if keyword in text_lower:
-                    skills.append({
-                        "skill": keyword.title(),
-                        "skill_category": category
-                    })
+                if keyword in text:
+                    skill_name = SKILL_NAME_MAP.get(keyword, keyword.title())
+                    key = skill_name.lower()
 
-        unique = []
-        seen = set()
+                    if key not in seen:
+                        skills.append({
+                            "skill": skill_name,
+                            "skill_category": category
+                        })
+                        seen.add(key)
 
-        for item in skills:
-            key = item["skill"].lower()
-            if key not in seen:
-                unique.append(item)
-                seen.add(key)
+        return skills
 
-        return unique
+    def build_skill_requirements(self, position_code):
+        position_code = position_code.upper()
+
+        if position_code == "FTA-1":
+            return {
+                "scoring_type": "weighted",
+                "core_skills": [
+                    "Control Panel Testing",
+                    "Electrical Testing",
+                    "Testing"
+                ],
+                "bonus_skills": [
+                    "Relay Testing",
+                    "FAT",
+                    "SAT",
+                    "Traction Panel Testing",
+                    "Customer Acceptance Testing"
+                ]
+            }
+
+        if position_code in ["FTA-2", "FTA-5"]:
+            return {
+                "scoring_type": "grouped_alternative",
+                "common_skills": [
+                    "Erection",
+                    "Commissioning",
+                    "Testing"
+                ],
+                "skill_groups": [
+                    {
+                        "group_name": "Automation and Control Systems",
+                        "skills": [
+                            "Distributed Control System",
+                            "DCS",
+                            "PLC",
+                            "Field Instrumentation"
+                        ]
+                    },
+                    {
+                        "group_name": "Electrical Systems",
+                        "skills": [
+                            "Generator Controls",
+                            "Excitation Systems",
+                            "DAVR",
+                            "Sync Generator",
+                            "Motors",
+                            "Thyristor Power Converters",
+                            "Substation",
+                            "Switchyard Controls",
+                            "SAS",
+                            "Electrical Metering System",
+                            "Electrical Interface System"
+                        ]
+                    }
+                ]
+            }
+
+        if position_code == "FTA-3":
+            return {
+                "scoring_type": "weighted",
+                "core_skills": [
+                    "Wave Soldering",
+                    "THT Assembly",
+                    "PCB Handling"
+                ],
+                "bonus_skills": [
+                    "Soldering Techniques",
+                    "Soldering Defects",
+                    "Thermal Profiling",
+                    "Troubleshooting",
+                    "Quality Acceptance Standards"
+                ]
+            }
+
+        if position_code == "FTA-4":
+            return {
+                "scoring_type": "weighted",
+                "core_skills": [
+                    "CNC",
+                    "Turret Punch",
+                    "Press Brake"
+                ],
+                "bonus_skills": [
+                    "CNC Programming",
+                    "CNC Operation",
+                    "AutoCAD",
+                    "Quality Assurance"
+                ]
+            }
+
+        return {
+            "scoring_type": "normal",
+            "required_skills": []
+        }
 
     def extract_fta_positions(self):
         positions = []
@@ -227,6 +372,7 @@ class JobDescriptionParser:
                 row_text = " ".join(cleaned)
 
                 fta_match = re.search(r"FTA\s*-?\s*\d+", row_text, re.I)
+
                 if not fta_match:
                     continue
 
@@ -247,7 +393,12 @@ class JobDescriptionParser:
                 else:
                     position = last_position
 
-                combined_skill_text = f"{function} {discipline} {experience}"
+                position = self.clean(position)
+                function = self.clean(function)
+                discipline = self.clean(discipline)
+                experience = self.clean(experience)
+
+                combined_text = f"{function} {discipline} {experience}"
 
                 positions.append({
                     "sl_no": sl_no,
@@ -262,7 +413,8 @@ class JobDescriptionParser:
                         "minimum_years": 1,
                         "description": experience
                     },
-                    "required_skills": self.extract_skills(combined_skill_text)
+                    "required_skills": self.extract_flat_skills(combined_text),
+                    "skill_requirements": self.build_skill_requirements(fta_code)
                 })
 
         return positions
