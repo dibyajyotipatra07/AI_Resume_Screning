@@ -1,0 +1,81 @@
+{% extends "layout2.html" %}
+
+{% block title %}Support{% endblock %}
+
+{% block head %}
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Support</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/support.css') }}">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <div class="page-header">
+        <h1>Help & Support</h1>
+        <p>Contact the recruitment support team for help.</p>
+    </div>
+
+    <div class="support-grid">
+
+        <div class="support-card">
+            <h2>Contact Support</h2>
+
+            <form method="POST">
+
+                <label>Subject</label>
+                <input
+                    type="text"
+                    name="subject"
+                    placeholder="Enter subject"
+                    required
+                >
+
+                <label>Message</label>
+                <textarea
+                    name="message"
+                    rows="7"
+                    placeholder="Write your issue or query"
+                    required
+                ></textarea>
+
+                <button type="submit">
+                    Send Message
+                </button>
+
+            </form>
+        </div>
+
+        <div class="support-card">
+            <h2>Help Center</h2>
+
+            <div class="faq">
+                <h3>How do I apply for a job?</h3>
+                <p>Go to Find Jobs, choose a job, upload your resume and click Apply.</p>
+            </div>
+
+            <div class="faq">
+                <h3>How can I update my resume?</h3>
+                <p>Open My Applications and click View/Update Resume for the applied job.</p>
+            </div>
+
+            <div class="faq">
+                <h3>How is AI score calculated?</h3>
+                <p>The system compares your resume skills, education and experience with job requirements.</p>
+            </div>
+
+            <div class="faq">
+                <h3>When will I get selection updates?</h3>
+                <p>You can track status in My Applications. Selected candidates may receive email communication.</p>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

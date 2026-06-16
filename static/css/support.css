@@ -1,0 +1,278 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:"times new roman",serif;
+}
+
+/* =========================
+   HEADER LAYOUT
+========================= */
+
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background-color:#f5f5f5;
+    padding:7px 40px;
+    margin-bottom:5px;
+    border-bottom:2px solid #ddd;
+    position:sticky;
+    top:0;
+    z-index:1000;
+}
+
+.header img{
+    width:82px;
+    height:70px;
+}
+
+.header p{
+    font-size:24px;
+    font-weight:bold;
+    color:#1202a1;
+    margin:0;
+    padding-left:7px;
+    letter-spacing:0.5px;
+}
+
+#tagline{
+    padding:9px;
+    margin:0;
+}
+
+.logo{
+    display:flex;
+}
+
+/* =========================
+   MAIN LAYOUT
+========================= */
+
+body{
+    background:#f4f7fc;
+}
+
+.main_container{
+    display:flex;
+    gap:25px;
+    padding:20px;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.sidebar{
+    width:240px;
+    background:#ffffff;
+    border-radius:15px;
+    box-shadow:0 4px 15px rgba(0,0,0,0.08);
+    padding:20px 0;
+    height:fit-content;
+    flex-shrink:0;
+}
+
+.sidebar_lists{
+    list-style:none;
+}
+
+.sidebar_lists li{
+    margin:8px 15px;
+}
+
+.sidebar_lists a{
+    display:block;
+    text-decoration:none;
+    color:#374151;
+    padding:14px 18px;
+    border-radius:10px;
+    font-weight:600;
+    transition:.3s;
+}
+
+.sidebar_lists a:hover{
+    background:#edf4ff;
+    color:#0056b3;
+}
+
+.sidebar_lists a.active{
+    background:#0056b3;
+    color:white;
+}
+
+/* =========================
+   SUPPORT CONTENT
+========================= */
+
+.container{
+    width:100%;
+}
+
+.page-header{
+    margin-bottom:25px;
+}
+
+.page-header h1{
+    color:#003366;
+    margin-bottom:8px;
+}
+
+.page-header p{
+    color:#666;
+}
+
+.support-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:25px;
+    margin-bottom:30px;
+}
+
+.support-card{
+    background:white;
+    padding:25px;
+    border-radius:15px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.support-card h2{
+    color:#003366;
+    margin-bottom:20px;
+}
+
+label{
+    display:block;
+    margin-bottom:8px;
+    font-weight:bold;
+    color:#003366;
+}
+
+input,
+textarea{
+    width:100%;
+    padding:12px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    margin-bottom:18px;
+    outline:none;
+    background:white;
+}
+
+input:focus,
+textarea:focus{
+    border-color:#0056b3;
+}
+
+button{
+    background:#003366;
+    color:white;
+    border:none;
+    padding:12px 22px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+button:hover{
+    background:#0056b3;
+}
+
+.faq{
+    margin-bottom:18px;
+    padding-bottom:15px;
+    border-bottom:1px solid #eee;
+}
+
+.faq h3{
+    color:#003366;
+    margin-bottom:6px;
+}
+
+.faq p{
+    color:#555;
+    line-height:1.5;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+.footer{
+    background:#0f172a;
+    color:#e5e7eb;
+    margin-top:40px;
+}
+
+.footer_container{
+    max-width:1400px;
+    margin:auto;
+    padding:40px 30px;
+    display:grid;
+    grid-template-columns:2fr 1fr 1fr 1fr;
+    gap:30px;
+}
+
+.footer_section h3,
+.footer_section h4{
+    margin-bottom:15px;
+    color:#ffffff;
+}
+
+.footer_section p{
+    color:#cbd5e1;
+    line-height:1.7;
+}
+
+.footer_section ul{
+    list-style:none;
+}
+
+.footer_section ul li{
+    margin-bottom:10px;
+}
+
+.footer_section a{
+    color:#cbd5e1;
+    text-decoration:none;
+    transition:.3s;
+}
+
+.footer_section a:hover{
+    color:#60a5fa;
+}
+
+.footer_bottom{
+    text-align:center;
+    padding:15px;
+    border-top:1px solid rgba(255,255,255,.1);
+    color:#94a3b8;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:900px){
+    .main_container{
+        flex-direction:column;
+    }
+
+    .sidebar{
+        width:100%;
+    }
+
+    .support-grid{
+        grid-template-columns:1fr;
+    }
+
+    .footer_container{
+        grid-template-columns:1fr 1fr;
+    }
+}
+
+@media(max-width:600px){
+    .footer_container{
+        grid-template-columns:1fr;
+    }
+}

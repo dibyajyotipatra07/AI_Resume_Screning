@@ -10,7 +10,7 @@ import os
 # Imporitng secur_file for safe files
 from werkzeug.utils import secure_filename
 # importing for mailing
-from flask_mail import Mail
+from flask_mail import Mail, Message
 
 # Importing functions from utils to work on resume screening and ranking
 from utils.pdf_reader import pdf_reader
@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS admin (
     email_id VARCHAR(50) NOT NULL,
     phn_no VARCHAR(10) NOT NULL,
     password VARCHAR(50) NOT NULL,
+    last_login DATETIME DEFAULT NULL,
     PRIMARY KEY (emp_id),
     UNIQUE KEY emp_id_UNIQUE (emp_id)
     ); 
@@ -59,10 +60,7 @@ CREATE TABLE IF NOT EXISTS applicant (
     name VARCHAR(50) NOT NULL,
     phn_no VARCHAR(10) NOT NULL,
     email_id VARCHAR(50) NOT NULL,
-    password VARCHAR(45) NOT NULL,
-    linkedin_url VARCHAR(45) DEFAULT NULL,
-    github_url VARCHAR(45) DEFAULT NULL,
-    total_experience VARCHAR(45) DEFAULT NULL,    
+    password VARCHAR(45) NOT NULL,   
     PRIMARY KEY (applicant_id),
     UNIQUE KEY email_id_UNIQUE (email_id),
     UNIQUE KEY sno_UNIQUE (applicant_id)
@@ -76,7 +74,7 @@ CREATE TABLE IF NOT EXISTS applications (
     applicant_id INT NOT NULL,
     job_id INT NOT NULL,
     application_date DATE NOT NULL,
-    match_score DECIMAL(5,0) DEFAULT NULL,
+    match_score DECIMAL(5,2) DEFAULT NULL,
     status VARCHAR(45) DEFAULT NULL,
     resume_uploaded VARCHAR(45) NOT NULL,
     upload_date DATE NOT NULL,
@@ -86,68 +84,6 @@ CREATE TABLE IF NOT EXISTS applications (
     KEY `applicant applications_idx` (applicant_id),
     CONSTRAINT `appliation to job` FOREIGN KEY (job_id) REFERENCES jobs (job_id),
     CONSTRAINT `applicant applications` FOREIGN KEY (applicant_id) REFERENCES applicant (applicant_id)
-);
-""")
-
-# Certifications Table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS certifications (
-    cert_id INT NOT NULL AUTO_INCREMENT,
-    applicant_id INT NOT NULL,
-    cert_name VARCHAR(45) NOT NULL,
-    issuer VARCHAR(45) NOT NULL,
-    PRIMARY KEY (cert_id),
-    UNIQUE KEY cert_id_UNIQUE (cert_id),
-    KEY `certificate earnd_idx` (applicant_id),
-    CONSTRAINT `certificate earnd` FOREIGN KEY (applicant_id) REFERENCES applicant (applicant_id)
-);
-""")
-
-# Education Table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS education (
-    education_id int NOT NULL AUTO_INCREMENT,
-    applicant_id int NOT NULL,
-    degree varchar(45) NOT NULL,
-    specialization varchar(45) NOT NULL,
-    institution varchar(45) NOT NULL,
-    end_year year NOT NULL,
-    cgpa decimal(4,0) NOT NULL,
-    PRIMARY KEY (education_id),
-    UNIQUE KEY education_id_UNIQUE (education_id),
-    KEY applicant_id_idx (applicant_id),
-    CONSTRAINT `education to aplicant` FOREIGN KEY (applicant_id) REFERENCES applicant (applicant_id)
-);
-""")
-
-# Experience Table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS experience (
-    exp_id INT NOT NULL AUTO_INCREMENT,
-    applicant_id INT NOT NULL,
-    company_name VARCHAR(45) NOT NULL,
-    designation VARCHAR(45) NOT NULL,
-    working_year INT NOT NULL,
-    description VARCHAR(45) DEFAULT NULL,
-    PRIMARY KEY (exp_id),
-    UNIQUE KEY exp_id_UNIQUE (exp_id),
-    KEY `experience of applicant_idx` (applicant_id),
-    CONSTRAINT `experience of applicant` FOREIGN KEY (applicant_id) REFERENCES applicant (applicant_id)
-);
-""")
-
-# Internship Table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS internship (
-    intern_id INT NOT NULL AUTO_INCREMENT,
-    applicant_id INT NOT NULL,
-    company_name VARCHAR(45) NOT NULL,
-    role VARCHAR(45) NOT NULL,
-    description VARCHAR(45) DEFAULT NULL,
-    PRIMARY KEY (intern_id),
-    UNIQUE KEY intern_id_UNIQUE (intern_id),
-    KEY `internships done by applicant_idx` (applicant_id),
-    CONSTRAINT `internships done by applicant` FOREIGN KEY (applicant_id) REFERENCES applicant (applicant_id)
 );
 """)
 
@@ -187,20 +123,6 @@ CREATE TABLE IF NOT EXISTS jobs (
 );
 """)
 
-#Projects Table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS projects (
-    project_id INT NOT NULL AUTO_INCREMENT,
-    applicant_id INT NOT NULL,
-    project_title VARCHAR(100) NOT NULL,
-    description VARCHAR(45) DEFAULT NULL,
-    github_link VARCHAR(45) DEFAULT NULL,
-    PRIMARY KEY (project_id),
-    UNIQUE KEY `project_id_UNIQUE` (project_id),
-    KEY `projects done_idx` (applicant_id),
-    CONSTRAINT `projects done` FOREIGN KEY (applicant_id) REFERENCES applicant (applicant_id)
-);
-""")
 
 #Skill Category Table
 cursor.execute("""
@@ -212,20 +134,6 @@ CREATE TABLE IF NOT EXISTS skill_category (
 );
 """)
 
-#Skills Table
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS skills (
-    skill_record_id INT NOT NULL AUTO_INCREMENT,
-    applicant_id INT NOT NULL,
-    category_id INT NOT NULL,
-    skill_name VARCHAR(45) NOT NULL,
-    PRIMARY KEY (skill_record_id),
-    KEY `skill category_idx` (category_id),
-    KEY `applicant skill_idx` (applicant_id),
-    CONSTRAINT `applicant skill` FOREIGN KEY (applicant_id) REFERENCES applicant (applicant_id),
-    CONSTRAINT `skill category` FOREIGN KEY (category_id) REFERENCES skill_category (category_id)
-);
-""")
 
 #Profile Table
 cursor.execute("""
@@ -263,6 +171,31 @@ app.config.update(
     MAIL_PASSWORD=params['mail_password']
 )
 mail = Mail(app)
+
+# Mail helper function
+def send_selection_mail(candidate_email, candidate_name, job_title):
+    subject = "Selection Update - BHEL Recruitment Portal"
+
+    body = f"""
+Dear {candidate_name},
+
+Congratulations!
+
+You have been selected for the position of {job_title} through the BHEL Recruitment Portal.
+
+Further communication regarding joining/document verification will be shared with you soon.
+
+Regards,
+BHEL Recruitment Team
+"""
+
+    msg = Message(
+        subject=subject,
+        recipients=[candidate_email],
+        body=body
+    )
+
+    mail.send(msg)
 
 # Configure upload folder for Job Descriptions
 app.config['UPLOAD_FOLDER_JD'] = params['upload_location_jd']
@@ -523,7 +456,7 @@ def update_resume(applicant_id, application_id):
 
     except Exception as e:
         conn.rollback()
-        print("Error:", e)
+        print("Resume Update Error:", e)
         flash("Failed to update resume.", "danger")
 
     return redirect(f'/dashboard/applicant/{session["user_id"]}')
@@ -735,6 +668,7 @@ def view_resume(applicant_id, application_id):
     )
 
 # Route to display applicant's profile
+# Route to display applicant's profile
 @app.route('/applicant/profile/<string:applicant_id>')
 def profile_applicant(applicant_id):
 
@@ -755,16 +689,36 @@ def profile_applicant(applicant_id):
     """, (applicant_id,))
     applicant = cursor.fetchone()
 
+    if not applicant:
+        flash("Profile not found.", "danger")
+        return redirect(f'/dashboard/applicant/{applicant_id}')
+
+    skills = []
+
     cursor.execute("""
-        SELECT 
-            s.skill_name,
-            sc.category_name
-        FROM skills s
-        JOIN skill_category sc
-        ON s.category_id = sc.category_id
-        WHERE s.applicant_id = %s
+        SELECT resume_uploaded
+        FROM applications
+        WHERE applicant_id = %s
+        AND resume_uploaded IS NOT NULL
+        ORDER BY upload_date DESC
+        LIMIT 1
     """, (applicant_id,))
-    skills = cursor.fetchall()
+
+    latest_application = cursor.fetchone()
+
+    if latest_application and latest_application['resume_uploaded']:
+        resume_path = os.path.join(
+            app.config['UPLOAD_FOLDER_RESUME'],
+            latest_application['resume_uploaded']
+        )
+
+        if os.path.exists(resume_path):
+            try:
+                resume_data = parse_resume(resume_path)
+                skills = resume_data.get("skills", [])
+            except Exception as e:
+                print("Profile Resume Skill Extraction Error:", e)
+                skills = []
 
     profile_completion = calculate_profile_completion(applicant)
 
@@ -777,6 +731,7 @@ def profile_applicant(applicant_id):
         active_page='profile',
         role=session['role'].upper()
     )
+    
 # Route to edit applicant's profile
 @app.route('/profile/<string:applicant_id>/edit', methods=['GET','POST'])
 def profile_applicant_edit(applicant_id): 
@@ -830,7 +785,7 @@ def profile_applicant_edit(applicant_id):
 
     except Exception as e:
         conn.rollback()
-        print("Error:", e)
+        print("Profile Update Error:", e)
         flash("Failed to update Profile.", "danger")
         return redirect(f'/dashboard/applicant/{session["user_id"]}')
     return render_template('edit_profile.html', params=params, applicant= applicant)
@@ -1134,7 +1089,6 @@ def applicants():
             ap.name,
             ap.email_id,
             ap.phn_no,
-            ap.total_experience,
             j.job_title,
             j.qualification
         FROM applications a
@@ -1197,7 +1151,6 @@ def ai_screen():
             ap.name,
             ap.email_id,
             ap.phn_no,
-            ap.total_experience,
 
             j.job_id,
             j.job_title,
@@ -1298,7 +1251,6 @@ def shortlist():
             ap.name,
             ap.email_id,
             ap.phn_no,
-            ap.total_experience,
             j.job_title
         FROM applications a
         JOIN applicant ap ON a.applicant_id = ap.applicant_id
@@ -1321,27 +1273,69 @@ def shortlist():
 
 @app.route('/application/<int:application_id>/status/<string:new_status>')
 def update_application_status(application_id, new_status):
+
     admin = get_logged_admin()
+
     if not admin:
         flash("Please login first.", "danger")
         return redirect('/login')
 
-    allowed_status = ['Applied', 'Under Review', 'Shortlisted', 'Rejected', 'Selected']
+    allowed_status = [
+        'Applied',
+        'Under Review',
+        'Shortlisted',
+        'Rejected',
+        'Selected'
+    ]
 
     if new_status not in allowed_status:
-        flash("Invalid status.", "danger")
-        return redirect('/applicants')
+        flash("Invalid application status.", "danger")
+        return redirect(request.referrer or '/applicants')
 
     cursor.execute("""
-        UPDATE applications a
+        SELECT
+            a.application_id,
+            a.status,
+            ap.name,
+            ap.email_id,
+            j.job_title
+        FROM applications a
+        JOIN applicant ap ON a.applicant_id = ap.applicant_id
         JOIN jobs j ON a.job_id = j.job_id
-        SET a.status = %s
-        WHERE a.application_id = %s AND j.emp_id = %s
-    """, (new_status, application_id, admin['emp_id']))
+        WHERE a.application_id=%s
+        AND j.emp_id=%s
+    """, (application_id, admin['emp_id']))
+
+    application = cursor.fetchone()
+
+    if not application:
+        flash("Application not found.", "danger")
+        return redirect(request.referrer or '/applicants')
+
+    cursor.execute("""
+        UPDATE applications
+        SET status=%s
+        WHERE application_id=%s
+    """, (new_status, application_id))
 
     conn.commit()
-    flash("Application status updated successfully.", "success")
-    return redirect('/applicants')
+
+    if new_status == "Selected":
+        try:
+            send_selection_mail(
+                application['email_id'],
+                application['name'],
+                application['job_title']
+            )
+            flash("Candidate selected and email sent successfully.", "success")
+
+        except Exception as e:
+            print("Mail Error:", e)
+            flash("Candidate selected, but email could not be sent.", "warning")
+    else:
+        flash(f"Application status updated to {new_status}.", "success")
+
+    return redirect(request.referrer or '/applicants')
 
 
 # ---------------- REPORTS ----------------
@@ -2225,12 +2219,6 @@ def run_ai_screening(job_id):
                 position_code
             )
 
-            print("RESULT:", result)
-
-            if not result:
-                print("No result for application:", application['application_id'])
-                continue
-
             final_score = result.get("final_score", 0)
 
             if final_score >= 80:
@@ -2252,9 +2240,6 @@ def run_ai_screening(job_id):
             ))
 
             conn.commit()
-
-            print("COMMIT DONE")
-
             screened_count += 1
 
         flash(f"AI screening completed for {screened_count} candidates.", "success")
@@ -2355,8 +2340,64 @@ def candidate_ai_analysis(application_id):
 )
 
 
-# Contact Page
-@app.route('/contact')
-def contact():
-    return render_template('home_page.html', params=params)
+# Support Page
+@app.route('/support/<string:applicant_id>', methods=['GET', 'POST'])
+def support(applicant_id):
+
+    if 'user_id' not in session:
+        flash("Please login first.", "danger")
+        return redirect('/login')
+
+    if str(session['user_id']) != str(applicant_id):
+        flash("Unauthorized access.", "danger")
+        return redirect('/login')
+
+    cursor.execute("""
+        SELECT *
+        FROM applicant
+        WHERE applicant_id=%s
+    """, (applicant_id,))
+    applicant = cursor.fetchone()
+
+    if request.method == 'POST':
+        subject = request.form.get('subject')
+        message = request.form.get('message')
+
+        try:
+            msg = Message(
+                subject=f"Support Request: {subject}",
+                recipients=[app.config['MAIL_USERNAME']],
+                body=f"""
+New support request received.
+
+Applicant Name: {applicant['name']}
+Applicant ID: {applicant['applicant_id']}
+Email: {applicant['email_id']}
+Phone: {applicant['phn_no']}
+
+Subject:
+{subject}
+
+Message:
+{message}
+"""
+            )
+
+            mail.send(msg)
+
+            flash("Your message has been sent to support team.", "success")
+            return redirect(f'/support/{applicant_id}')
+
+        except Exception as e:
+            print("Support Mail Error:", e)
+            flash("Message could not be sent. Please try again.", "danger")
+
+    return render_template(
+        'support.html',
+        params=params,
+        applicant=applicant,
+        active_page='support'
+    )
+    
+
 app.run(debug=True)

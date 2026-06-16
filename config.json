@@ -5,8 +5,8 @@
         "password": "Dibya14032007@",
         "database": "resume_screening",
         "port": 3306,
-        "mail_username": "admin@gmail.com",
-        "mail_password": "admin@123",
+        "mail_username": "ppatradibya2007@gmail.com",
+        "mail_password": "Dibya23252007@",
         "upload_location_resume": "C:\\Users\\ppatr\\OneDrive\\Desktop\\internship\\AI_Resume_Screning\\static\\resume",
         "upload_location_jd": "C:\\Users\\ppatr\\OneDrive\\Desktop\\internship\\AI_Resume_Screning\\static\\job_descriptions",
         "upload_location_pf": "C:\\Users\\ppatr\\OneDrive\\Desktop\\internship\\AI_Resume_Screning\\static\\assets\\profile_img"

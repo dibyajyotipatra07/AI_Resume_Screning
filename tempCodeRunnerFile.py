@@ -1,1 +1,1 @@
-create
+ai_scree
